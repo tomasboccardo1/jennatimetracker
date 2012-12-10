@@ -1,7 +1,5 @@
 target
 
-# Specific files that should not be considered
-grails-app/conf/customconf/Custom*.groovy
 
 *.log
 
