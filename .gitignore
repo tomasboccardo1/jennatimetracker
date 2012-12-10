@@ -1,8 +1,7 @@
 target
 
 # Specific files that should not be considered
-# Para el taller lo dejamos subir
-#grails-app/conf/customconf/Custom*.groovy
+grails-app/conf/customconf/Custom*.groovy
 
 *.log
 
