@@ -8,3 +8,7 @@ grails-app/conf/customconf/Custom*.groovy
 # IDE-specific
 target-eclipse
 web-app/WEB-INF/classes/
+
+.idea
+atlassian-ide-plugin.xml
+Jenna*.iml
