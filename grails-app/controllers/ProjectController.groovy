@@ -32,10 +32,14 @@ class ProjectController extends BaseController {
 
     def list = { ProjectFilterCommand cmd ->
         def user = findLoggedUser()
+        def userInstanceList = User.withCriteria {
+            eq("company", user.company)
+            order(params.get('sort','name'), params.get('order','asc'))
+        }
         setUpDefaultPagingParams(params)
         def projectInstanceList = listByCriteria(params, cmd, user)
         def projectInstanceTotal = countByCriteria(cmd, user)
-        [projectInstanceList: projectInstanceList, projectInstanceTotal: projectInstanceTotal, project: cmd.project, startDate: cmd.startDate, endDate: cmd.endDate, ongoing: cmd.ongoing]
+        [projectInstanceList: projectInstanceList, projectInstanceTotal: projectInstanceTotal, project: cmd.project, startDate: cmd.startDate, endDate: cmd.endDate, ongoing: cmd.ongoing,userList: userInstanceList]
     }
 
     private List<Project> listByCriteria(params, cmd, user) {

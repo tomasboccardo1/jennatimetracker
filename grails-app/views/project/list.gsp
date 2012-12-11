@@ -326,7 +326,7 @@
             <jquery:datePicker name="endDate" value="${projectInstance?.endDate}"/>
 
             <label for="teamLeader.id"><g:message code="project.teamLeader" default="Team Leader"/>:</label>
-            <g:select name="teamLeader.id" from="${User.list()}" optionKey="id" value="${projectInstance?.teamLeader?.id}"/>
+            <g:select name="teamLeader.id" from="${userList}" optionKey="id" value="${projectInstance?.teamLeader?.id}"/>
 
             <label for="mode.id"><g:message code="project.mode" default="Mode"/>:</label>
             <g:select name="mode.id" from="${Mode.list()}" optionKey="id" value="${projectInstance?.mode?.id}"/>
