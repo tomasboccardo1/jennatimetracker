@@ -57,7 +57,7 @@
                                 <g:message code="user.points" default="Points" />:
                               </td>
                               <td valign="top" class="name">
-                                  <h2 style="color:black;">${userInstance.getPoints()}</h2>
+                                      <h2 style="color:black;">${userPoints}</h2>
                               </td>
                               <td valign="top" class="name">
                                   <g:message code="user.historic.ranking" default="Historic Ranking" />:
