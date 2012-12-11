@@ -150,18 +150,21 @@ class DatabaseService {
     }
 
 
-    public List<ReportRankItem> getReportRanking(String startDate, String endDate, Company company) {
+    public List<ReportRankItem> getUsersPoints(String startDate, String endDate, Company company,Long userID) {
 
         def List rankingList = new ArrayList()
         def sql = new Sql(dataSource)
+
         def query = " select us.name, sum(sc.points) score from score sc, user us " +
                 " where sc.company_id = ${company.id} " +
+                (userID==null ? "":" and us.id = "+userID) +
                 " and sc.user_id = us.id " +
                 " and sc.company_id = us.company_id " +
                 " and sc.date <= '${endDate}" + " 23:59:59'" +
                 " and sc.date >= '${startDate}' " +
                 " group by sc.user_id " +
                 " order by score desc ";
+
 
         def rows = sql.rows(query)
 
@@ -173,8 +176,12 @@ class DatabaseService {
         }
 
         return rankingList
+
     }
 
+    public List<ReportRankItem> getReportRanking(String startDate, String endDate, Company company) {
+        getUsersPoints(startDate,endDate,company,null)
+    }
 
     public getReportRankingTotalScore(String startDate, String endDate, Company company) {
         def rankingTotal = 0
