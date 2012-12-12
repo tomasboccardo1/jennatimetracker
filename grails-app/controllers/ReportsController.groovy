@@ -2,28 +2,23 @@ import ar.com.fdvs.dj.domain.builders.FastReportBuilder
 import ar.com.fdvs.dj.domain.DynamicReport
 import ar.com.fdvs.dj.core.DynamicJasperHelper
 import ar.com.fdvs.dj.core.layout.ClassicLayoutManager
-
 import ar.com.fdvs.dj.domain.entities.columns.AbstractColumn
 import ar.com.fdvs.dj.domain.builders.ColumnBuilder
 import net.sf.jasperreports.engine.JRDataSource
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource
 import net.sf.jasperreports.engine.JasperPrint
-
 import net.sf.jasperreports.engine.JRException
 import net.sf.jasperreports.engine.export.JRPdfExporter
 import net.sf.jasperreports.engine.JRExporter
 import net.sf.jasperreports.engine.JRExporterParameter
 import ar.com.fdvs.dj.domain.DJCalculation
-
 import ar.com.fdvs.dj.domain.constants.GroupLayout
 import java.text.SimpleDateFormat
 import org.json.JSONObject
-import org.jfree.ui.RectangleInsets
 import net.sf.jasperreports.engine.export.JRXlsExporter
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter
 import ar.com.fdvs.dj.core.layout.ListLayoutManager
 import grails.converters.JSON
-import java.text.Format
 import org.compass.core.CompassQuery
 
 class ReportsController extends BaseController {
@@ -96,23 +91,21 @@ class ReportsController extends BaseController {
         params.order = params?.order ?: "desc"
 
         def learnings = []
-        def highlights = []
         def total
+
         if (params.search) {
-            def descriptionHighlighter = { highlighter, index, sr ->
-                highlights[index] = highlighter.fragment('description')
-            }
-            def result = searchableService.search([offset: params.offset, max: params.max, withHighlighter: descriptionHighlighter, escape: true]) {
+            def result = searchableService.search([offset: params.offset, max: params.max,escape: true]) {
                 alias('Learning')
                 must(term('company', user.company))
                 must(queryString(params.search) {
                     useOrDefaultOperator()
                     setDefaultSearchProperty('description')
                 })
-                //sort(params.sort, CompassQuery.SortDirection.AUTO params.order) // FIXME: property does not seem to be indexed
                 sort(CompassQuery.SortImplicitType.SCORE)
             }
             learnings = result.results
+
+
             total = searchableService.countHits([escape: true]) {
                 alias('Learning')
                 must(term('company', user.company))
@@ -131,7 +124,7 @@ class ReportsController extends BaseController {
         if (params.learningSaved)
             flash.message = "reports.knowledge.new.learning.saved"
 
-        render(view: 'knowledge', model: [user: user, learnings: learnings, highlights: highlights, totalLearnings: total, search: params.search])
+        render(view: 'knowledge', model: [user: user, learnings: learnings, totalLearnings: total, search: params.search])
     }
 
 
