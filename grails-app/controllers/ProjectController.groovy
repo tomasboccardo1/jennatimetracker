@@ -62,6 +62,7 @@ class ProjectController extends BaseController {
                 ge('endDate', today)
             }
             ne("deleted", true)
+            eq("active",true)
             order(params.sort, params.order)
         }
     }
@@ -88,6 +89,7 @@ class ProjectController extends BaseController {
                 ge('endDate', today)
             }
             ne("deleted", true)
+            eq("active",true)
         }
     }
 
