@@ -63,7 +63,7 @@ class ProjectController extends BaseController {
             }
             ne("deleted", true)
             eq("active",true)
-            order(params.sort, params.order)
+            order("startDate", "desc")
         }
     }
 
