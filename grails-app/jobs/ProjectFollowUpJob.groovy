@@ -15,7 +15,6 @@ class ProjectFollowUpJob {
     def projectFollowUpService
 
     static triggers = {
-        cron name: 'everyMondayTrigger', cronExpression: "0 0 8 ? * MON"
     }
 
     def execute() {
