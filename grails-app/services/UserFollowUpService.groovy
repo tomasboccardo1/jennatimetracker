@@ -32,8 +32,10 @@ class UserFollowUpService {
 
     def sendEmailsToFollowers(company) {
 
+        Permission permission = Permission.findByName(Permission.ROLE_COMPANY_ADMIN)
         def maxDate = new Date().clearTime()
         def minDate = maxDate - 7
+
 
         User.withTransaction {
 
@@ -43,33 +45,34 @@ class UserFollowUpService {
                     [company: company])
 
             users.each { User u ->
+                if (u.permissions.contains(permission)) {
+                    u.usersFollowed.each { User followed ->
 
-                u.usersFollowed.each { User followed ->
+                        def reportFile = File.createTempFile('UsersFollowed', '.pdf')
+                        def outputStream = new FileOutputStream(reportFile)
 
-                    def reportFile = File.createTempFile('UsersFollowed', '.pdf')
-                    def outputStream = new FileOutputStream(reportFile)
+                        def report = databaseService.getWeeWorkReport(followed.id).collect {
+                            [project: it.getAt('project'), date: it.getAt('date'), comment: it.getAt('comment'), timeSpent: it.getAt('effort')]
+                        }
 
-                    def report = databaseService.getWeeWorkReport(followed.id).collect {
-                        [project: it.getAt('project'), date: it.getAt('date'), comment: it.getAt('comment'), timeSpent: it.getAt('effort')]
+                        if (report) {
+                            exportUserFollowUp('pdf', u.locale, outputStream, followed.name, report)
+
+                            def model = [
+                                    recipient: u.name,
+                                    user: followed,
+                                    from: messageSource.getMessage("default.date.formatted.short", [minDate] as Object[], u.locale),
+                                    to: messageSource.getMessage("default.date.formatted.short", [maxDate] as Object[], u.locale)
+                            ]
+
+                            emailNotificationService.sendNotification(u,
+                                    messageSource.getMessage('email.userFollowUp.subject', [followed.name] as Object[], u.locale),
+                                    'userFollowUp',
+                                    model,
+                                    [reportFile])
+                        }
+                        FileUtils.deleteQuietly(reportFile)
                     }
-
-                    if (report){
-                        exportUserFollowUp('pdf', u.locale, outputStream, followed.name, report)
-
-                    def model = [
-                            recipient: u.name,
-                            user: followed,
-                            from: messageSource.getMessage("default.date.formatted.short", [minDate] as Object[], u.locale),
-                            to: messageSource.getMessage("default.date.formatted.short", [maxDate] as Object[], u.locale)
-                    ]
-
-                    emailNotificationService.sendNotification(u,
-                            messageSource.getMessage('email.userFollowUp.subject', [followed.name] as Object[], u.locale),
-                            'userFollowUp',
-                            model,
-                            [reportFile])
-                    }
-                    FileUtils.deleteQuietly(reportFile)
                 }
             }
         }
