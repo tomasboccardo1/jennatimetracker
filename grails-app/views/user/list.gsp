@@ -18,7 +18,7 @@
         <table>
             <thead>
             <tr>
-                <g:sortableColumn property="name" title="Name" titleKey="user.name" />
+                <g:sortableColumn property="name" title="Name" titleKey="user.name"/>
                 <g:sortableColumn property="account" title="gMail" titleKey="user.account"/>
                 <th class="style7">Follow</th>
             </tr>
@@ -27,10 +27,19 @@
             <g:each in="${userInstanceList}" status="i" var="userInstance">
                 <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                     <td>
-                        <g:link action="show" id="${userInstance.id}">${fieldValue(bean: userInstance, field: "name")}</g:link>
+                        <g:link action="show"
+                                id="${userInstance.id}">${fieldValue(bean: userInstance, field: "name")}</g:link>
                     </td>
                     <td>${fieldValue(bean: userInstance, field: "account")}</td>
-                    <td><g:link action="showReports" id="${userInstance.id}">Follow</g:link></td>
+
+                    <g:if test="${!currentUser.usersFollowed.contains(userInstance)}">
+                        <td><g:link action="showReports" id="${userInstance.id}">Follow</g:link></td>
+                    </g:if>
+                    <g:else>
+                        <td>
+                            <g:link action="unFollow" id="${userInstance.id}">Unfollow</g:link>
+                        </td>
+                    </g:else>
                 </tr>
             </g:each>
             </tbody>

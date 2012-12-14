@@ -27,9 +27,9 @@ class UserController extends BaseController {
         def userInstanceTotal = User.countByCompany(user.company)
         def userInstanceList = User.withCriteria {
             eq("company", user.company)
-			order(params.get('sort','name'), params.get('order','asc'))
+            order(params.get('sort', 'name'), params.get('order', 'asc'))
         }
-        [userInstanceList: userInstanceList, userInstanceTotal: userInstanceList.size()]
+        [userInstanceList: userInstanceList, userInstanceTotal: userInstanceList.size(),currentUser: user]
     }
 
     def create = {
@@ -71,8 +71,7 @@ class UserController extends BaseController {
             flash.defaultMessage = "User ${userInstance.id} created"
             sendNotificationEmailToNewUser(userInstance)
             redirect(action: "show", id: userInstance.id)
-        }
-        else {
+        } else {
             render(view: "create", model: [userInstance: userInstance])
         }
     }
@@ -84,8 +83,7 @@ class UserController extends BaseController {
             flash.args = [params.id]
             flash.defaultMessage = "User not found with id ${params.id}"
             redirect(action: "list")
-        }
-        else {
+        } else {
             return [userInstance: userInstance]
         }
     }
@@ -93,7 +91,14 @@ class UserController extends BaseController {
 
     def showReports = {
 
+        def User currentUser = findLoggedUser()
         def user = User.get(params.id)
+
+        //Si ya no lo estaba siguiendo lo agrego a la lista
+        if (!currentUser.usersFollowed.contains(user)){
+            currentUser.addToUsersFollowed(user)
+            currentUser.save()
+        }
 
         def moodWeekReport = databaseService.getMoodReport(user.id).collect {
             [date: it.getAt('date'), moodValue: it.getAt('value')]
@@ -111,6 +116,18 @@ class UserController extends BaseController {
         return [user: user, moodReport: moodWeekReport, workReport: workWeekReport, knowledgeReport: knowledgeWeekReport, votedKnowledge: votedKnowledgeWeekReport]
     }
 
+    def unFollow = {
+
+        def User currentUser = findLoggedUser()
+        def user = User.get(params.id)
+        if (currentUser.usersFollowed.contains(user)){
+            currentUser.removeFromUsersFollowed(user)
+            currentUser.save()
+        }
+        flash.message = "user.unfollowMessage"
+        flash.args = [user.name]
+        redirect(action: "list")
+    }
 
 
     def edit = {
@@ -120,8 +137,7 @@ class UserController extends BaseController {
             flash.args = [params.id]
             flash.defaultMessage = "User not found with id ${params.id}"
             redirect(action: "list")
-        }
-        else {
+        } else {
             return [userInstance: userInstance, availablesChatTime: TimeZoneUtil.getAvailablePromptTimes(), timeZones: TimeZoneUtil.getAvailableTimeZones(), locales: LocaleUtil.getAvailableLocales(), skills: Skill.list()]
         }
     }
@@ -145,12 +161,10 @@ class UserController extends BaseController {
                 flash.args = [params.id]
                 flash.defaultMessage = "User ${params.id} updated"
                 redirect(action: "show", id: userInstance.id)
-            }
-            else {
+            } else {
                 render(view: "edit", model: [userInstance: userInstance])
             }
-        }
-        else {
+        } else {
             flash.message = "user.not.found"
             flash.args = [params.id]
             flash.defaultMessage = "User not found with id ${params.id}"
@@ -175,8 +189,7 @@ class UserController extends BaseController {
                 flash.defaultMessage = "User ${params.id} could not be deleted"
                 redirect(action: "show", id: params.id)
             }
-        }
-        else {
+        } else {
             flash.message = "user.not.found"
             flash.args = [params.id]
             flash.defaultMessage = "User not found with id ${params.id}"

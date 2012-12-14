@@ -32,6 +32,7 @@ class User {
         )
     }
 
+
     boolean registeredEffortsFor(Date _date) {
         Object result = Effort.executeQuery(
                 'select count(*) as c from Effort e where e.user = :user and e.date >= :fromDate and e.date < :toDate',
@@ -44,7 +45,7 @@ class User {
         "$name"
     }
 
-    static hasMany = [efforts: Effort, assignments: Assignment, reminders: Reminder, permissions: Permission, learnings: Learning, moods: UserMood, scores:Score, skills: Skill]
+    static hasMany = [efforts: Effort, assignments: Assignment, reminders: Reminder, permissions: Permission, learnings: Learning, moods: UserMood, scores:Score, skills: Skill, usersFollowed: User]
 
     static belongsTo = Permission
 
@@ -64,6 +65,7 @@ class User {
         localChatTime(nullable: true)
         humour(nullable: true)
         company(nullable: false)
+        usersFollowed(nullable: true)
         activationHash(nullable: true, size: 32..32)
         dailyWorkingHours(nullable:true, max:24)
         birthday(max:new Date(), nullable: true)

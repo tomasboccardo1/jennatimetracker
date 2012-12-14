@@ -9,7 +9,6 @@ import org.apache.commons.io.FileUtils
 class ProjectFollowUpService {
 
     boolean transactional = false
-
     MessageSource messageSource
     ExportService exportService
     EmailNotificationService emailNotificationService
@@ -121,6 +120,7 @@ and p.startDate <= :maxDate and p.endDate >= :minDate''',
                         reportFile = File.createTempFile(p.name, '.pdf')
                         def outputStream = new FileOutputStream(reportFile)
                         exportProjectFollowUp('pdf', p.teamLeader.locale, outputStream, p.name, efforts)
+                        //exportProjectFollowUp('pdf', p.teamLeader.locale, outputStream, p.name, efforts)
                         def model = [
                             recipient: p.teamLeader, project: p,
                             from: messageSource.getMessage("default.date.formatted.short", [minDate] as Object[], p.teamLeader.locale),
