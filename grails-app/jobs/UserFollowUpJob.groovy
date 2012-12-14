@@ -1,7 +1,7 @@
 class UserFollowUpJob {
 
     def group = 'jenna-jobs'
-    def name = 'project-follow-up-job'
+    def name = 'user-follow-up-job'
     def sessionRequired = true
     def concurrent = false
     def userFollowUpService
