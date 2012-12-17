@@ -201,7 +201,7 @@ class RegisterController extends BaseController {
               File tplFile = grailsAttributes.getApplicationContext().getResource(templatePath).getFile()
 
 			  String linkHash = createLink(controller:"register",action:"activate",params:[hash:person.activationHash],absolute:true)
-              def binding = ["name": person.name, "account": person.account, "accountToAdd": get.message(code: 'application.email.account'), "linkHash": linkHash]
+              def binding = ["name": person.name, "account": person.account, "accountToAdd": g.message(code: 'application.email.account'), "linkHash": linkHash]
 
               String invitee = person.account
 
@@ -212,8 +212,8 @@ class RegisterController extends BaseController {
 
               def email = [
                       to: [invitee], // 'to' expects a List, NOT a single email address
-                      subject: get.message(code: 'registration.mail.subject'),
-                      from: get.message(code: 'application.email'),
+                      subject: g.message(code: 'registration.mail.subject'),
+                      from: g.message(code: 'application.email'),
                       text: body
               ]
               emailerService.sendEmails([email])
