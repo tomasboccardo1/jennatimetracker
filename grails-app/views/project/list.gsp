@@ -11,10 +11,10 @@
 <script>
 
     // TODO: Modify from library
-    $(document).ready(function() {
+    $(document).ready(function () {
         $("#startDateEdit_datePicker").attr("readonly", "true");
         $("#endDateEdit_datePicker").attr("readonly", "true");
-        $("#filterButton").click(function() {
+        $("#filterButton").click(function () {
             $("#offset").val('0');
             $("#projectFormList").submit();
         });
@@ -33,7 +33,7 @@
                 type: "GET",
                 data: ({id: id}),
                 dataType: "json",
-                success: function(response, statusText) {
+                success: function (response, statusText) {
                     $("#dialogEdit").dialog('close');
                     $.jGrowl(response.message);
                     reloadAfterDelete();
@@ -42,7 +42,7 @@
         }
     }
 
-    $(function() {
+    $(function () {
         var id = $("#id");
         var version = $("#version");
         var name = $("#name");
@@ -123,19 +123,19 @@
         }
 
         $('#btnCreate').click(
-                function() {
+                function () {
                     $('#ui-dialog-title-dialog').text('<g:message code="project.create"/>');
                     $('#dialogCreate').dialog('open');
                 }).hover(
-                function() {
+                function () {
                     $(this).addClass("ui-state-hover");
                 },
-                function() {
+                function () {
                     $(this).removeClass("ui-state-hover");
                 }).mousedown(
-                function() {
+                function () {
                     $(this).addClass("ui-state-active");
-                }).mouseup(function() {
+                }).mouseup(function () {
                     $(this).removeClass("ui-state-active");
                 });
 
@@ -149,17 +149,17 @@
             height: 300,
             modal: true,
             buttons: {
-                '<g:message code="ok"/>': function() {
+                '<g:message code="ok"/>': function () {
                     $("#projectFormEdit").submit();
                 },
-                '<g:message code="cancel"/>': function() {
+                '<g:message code="cancel"/>': function () {
                     $(this).dialog('close');
                 },
                 '<g:message code="delete"/>': function () {
                     deleteIt($("#idEdit").val());
                 }
             },
-            close: function() {
+            close: function () {
                 allFieldsEdit.val('').removeClass('ui-state-error');
                 tipsEdit.text('');
             }
@@ -171,14 +171,14 @@
             height: 550,
             modal: true,
             buttons: {
-                '<g:message code="ok"/>': function() {
+                '<g:message code="ok"/>': function () {
                     $("#projectFormCreate").submit();
                 },
-                '<g:message code="cancel"/>': function() {
+                '<g:message code="cancel"/>': function () {
                     $(this).dialog('close');
                 }
             },
-            close: function() {
+            close: function () {
                 allFields.val('').removeClass('ui-state-error');
                 tips.text('');
             }
@@ -230,12 +230,12 @@
     }
 
     function changeLinks() {
-        $("a.step,a.prevLink,a.nextLink").each(function() {
+        $("a.step,a.prevLink,a.nextLink").each(function () {
             linkData = $(this).attr("href");
             newStr = "javascript:paginate('" + linkData + "');";
             $(this).attr("href", newStr);
         });
-        $(".sortable > a").each(function() {
+        $(".sortable > a").each(function () {
             linkData = $(this).attr("href");
             newStr = "javascript:paginate('" + linkData + "');";
             $(this).attr("href", newStr);
@@ -262,6 +262,7 @@
     <g:hiddenField name="startDate" value="${params.startDate}"/>
     <g:hiddenField name="endDate" value="${params.endDate}"/>
     <g:hiddenField name="ongoing" value="${params.ongoing}"/>
+    <g:hiddenField name="active" value="${params.active}"/>
 </g:form>
 
 <g:form action="ajaxEdit" method="POST" name="editProjectForm">
@@ -288,7 +289,8 @@
             <g:textArea name="descriptionEdit" rows="3" cols="40"/>
 
             <label for="startDateEdit"><g:message code="project.startDate" default="Start Date"/>:</label>
-            <jquery:datePicker id="startDateEdit" name="startDateEdit" onclick="disableCalendarInput()" format="MM/dd/yyyy"
+            <jquery:datePicker id="startDateEdit" name="startDateEdit" onclick="disableCalendarInput()"
+                               format="MM/dd/yyyy"
                                jsformat="mm/dd/yy"/>
 
             <label for="endDateEdit"><g:message code="project.endDate" default="End Date"/>:</label>
@@ -317,7 +319,8 @@
             <g:textField name="name" maxlength="50" value="${fieldValue(bean: projectInstance, field: 'name')}"/>
 
             <label for="description"><g:message code="project.description" default="Description"/>:</label>
-            <g:textArea name="description" rows="3" cols="40" value="${fieldValue(bean: projectInstance, field: 'description')}"/>
+            <g:textArea name="description" rows="3" cols="40"
+                        value="${fieldValue(bean: projectInstance, field: 'description')}"/>
 
             <label for="startDate"><g:message code="project.startDate" default="Start Date"/>:</label>
             <jquery:datePicker name="startDate" value="${projectInstance?.startDate}"/>
@@ -326,13 +329,15 @@
             <jquery:datePicker name="endDate" value="${projectInstance?.endDate}"/>
 
             <label for="teamLeader.id"><g:message code="project.teamLeader" default="Team Leader"/>:</label>
-            <g:select name="teamLeader.id" from="${userList}" optionKey="id" value="${projectInstance?.teamLeader?.id}"/>
+            <g:select name="teamLeader.id" from="${userList}" optionKey="id"
+                      value="${projectInstance?.teamLeader?.id}"/>
 
             <label for="mode.id"><g:message code="project.mode" default="Mode"/>:</label>
             <g:select name="mode.id" from="${Mode.list()}" optionKey="id" value="${projectInstance?.mode?.id}"/>
 
             <label for="technologies"><g:message code="project.technology" default="Technologies"/>:</label>
-            <g:select name="technologies" multiple="yes" size="2" from="${Technology.list()}" optionKey="id" value="${projectInstance?.technologies}"/>
+            <g:select name="technologies" multiple="yes" size="2" from="${Technology.list()}" optionKey="id"
+                      value="${projectInstance?.technologies}"/>
 
             <label for="active"><g:message code="projectActive" default="Project is active"/>:</label>
             <g:checkBox name="active" value="true"/>
@@ -346,7 +351,7 @@
 
 
 <div class="body">
-    <h1><span class="style7"><g:message code="app.menu.management.projects" /></span></h1>
+    <h1><span class="style7"><g:message code="app.menu.management.projects"/></span></h1>
 
     <p>&nbsp;</p>
     <g:if test="${flash.message}">
@@ -381,6 +386,9 @@
 
                     <label for="ongoing"><g:message code="project.ongoing" default="Ongoing"/>:</label>
                     <g:checkBox name="ongoing" value="${ongoing}"/>
+
+                    <label for="active"><g:message code="project.active" default="Active"/>:</label>
+                    <g:checkBox name="active" value="${(active == null) ? true : active}"/>
                 </fieldset>
             </g:form>
         </div>
@@ -391,6 +399,7 @@
             </button>
         </div>
     </div>
+
 
     <div id="list">
         <g:render template="list"/>

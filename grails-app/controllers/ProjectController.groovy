@@ -39,7 +39,7 @@ class ProjectController extends BaseController {
         setUpDefaultPagingParams(params)
         def projectInstanceList = listByCriteria(params, cmd, user)
         def projectInstanceTotal = countByCriteria(cmd, user)
-        [projectInstanceList: projectInstanceList, projectInstanceTotal: projectInstanceTotal, project: cmd.project, startDate: cmd.startDate, endDate: cmd.endDate, ongoing: cmd.ongoing,userList: userInstanceList]
+        [projectInstanceList: projectInstanceList, projectInstanceTotal: projectInstanceTotal, project: cmd.project, startDate: cmd.startDate, endDate: cmd.endDate, ongoing: cmd.ongoing,active: cmd.active, userList: userInstanceList]
     }
 
     private List<Project> listByCriteria(params, cmd, user) {
@@ -61,8 +61,10 @@ class ProjectController extends BaseController {
                 le('startDate', today)
                 ge('endDate', today)
             }
+            if (cmd.active)
+                eq("active",true)
+
             ne("deleted", true)
-            eq("active",true)
             order("startDate", "desc")
         }
     }
@@ -88,8 +90,10 @@ class ProjectController extends BaseController {
                 le('startDate', today)
                 ge('endDate', today)
             }
+            if (cmd.active || cmd.active==null)
+                eq("active",true)
+
             ne("deleted", true)
-            eq("active",true)
         }
     }
 
@@ -198,6 +202,7 @@ class ProjectController extends BaseController {
         return jsonResponse
     }
 
+
     def show = {
         def projectInstance = Project.get(params.id)
         User user = findLoggedUser()
@@ -273,4 +278,5 @@ class ProjectFilterCommand {
     Date startDate
     Date endDate
     Boolean ongoing
+    Boolean active
 }
