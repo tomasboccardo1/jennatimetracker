@@ -11,16 +11,16 @@ mailSender {
 environments {
     development {
         mailSender {
-            mailUsername = 'federicofarina22@gmail.com'
-            mailFrom = 'federicofarina22@gmail.com'
-            mailPassword = '74123698'
+            mailUsername = 'developer@fdvsolutions.com'
+            mailFrom = 'developer@fdvsolutions.com'
+            mailPassword = 'superFDV'
         }
     }
     production {
         mailSender {
-            mailUsername = 'federicofarina22@gmail.com'
-            mailPassword = 'federicofarina22@gmail.com'
-            mailFrom = '74123698'
+            mailUsername = 'developer@fdvsolutions.com'
+            mailFrom = 'developer@fdvsolutions.com'
+            mailPassword = 'superFDV'
         }
     }
 }
