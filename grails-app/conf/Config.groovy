@@ -99,3 +99,17 @@ log4j = { root ->
     info   file: 'grails.app'
     info   file: 'log4j.logger.org.springframework.security'
 }
+
+
+environments {
+    production {
+        // conversations expire in 2 minutes
+        conversationExpiracy = 1000 * 60 * 2
+        chat.cronExpression = '0 0 0-23 ? * *'
+        reminder.cronExpression = '0 0 * ? * *'
+        userFollowUp.cronExpression = '0 0 9 ? * MON'
+        projectFollowUp.cronExpression = '0 0 9 ? * FRI'
+        knowledgeHeadsUp.cronExpression = '0 0 9 ? * MON'
+        moodWarningHeadsUp.cronExpression = '0 0 9 ? * MON-FRI'
+    }
+}
