@@ -3,6 +3,8 @@ target
 
 *.log
 
+grails-app/conf/customconf/*.groovy
+
 # IDE-specific
 target-eclipse
 web-app/WEB-INF/classes/
