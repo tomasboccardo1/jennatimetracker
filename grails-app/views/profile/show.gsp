@@ -3,9 +3,24 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="layout" content="main"/>
     <title><g:message code="app.title.profile" args="${[userInstance]}"/></title>
+
+    <script>
+        function showWarning(length) {
+            if($("[name='newpassword']").val().length==10){
+                $("#passwordWarning").css("display","none");
+                $("#maxLengthPasswordWarning").css("display","");
+            }else{
+                $("#maxLengthPasswordWarning").css("display","none");
+                $("#passwordWarning").css("display","");
+            }
+
+        }
+    </script>
+
 </head>
 
 <body>
+
 <div class="body">
 <h1><span class="style7"><g:message code="user.show" default="Edit User"/></span></h1>
 
@@ -42,8 +57,12 @@
                     <label for="name"><g:message code="user.profile.new.password" default="New Password"/>:</label>
                 </td>
                 <td valign="top" class="value ${hasErrors(bean: userInstance, field: 'name', 'errors')}">
-                    <g:passwordField name="newpassword" maxlength="10"/><g:message
-                            code="user.profile.new.password.warning"/>
+                    <g:passwordField name="newpassword" maxlength="10"
+                                     oninput="javascript: showWarning()"/>
+                    <span id="passwordWarning"><g:message code="user.profile.new.password.warning"/></span>
+                    <span id="maxLengthPasswordWarning" style="display:none; color: red;"><g:message
+                            code="user.profile.new.password.maxLengthWarning"/></span>
+
                 </td>
             </tr>
 
@@ -73,10 +92,10 @@
                 <td valign="top" style="text-align: left;" class="value">
                     <ul>
                         <g:each in="${userInstance?.skills}" var="userSkill">
-                                <g:if test="${!userSkill.deleted}">
+                            <g:if test="${!userSkill.deleted}">
                                 <li><g:link controller="skill" action="show"
                                             id="${userSkill.id}">${userSkill.encodeAsHTML()}</g:link></li>
-                                </g:if >
+                            </g:if>
                         </g:each>
                     </ul>
                 </td>
@@ -126,9 +145,9 @@
                             <g:timeZoneSelect name="timeZone" value="${person.timeZone?.getID()}" />
                         However, http://jira.grails.org/browse/GRAILS-6590 prevents us from using it :(                    
                         --%>
-                        <g:select id="timeZone" name="timeZone"
-                                  from="${timeZones}"
-                                  value="${userInstance.timeZone?.getID()}" />
+                    <g:select id="timeZone" name="timeZone"
+                              from="${timeZones}"
+                              value="${userInstance.timeZone?.getID()}"/>
                 </td>
             </tr>
 
@@ -138,20 +157,22 @@
                 </td>
                 <td valign="top" class="value ${hasErrors(bean: userInstance, field: 'birthday', 'errors')}">
                     <jquery:datePicker name="birthday" format="MM/dd/yyyy"
-                                        value="${userInstance?.birthday ?: 'none'}"/> (MM/dd/yyyy)
+                                       value="${userInstance?.birthday ?: 'none'}"/> (MM/dd/yyyy)
                 </td>
             </tr>
 
             <tr class="prop odd">
                 <td valign="top" class="name">
                     <a href="http://www.gravatar.com" title="<g:message code='user.gravatar'/>">
-                        <img style="vertical-align:middle" src="${resource(dir: 'images', file: 'gravatar.png')}" width="30" height="30">
+                        <img style="vertical-align:middle" src="${resource(dir: 'images', file: 'gravatar.png')}"
+                             width="30" height="30">
                         Gravatar:
                     </a>
                 </td>
                 <td valign="top">
                     <span>
-                        <avatar:gravatar email="${userInstance.account}" size="75" defaultGravatarUrl="${ resource(dir:'images', file:'noavatar.png', absolute: true) }"/>
+                        <avatar:gravatar email="${userInstance.account}" size="75"
+                                         defaultGravatarUrl="${resource(dir: 'images', file: 'noavatar.png', absolute: true)}"/>
                     </span>
                 </td>
             </tr>

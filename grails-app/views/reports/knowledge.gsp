@@ -69,13 +69,7 @@
               </td>
               <td>
                 <div id="learning_${row.id}">
-                    <g:if test="${highlights[i]}">
-                        <markdown:renderHtml text="${highlights[i].encodeAsSafeHTML()}"/>
-                    </g:if>
-                    <g:else>
                         <markdown:renderHtml text="${row.description?.encodeAsSafeHTML()}"/>
-                    </g:else>
-                    
                 </div>
               </td>
               <td>

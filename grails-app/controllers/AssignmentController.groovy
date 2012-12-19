@@ -1,7 +1,10 @@
 import org.json.JSONObject
 
+import java.text.SimpleDateFormat
+
 class AssignmentController extends BaseController {
 
+    static DATEPICKER_DATEFORMAT = new SimpleDateFormat("MM/dd/yyyy")
     def index = { redirect(action: "list", params: params) }
 
     // the delete, save and update actions only accept POST requests
@@ -95,6 +98,32 @@ class AssignmentController extends BaseController {
         JSONObject jsonResponse = params.id ? update(request, params) : create(request, params)
         render jsonResponse.toString()
     }
+
+
+    def ajaxEdit = {
+        def assignmentInstance = Assignment.get(params.id)
+        if (!assignmentInstance) {
+            flash.message = "Assignment.not.found"
+            flash.args = [params.id]
+            flash.defaultMessage = "Assignment not found with id ${params.id}"
+            redirect(action: "list")
+        }
+        else {
+            JSONObject jsonResponse = new JSONObject()
+            jsonResponse.put('ok', true)
+            jsonResponse.put('id', assignmentInstance.id)
+            jsonResponse.put('version', assignmentInstance.version)
+            jsonResponse.put('userId', assignmentInstance.userId)
+            jsonResponse.put('roleId', assignmentInstance.roleId)
+            jsonResponse.put('description', assignmentInstance.description)
+            jsonResponse.put('startDate', DATEPICKER_DATEFORMAT.format(assignmentInstance.startDate))
+            jsonResponse.put('endDate', DATEPICKER_DATEFORMAT.format(assignmentInstance.endDate))
+            jsonResponse.put('active', assignmentInstance.active)
+            render jsonResponse.toString()
+        }
+    }
+
+
 
     private JSONObject create(request, params) {
         JSONObject jsonResponse
