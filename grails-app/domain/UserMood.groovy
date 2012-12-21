@@ -5,6 +5,7 @@ class UserMood {
     User            user
     Company         company
     int             value
+    String          reason;
 
     boolean deleted = false
 
