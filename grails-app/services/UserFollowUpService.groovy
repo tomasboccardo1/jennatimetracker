@@ -51,7 +51,7 @@ class UserFollowUpService {
                         def reportFile = File.createTempFile('UsersFollowed', '.pdf')
                         def outputStream = new FileOutputStream(reportFile)
 
-                        def report = databaseService.getWeeWorkReport(followed.id).collect {
+                        def report = databaseService.getWeekWorkReport(followed.id).collect {
                             [project: it.getAt('project'), date: it.getAt('date'), comment: it.getAt('comment'), timeSpent: it.getAt('effort')]
                         }
 

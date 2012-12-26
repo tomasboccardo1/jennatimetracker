@@ -41,7 +41,7 @@ class AskForHumourRequestHandler extends RequestHandler {
                 uMood.value = _conversation.context.moodValue
                 uMood.status = ""
                 uMood.company = user.company
-                uMood.reason = response;
+                uMood.comment = response;
                 uMood.save(flush: true)
             }
 

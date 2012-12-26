@@ -5,13 +5,11 @@ class UserMood {
     User            user
     Company         company
     int             value
-    String          reason;
+    String          comment;
 
     boolean deleted = false
-
     static belongsTo = User
-
-     static constraints = {
+    static constraints = {
         status(nullable: false)
         date(nullable: false)
     }

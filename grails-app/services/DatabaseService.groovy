@@ -69,7 +69,7 @@ class DatabaseService {
         return rows
     }
 
-    def getWeeWorkReport = {Long userId ->
+    def getWeekWorkReport = {Long userId ->
 
         def sql = new Sql(dataSource)
         def query = '''select distinct e.date as date,
@@ -89,6 +89,10 @@ class DatabaseService {
         def rows = sql.rows(query, [userId])
         return rows
     }
+
+
+
+
 
     def getKnowledge = {Long userId ->
 

@@ -103,7 +103,7 @@ class UserController extends BaseController {
         def moodWeekReport = databaseService.getMoodReport(user.id).collect {
             [date: it.getAt('date'), moodValue: it.getAt('value')]
         }
-        def workWeekReport = databaseService.getWeeWorkReport(user.id).collect {
+        def workWeekReport = databaseService.getWeekWorkReport(user.id).collect {
             [date: it.getAt('date'), timeSpent: it.getAt('effort'), project: it.getAt('project'), comment: it.getAt('comment')]
         }
         def knowledgeWeekReport = databaseService.getKnowledge(user.id).collect {
