@@ -24,7 +24,7 @@ class BadMoodDescriptionHeadsUpService {
 
         Formatters.locale = locale
         Map formatters = [date: Formatters.dateFormatter]
-        Map parameters = [title: getMessage(locale, 'badMood.heads.up.subject'), 'column.widths': [0.1, 0.1, 0.4, 0.1]]
+        Map parameters = [title: getMessage(locale, 'badMood.heads.up.subject'), 'column.widths': [0.1, 0.1, 0.1, 0.4]]
         exportService.export(format, outputStream, reports, fields, labels, formatters, parameters)
     }
 
