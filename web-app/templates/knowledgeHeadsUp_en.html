@@ -1,13 +1,36 @@
-<p>Hello ${recipient}<p>
+    <p>Hello ${recipient}<p>
 
-<% if (newKnowledge) { %>
-	<p>People in ${company} learned a lot from ${from} to ${to}. Here's a short summary!</p>
-	
-	<ul>
-	    <% newKnowledge.each { learning -> %>
-	            <li>${learning.description.encodeAsSafeHTML()} - ${learning.user}</li>
-	    <% } %>
+        <% if (newKnowledge) { %>
+    <p>People in ${company} learned a lot from ${from} to ${to}. Here's a short summary!</p>
+
+
+
+    <% if (maxPoints>0 && usersWithMorePoints?.size()==1) { %>
+
+    <p>Congratulations <% usersWithMorePoints.each { user -> %> ${user.name}  <% } %> for the ${maxPoints} points scored, you are the winner of the week
+        ${weekNumber} of ${year}.</p>
+
+
+    <% } else if(usersWithMorePoints?.size()>1) {%>
+
+    <p>Congratulations to the following users who share the podium of the week ${weekNumber} of ${year} with
+        ${maxPoints} points scored.</p>
+
+    <ul>
+        <% usersWithMorePoints.each { user -> %>
+        <li>${user.name}</li>
+        <% } %>
     </ul>
-<% } else { %>
-    <p>It seems like nobody learned new stuff from ${from} to ${to}. Don't forget to track your new knowledge with Jenna Timetracker!</p>
-<% } %>
+
+    <% } %>
+
+
+    <ul>
+        <% newKnowledge.each { learning -> %>
+        <li>${learning.description.encodeAsSafeHTML()} - ${learning.user}</li>
+        <% } %>
+    </ul>
+    <% } else { %>
+    <p>It seems like nobody learned new stuff from ${from} to ${to}. Don't forget to track your new knowledge with Jenna
+        Timetracker!</p>
+    <% } %>
