@@ -26,7 +26,7 @@ class IncompleteEffortsAlarmService {
 
             def efforts = Effort.executeQuery(
                     '''select ef from Effort ef
-                        where  ef.user= :user and ef.date < :to and ef.date > :from''',
+                        where  ef.deleted=false and ef.user= :user and ef.date < :to and ef.date > :from''',
                     [user: u, from: minDate, to: maxDate])
 
             if (efforts && !efforts.isEmpty()) {
@@ -37,16 +37,20 @@ class IncompleteEffortsAlarmService {
                 }
 
                 def dailyWorkingHours=u.dailyWorkingHours
-                def count=0;
+                int count=0;
 
                 moodPerUser.each() {ef->
-                    ef.each(){
+                    ef.value.each(){
                         count+=it.value
                     }
                 }
 
                 def percentage = 0.75
-                if (count<dailyWorkingHours*percentage){
+
+                /*TODO: seguir agregando controles
+                * Ahora solo notificamos cuando se carga menos del 75% de horas en una semana
+                * */
+                if (count<dailyWorkingHours*percentage*5){
 
                     def model = [
                             recipient: u.name,
@@ -55,10 +59,10 @@ class IncompleteEffortsAlarmService {
                     ]
 
                     emailNotificationService.sendNotification(u,
-                            messageSource.getMessage('email.userFollowUp.subject', [followed.name] as Object[], u.locale),
+                            messageSource.getMessage('email.userFollowUp.subject', [u.name] as Object[], u.locale),
                             'incompleteEffortsHeadsUp',
                             model,
-                            [reportFile])
+                            [])
                 }
             }
         }

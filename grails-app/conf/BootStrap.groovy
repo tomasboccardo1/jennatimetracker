@@ -78,6 +78,7 @@ class BootStrap {
 		ProjectFollowUpJob.schedule(grailsApplication.config.projectFollowUp.cronExpression)
 		UserFollowUpJob.schedule(grailsApplication.config.userFollowUp.cronExpression)
         BadMoodDescriptionHeadsUpJob.schedule(grailsApplication.config.badMoodDescriptionHeadsUp.cronExpression)
+        IncompleteEffortsAlarmJob.schedule(grailsApplication.config.incompleteEffortsAlarm.cronExpression)
         NewKnowledgesHeadUpJob.schedule(grailsApplication.config.knowledgeHeadsUp.cronExpression)
         MoodWarningHeadsUpJob.schedule(grailsApplication.config.moodWarningHeadsUp.cronExpression)
 		// FIXME: Reminders are not fully-implemented, so we're deactivating this
