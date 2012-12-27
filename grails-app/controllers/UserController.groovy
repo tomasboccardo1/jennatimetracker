@@ -49,7 +49,7 @@ class UserController extends BaseController {
         userInstance.chatTime = currentUser.chatTime
         userInstance.humour = "sweet"
         userInstance.localChatTime = TimeZoneUtil.toSystemTime(userInstance.chatTime, userInstance.timeZone)
-
+        userInstance.dailyWorkingHours=8
         Company company = Company.findById(currentUser.getCompany().getId())
 
         if (!userInstance.hasErrors() && userInstance.save()) {
