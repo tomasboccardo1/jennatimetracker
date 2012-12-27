@@ -1,9 +1,6 @@
     <p>Hello ${recipient}<p>
 
         <% if (newKnowledge) { %>
-    <p>People in ${company} learned a lot from ${from} to ${to}. Here's a short summary!</p>
-
-
 
     <% if (maxPoints>0 && usersWithMorePoints?.size()==1) { %>
 
@@ -24,7 +21,7 @@
 
     <% } %>
 
-
+    <p>People in ${company} learned a lot from ${from} to ${to}. Here's a short summary!</p>
     <ul>
         <% newKnowledge.each { learning -> %>
         <li>${learning.description.encodeAsSafeHTML()} - ${learning.user}</li>

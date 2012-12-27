@@ -2,7 +2,7 @@
 
 <% if (newKnowledge) { %>
 
-    <p>La gente de ${company} aprendi&oacute; mucho entre el ${from} y el ${to}. Mir&aacute; este resumen:</p>
+
 
     <% if (maxPoints>0 && usersWithMorePoints?.size()==1) { %>
 
@@ -20,6 +20,8 @@
         </ul>
 
     <% } %>
+
+    <p>La gente de ${company} aprendi&oacute; mucho entre el ${from} y el ${to}. Mir&aacute; este resumen:</p>
 
     <ul>
         <% newKnowledge.each { learning -> %>

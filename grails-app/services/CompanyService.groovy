@@ -74,8 +74,8 @@ where um.company = :company and um.deleted = false''',
         def result = Learning.executeQuery(
                 '''select l
 from Learning l
-where l.company = :company and l.deleted = false and l.date >= :minDate and l.date < :maxDate
-order by l.points desc''',
+where l.company = :company and l.deleted = false and l.date >= :minDate and l.date <= :maxDate
+order by l.points desc, l.user.name asc''',
                 [company: company, minDate: minDate, maxDate: maxDate])
         return result
     }

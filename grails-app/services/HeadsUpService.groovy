@@ -27,25 +27,29 @@ class HeadsUpService {
 
         def knowledgePerUser = new HashMap().withDefault { 0 }
 
-        List<User> usersWithMorePoints = [];
-
-
+        List<User> usersWithMorePoints = []
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd")
 
-        int count, maxPoints = 0;
-        String fromS=sdf.format(from)
-        String toS=sdf.format(to)
+        int userPoints, maxPoints = 0;
+        String fromS = sdf.format(from)
+        String toS = sdf.format(to)
 
         for (learning in newKnowledge) {
             if (!knowledgePerUser.get(learning.user)) {
-                count = (databaseService.getUsersPoints(fromS, toS, learning.user.company, learning.user.id))[0]?.points
-                knowledgePerUser.put(learning.user, count);
 
-                if (count > maxPoints) {
-                    maxPoints = count
-                    usersWithMorePoints = []
+                userPoints = (databaseService.getUsersPoints(fromS, toS, learning.user.company, learning.user.id))[0]?.points
+                if (userPoints > 0) {
+                    knowledgePerUser.put(learning.user, userPoints)
+
+                    if (userPoints > maxPoints) {
+                        maxPoints = userPoints
+                        usersWithMorePoints = []
+                    }
+
+                    if (!(userPoints < maxPoints)){
+                        usersWithMorePoints.add(((Learning) learning).user)
+                    }
                 }
-                usersWithMorePoints.add(((Learning) learning).user)
             }
         }
 
