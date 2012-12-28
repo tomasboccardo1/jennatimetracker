@@ -28,7 +28,9 @@ beans = {
 	inviteCoworkersStep1RequestHandler(InviteCoworkersStep1RequestHandler)
 	inviteCoworkersStep2RequestHandler(InviteCoworkersStep2RequestHandler)
 	inviteCoworkersStep3RequestHandler(InviteCoworkersStep3RequestHandler, grailsApplication: grailsApplication)
-	chatService(ChatService) {
+    askForHumourRequestHandler(AskForHumourRequestHandler)
+
+    chatService(ChatService) {
 		chatHandlers = [
 			humourRequestHandler,
 			languageRequestHandler,
@@ -53,7 +55,8 @@ beans = {
 			yesterdayRequestHandler,
 			inviteCoworkersStep1RequestHandler,
 			inviteCoworkersStep2RequestHandler,
-			inviteCoworkersStep3RequestHandler
+			inviteCoworkersStep3RequestHandler,
+            askForHumourRequestHandler
 		]
 	}
 }

@@ -1,13 +1,93 @@
-<p>Hello ${recipient}<p>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Jenna reports</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+    </style>
+</head>
 
-<% if (newKnowledge) { %>
-	<p>People in ${company} learned a lot from ${from} to ${to}. Here's a short summary!</p>
-	
-	<ul>
-	    <% newKnowledge.each { learning -> %>
-	            <li>${learning.description.encodeAsSafeHTML()} - ${learning.user}</li>
-	    <% } %>
-    </ul>
-<% } else { %>
-    <p>It seems like nobody learned new stuff from ${from} to ${to}. Don't forget to track your new knowledge with Jenna Timetracker!</p>
-<% } %>
+<body>
+<table width="650" border="0" cellspacing="0" cellpadding="0" align="center">
+    <tr width="650" height="188" valign="bottom">
+        <td colspan="3"><img src="http://fdvsolutions.com/jenna/reporte/header.jpg" width="650" height="188"
+                             alt="header jenna"/></td>
+    </tr>
+    <tr>
+        <td width="10" bgcolor="#1b6982"></td>
+        <td bgcolor="#1b6982" height="40" align="right" valign="bottom"><font face="Arial, Helvetica, sans-serif"
+                                                                              size="2" color="#FFFFFF">from</font>&nbsp;<font
+                face="Arial, Helvetica, sans-serif" size="4" color="#f3d099">${from}</font>&nbsp;<font
+                face="Arial, Helvetica, sans-serif" size="2" color="#FFFFFF">to</font>&nbsp;<font
+                face="Arial, Helvetica, sans-serif" size="4" color="#f3d099">${to}</font></td>
+        <td width="10" bgcolor="#1b6982"></td>
+    </tr>
+    <tr>
+        <td width="10" bgcolor="#f3d099"></td>
+        <td bgcolor="#f3d099" height="40"><font face="Arial, Helvetica, sans-serif" size="3" color="#000000">Hello
+            <strong>${recipient}</strong></font></td>
+        <td width="10" bgcolor="#f3d099"></td>
+    </tr>
+    <tr>
+        <td height="10" bgcolor="#FFFFFF" colspan="3"></td>
+    </tr>
+    <tr>
+        <td width="10"></td>
+        <td>
+            <!--Codigo de la lista-->
+            <% if (newKnowledge) { %>
+            <font face="Arial, Helvetica, sans-serif" size="4" color="#000000">People
+                in </font><strong>${company}</strong>learned a lot this week.<br/></font> <font
+                face="Arial, Helvetica, sans-serif" size="5" color="#000000">Here's a short summary!</font><br/><br/>
+            <font face="Arial, Helvetica, sans-serif" size="2" color="#000000">
+                <ul>
+                    <% newKnowledge.each { learning -> %>
+                    <li>${learning.description.encodeAsSafeHTML()} - ${learning.user}</li>
+                    <% } %>
+                </ul>
+                <br/><br/>
+            </font>
+            <% } else { %>
+            <font face="Arial, Helvetica, sans-serif" size="4" color="#000000">It seems like nobody learned new stuff.
+                Don't forget to track your new knowledge with <strong>Jenna Timetracker</strong></font>
+            <% } %>
+            <!--FIn Codigo de la lista-->
+        </td>
+        <td width="10"></td>
+    </tr>
+    <tr>
+        <td height="10" colspan="3"></td>
+    </tr>
+    <tr>
+        <td width="10" bgcolor="#f3d099"></td>
+        <td bgcolor="#f3d099">
+            <% if (newKnowledge) { %> <% if (maxPoints>0 && usersWithMorePoints?.size()==1) { %>
+
+            <font face="Arial, Helvetica, sans-serif" size="2" color="#000000">Congratulations <strong><%
+                usersWithMorePoints.each { user -> %> ${user.name} <% } %></strong> for the</font><font
+                face="Arial, Helvetica, sans-serif" size="3" color="#1b6982"> ${maxPoints}</font> <font
+                face="Arial, Helvetica, sans-serif" size="2" color="#000000">points scored, you are the winner of the
+            week <strong>${weekNumber} of ${year}.</strong></font>
+
+            <% } else if(usersWithMorePoints?.size()>1) {%>
+            <font face="Arial, Helvetica, sans-serif" size="2" color="#000000">Congratulations to the following users
+                who share the podium of the week <strong>${weekNumber} of ${year}</strong> with</font> <font
+                face="Arial, Helvetica, sans-serif" size="3" color="#1b6982">${maxPoints} points scored.</font>
+            <font face="Arial, Helvetica, sans-serif" size="2" color="#000000"><strong>
+                <% usersWithMorePoints.each { user -> %>
+                ${user.name}
+                <% } %>
+                <% } %>
+            </strong></font>
+            <% } %>
+
+        </td>
+        <td width="10" bgcolor="#f3d099"></td>
+    </tr>
+</table>
+</body>
+</html>
