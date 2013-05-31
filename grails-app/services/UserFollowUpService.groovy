@@ -33,7 +33,7 @@ class UserFollowUpService {
     def sendEmailsToFollowers(company) {
 
         Permission permission = Permission.findByName(Permission.ROLE_COMPANY_ADMIN)
-        def maxDate = new Date().clearTime()
+        def maxDate = new Date().clearTime() + 1
         def minDate = maxDate - 7
 
 

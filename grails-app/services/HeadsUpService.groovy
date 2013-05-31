@@ -16,7 +16,7 @@ class HeadsUpService {
     def sendNewKnowledgeReport(company) {
         def today = new Date().clearTime()
         def from = today - 7
-        def to = today
+        def to = today + 1
 
         Calendar cal = Calendar.getInstance()
         int weekNumber = cal.get(Calendar.WEEK_OF_YEAR)
@@ -25,12 +25,18 @@ class HeadsUpService {
 
         def newKnowledge = companyService.listNewLearnings(company, from, to)
 
+        if(newKnowledge.empty) {
+            log.debug("Sin conocimiento para: " + company.name)
+            return
+        }
+
         def knowledgePerUser = new HashMap().withDefault { 0 }
 
-        List<User> usersWithMorePoints = []
+        List<User> usersWithMorePoints
+        usersWithMorePoints = []
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd")
 
-        int userPoints, maxPoints = 0;
+        Integer userPoints, maxPoints = 0;
         String fromS = sdf.format(from)
         String toS = sdf.format(to)
 
@@ -38,9 +44,11 @@ class HeadsUpService {
             if (!knowledgePerUser.get(learning.user)) {
 
                 userPoints = (databaseService.getUsersPoints(fromS, toS, learning.user.company, learning.user.id))[0]?.points
-                if (userPoints > 0) {
+                if (userPoints!= null && userPoints > 0) {
                     knowledgePerUser.put(learning.user, userPoints)
 
+
+                    //Creo que esto esta mal.
                     if (userPoints > maxPoints) {
                         maxPoints = userPoints
                         usersWithMorePoints = []

@@ -82,7 +82,6 @@ class DatabaseService {
                 and    a.project_id = p.id
                 and    e.time_spent > 0
                 and    e.deleted = 0
-                and    week(e.date) = week(CURRENT_DATE)
                 and    month(e.date) = month(CURRENT_DATE)
                 and    year(e.date) = year(CURRENT_DATE)
                 order   by date'''
