@@ -115,6 +115,53 @@ class BootStrap {
 
 		// FIXME: Reminders are not fully-implemented, so we're deactivating this
         //ReminderJob.schedule(grailsApplication.config.chat.cronExpression)
+
+        /**
+         * Check for admin user
+         */
+        checkForAdminUser()
+
+    }
+
+    def checkForAdminUser() {
+        log.info("Check for admin user.")
+
+
+        def admin = User.find("from User u where u.enabled = true and exists (from u.permissions p where p.name = :admin)",['admin': Permission.ROLE_SYSTEM_ADMIN])
+        if (!admin){
+            log.info("*** Creating admin user")
+            admin = new User()
+
+            admin.setPermissions(new HashSet<Permission>())
+            admin.setName("System Administrator")
+            admin.setEnabled(true)
+            def cleanPass = "j33naAdm1n"
+            admin.setPassword(authenticateService.encodePassword(cleanPass))
+            admin.setAccount("admin")
+
+            Company aCompany = new Company()
+            aCompany.setName("Default Company")
+            aCompany.save()
+            aCompany.refresh()
+            admin.setCompany(aCompany)
+
+            admin.setLocale(Locale.getDefault())
+            admin.setTimeZone(TimeZone.getDefault())
+
+            if (admin.save(false)){
+                Permission.findAll().each { permission ->
+                    ((Permission)permission).addToUsers(admin)
+
+                }
+
+            }
+            log.info("\n***********************************************************" +
+                     "\n*** ADMIN LOGIN: user = admin, password = j33naAdm1n\n" +
+                     "\n***********************************************************\n\n")
+
+        } else {
+            log.info("Admin user found!")
+        }
     }
 
     def destroy = {
