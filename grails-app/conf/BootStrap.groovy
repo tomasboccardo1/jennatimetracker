@@ -64,7 +64,7 @@ class BootStrap {
             taskCategory = new TagCategory(name: TagCategory.CATEGORY_TASK)
             taskCategory.save()
         }
-		
+
 		// FIXME: Is there any better way to force Singleton beans to be loaded eagerly?
 		grailsApplication.getMainContext().getBean("jabberService")
 
@@ -73,14 +73,46 @@ class BootStrap {
 		 * As there's no (easy/proper) way to access the config from the static triggers definition,
 		 * we have to schedule the Jobs here (and pray not to forget any)
 		 */
-		ChattingJob.schedule(grailsApplication.config.chat.cronExpression)
-		InviteCoworkersJob.schedule(grailsApplication.config.chat.cronExpression)
-		ProjectFollowUpJob.schedule(grailsApplication.config.projectFollowUp.cronExpression)
-		UserFollowUpJob.schedule(grailsApplication.config.userFollowUp.cronExpression)
-        BadMoodDescriptionHeadsUpJob.schedule(grailsApplication.config.badMoodDescriptionHeadsUp.cronExpression)
-        IncompleteEffortsAlarmJob.schedule(grailsApplication.config.incompleteEffortsAlarm.cronExpression)
-        NewKnowledgesHeadUpJob.schedule(grailsApplication.config.knowledgeHeadsUp.cronExpression)
-        MoodWarningHeadsUpJob.schedule(grailsApplication.config.moodWarningHeadsUp.cronExpression)
+        if (grailsApplication.config.chat.cronExpression)
+            ChattingJob.schedule(grailsApplication.config.chat.cronExpression)
+        else
+            log.info("No cron definition for ChattingJob: chat.cronExpression")
+
+        if (grailsApplication.config.chat.cronExpression)
+		    InviteCoworkersJob.schedule(grailsApplication.config.chat.cronExpression)
+        else
+            log.info("No cron definition for InviteCoworkersJob: chat.cronExpression")
+
+        if (grailsApplication.config.badMoodDescriptionHeadsUp.cronExpression)
+            BadMoodDescriptionHeadsUpJob.schedule(grailsApplication.config.badMoodDescriptionHeadsUp.cronExpression)
+        else
+            log.info("No cron definition for BadMoodDescriptionHeadsUpJob: badMoodDescriptionHeadsUp.cronExpression")
+
+        if (grailsApplication.config.projectFollowUp.cronExpression)
+            ProjectFollowUpJob.schedule(grailsApplication.config.projectFollowUp.cronExpression)
+        else
+            log.info("No cron definition for ProjectFollowUpJob: projectFollowUp.cronExpression")
+
+        if (grailsApplication.config.userFollowUp.cronExpression)
+            UserFollowUpJob.schedule(grailsApplication.config.userFollowUp.cronExpression)
+        else
+            log.info("No cron definition for UserFollowUpJob: userFollowUp.cronExpression")
+
+        if (grailsApplication.config.incompleteEffortsAlarm.cronExpression)
+            IncompleteEffortsAlarmJob.schedule(grailsApplication.config.incompleteEffortsAlarm.cronExpression)
+        else
+            log.info("No cron definition for IncompleteEffortsAlarmJob: incompleteEffortsAlarm.cronExpression")
+
+        if (grailsApplication.config.knowledgeHeadsUp.cronExpression)
+            NewKnowledgesHeadUpJob.schedule(grailsApplication.config.knowledgeHeadsUp.cronExpression)
+        else
+            log.info("No cron definition for NewKnowledgesHeadUpJob: knowledgeHeadsUp.cronExpression")
+
+        if (grailsApplication.config.moodWarningHeadsUp.cronExpression)
+            MoodWarningHeadsUpJob.schedule(grailsApplication.config.moodWarningHeadsUp.cronExpression)
+        else
+            log.info("No cron definition for MoodWarningHeadsUpJob: moodWarningHeadsUp.cronExpression")
+
 		// FIXME: Reminders are not fully-implemented, so we're deactivating this
         //ReminderJob.schedule(grailsApplication.config.chat.cronExpression)
     }
