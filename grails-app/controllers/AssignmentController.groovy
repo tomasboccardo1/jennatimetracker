@@ -125,7 +125,7 @@ class AssignmentController extends BaseController {
 
 
 
-    private JSONObject create(request, params) {
+    public JSONObject create(request, params) {
         JSONObject jsonResponse
         Assignment assignmentInstance = new Assignment(params)
         if (!assignmentInstance.hasErrors() && assignmentInstance.save()) {
@@ -136,7 +136,7 @@ class AssignmentController extends BaseController {
         return jsonResponse
     }
 
-    private JSONObject update(request, params) {
+    public JSONObject update(request, params) {
         JSONObject jsonResponse
         Assignment assignment = Assignment.get(params.id)
         if (assignment && assignment.project.company.id == findLoggedUser().company.id) {

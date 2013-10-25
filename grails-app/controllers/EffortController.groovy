@@ -147,7 +147,7 @@ class EffortController extends BaseController {
         render jsonResponse.toString()
     }
 
-    private JSONObject create(request, params) {
+    public JSONObject create(request, params) {
         JSONObject jsonResponse
 
         Effort effortInstance = new Effort(params)
@@ -165,7 +165,7 @@ class EffortController extends BaseController {
         return jsonResponse
     }
 
-    private JSONObject update(request, params) {
+    public JSONObject update(request, params) {
         JSONObject jsonResponse
         def effortInstance = Effort.get(params.id)
         if (effortInstance && effortInstance.user.id == findLoggedUser().id) {
