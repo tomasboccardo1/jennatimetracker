@@ -11,4 +11,5 @@ web-app/WEB-INF/classes/
 
 .idea
 atlassian-ide-plugin.xml
-Jenna*.iml
+*.iml
+out/
