@@ -1,9 +1,10 @@
-import org.hibernate.event.DeleteEvent;
-import org.hibernate.event.def.DefaultDeleteEventListener
-import org.hibernate.event.EventSource
-import org.hibernate.persister.entity.EntityPersister
 import org.hibernate.engine.PersistenceContext
-import java.text.SimpleDateFormat;
+import org.hibernate.event.DeleteEvent
+import org.hibernate.event.EventSource
+import org.hibernate.event.def.DefaultDeleteEventListener
+import org.hibernate.persister.entity.EntityPersister
+
+import java.text.SimpleDateFormat
 
 /**
  * @author Leandro Larroulet

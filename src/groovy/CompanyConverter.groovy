@@ -1,6 +1,6 @@
-import org.compass.core.marshall.MarshallingContext
 import org.compass.core.converter.basic.AbstractBasicConverter
 import org.compass.core.mapping.ResourcePropertyMapping
+import org.compass.core.marshall.MarshallingContext
 
 /**
  * @author Alejandro Gomez (alejandro.gomez@fdvsolutions.com)

@@ -1,4 +1,5 @@
 import groovy.sql.Sql
+
 import java.text.SimpleDateFormat
 
 class DatabaseService {
@@ -14,13 +15,13 @@ class DatabaseService {
                 " ef.date as date, " +
                 " ef.time_spent as timeSpent, " +
                 " us.name as user, " +
-                " ro.name as role, " +
+                " ro.name as permission, " +
                 " ass.start_date as assignmentStartDate, " +
                 " ass.end_date as assignmentEndDate, " +
                 " ef.comment as comment" +
                 " from    project_guide.effort ef, " +
                 " project_guide.user us, " +
-                " project_guide.role ro, " +
+                " project_guide.permission ro, " +
                 " project_guide.assignment ass, " +
                 " project_guide.project pro " +
                 " where   ef.user_id = us.id " +
@@ -49,7 +50,7 @@ class DatabaseService {
 
         query += " and     us.company_id = ${company.id}"
 
-        query += " order by pro.name asc, role asc, user asc, ef.date desc "
+        query += " order by pro.name asc, permission asc, user asc, ef.date desc "
 
         def rows = sql.rows(query)
         return rows

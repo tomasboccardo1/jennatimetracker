@@ -33,7 +33,7 @@ class RoleController extends BaseController{
     def save = {
         def roleInstance = new Role(params)
         if (!roleInstance.hasErrors() && roleInstance.save()) {
-            flash.message = "role.created"
+            flash.message = "permission.created"
             flash.args = [roleInstance.id]
             flash.defaultMessage = "Role ${roleInstance.id} created"
             redirect(action: "show", id: roleInstance.id)
@@ -46,7 +46,7 @@ class RoleController extends BaseController{
     def show = {
         def roleInstance = Role.get(params.id)
         if (!roleInstance) {
-            flash.message = "role.not.found"
+            flash.message = "permission.not.found"
             flash.args = [params.id]
             flash.defaultMessage = "Role not found with id ${params.id}"
             redirect(action: "list")
@@ -59,7 +59,7 @@ class RoleController extends BaseController{
     def edit = {
         def roleInstance = Role.get(params.id)
         if (!roleInstance) {
-            flash.message = "role.not.found"
+            flash.message = "permission.not.found"
             flash.args = [params.id]
             flash.defaultMessage = "Role not found with id ${params.id}"
             redirect(action: "list")
@@ -76,14 +76,14 @@ class RoleController extends BaseController{
                 def version = params.version.toLong()
                 if (roleInstance.version > version) {
                     
-                    roleInstance.errors.rejectValue("version", "role.optimistic.locking.failure", "Another user has updated this Role while you were editing")
+                    roleInstance.errors.rejectValue("version", "permission.optimistic.locking.failure", "Another user has updated this Role while you were editing")
                     render(view: "edit", model: [roleInstance: roleInstance])
                     return
                 }
             }
             roleInstance.properties = params
             if (!roleInstance.hasErrors() && roleInstance.save()) {
-                flash.message = "role.updated"
+                flash.message = "permission.updated"
                 flash.args = [params.id]
                 flash.defaultMessage = "Role ${params.id} updated"
                 redirect(action: "show", id: roleInstance.id)
@@ -93,7 +93,7 @@ class RoleController extends BaseController{
             }
         }
         else {
-            flash.message = "role.not.found"
+            flash.message = "permission.not.found"
             flash.args = [params.id]
             flash.defaultMessage = "Role not found with id ${params.id}"
             redirect(action: "edit", id: params.id)
@@ -105,20 +105,20 @@ class RoleController extends BaseController{
         if (roleInstance) {
             try {
                 roleInstance.delete()
-                flash.message = "role.deleted"
+                flash.message = "permission.deleted"
                 flash.args = [params.id]
                 flash.defaultMessage = "Role ${params.id} deleted"
                 redirect(action: "list")
             }
             catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "role.not.deleted"
+                flash.message = "permission.not.deleted"
                 flash.args = [params.id]
                 flash.defaultMessage = "Role ${params.id} could not be deleted"
                 redirect(action: "show", id: params.id)
             }
         }
         else {
-            flash.message = "role.not.found"
+            flash.message = "permission.not.found"
             flash.args = [params.id]
             flash.defaultMessage = "Role not found with id ${params.id}"
             redirect(action: "list")

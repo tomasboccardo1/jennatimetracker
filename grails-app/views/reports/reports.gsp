@@ -30,7 +30,7 @@
                 <td>${row.getAt('user')}</td>
                 <td><g:formatDate date="${row.getAt('date')}"  format="dd-MM-yyyy" /></td>
                 <td>${row.getAt('timeSpent')}</td>
-                <td>${row.getAt('role')}</td>
+                <td>${row.getAt('permission')}</td>
             </tr>
         </g:each>
       </table>

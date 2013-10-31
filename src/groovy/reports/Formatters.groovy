@@ -1,8 +1,9 @@
 package reports
 
-import java.text.DecimalFormatSymbols
-import java.text.DecimalFormat
 import org.springframework.web.servlet.support.RequestContextUtils
+
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 
 /**
  * @author Alejandro Gomez (alejandro.gomez@fdvsolutions.com)

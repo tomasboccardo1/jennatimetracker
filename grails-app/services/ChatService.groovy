@@ -1,10 +1,10 @@
-import org.springframework.context.NoSuchMessageException
-import org.springframework.context.MessageSource
 import eliza.ElizaMain
-import org.springframework.beans.factory.InitializingBean
-import org.codehaus.groovy.grails.commons.GrailsApplication;
+import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.plugins.support.aware.GrailsApplicationAware
+import org.springframework.beans.factory.InitializingBean
+import org.springframework.context.MessageSource
 import org.springframework.context.MessageSourceAware
+import org.springframework.context.NoSuchMessageException
 
 class ChatService  implements InitializingBean, GrailsApplicationAware, MessageSourceAware {
 

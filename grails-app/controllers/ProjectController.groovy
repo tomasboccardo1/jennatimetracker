@@ -1,11 +1,7 @@
-import org.json.JSONObject
-import java.text.DateFormat
-import org.springframework.web.servlet.support.RequestContextUtils
-import java.text.SimpleDateFormat
-import javax.servlet.http.HttpServletRequest
+import org.json.simple.JSONObject
 import org.springframework.dao.DataIntegrityViolationException
-import java.lang.reflect.Array
-import grails.converters.JSON
+
+import java.text.SimpleDateFormat
 
 class ProjectController extends BaseController {
 

@@ -1,5 +1,5 @@
-import grails.test.*
 import SafeHTMLCodec
+import grails.test.GrailsUnitTestCase
 
 class SafeHTMLCodecTest extends GrailsUnitTestCase {
 

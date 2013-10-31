@@ -1,10 +1,10 @@
+import grails.util.GrailsUtil
+import org.jivesoftware.smack.*
 import org.jivesoftware.smack.packet.Message
 import org.jivesoftware.smack.packet.Message.Type
 import org.jivesoftware.smack.packet.Presence
 import org.jivesoftware.smackx.packet.VCard
 import org.springframework.beans.factory.InitializingBean
-import org.jivesoftware.smack.*
-import grails.util.GrailsUtil
 
 class JabberService implements InitializingBean {
 

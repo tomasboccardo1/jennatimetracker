@@ -4,9 +4,6 @@
  * Date: 29/09/2010
  * Time: 15:40:03
  */
-import org.hibernate.type.LocaleType
-import org.hibernate.type.TimeZoneType
-
 class LearningVote {
 
     User user

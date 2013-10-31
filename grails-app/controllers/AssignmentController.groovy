@@ -1,4 +1,4 @@
-import org.json.JSONObject
+import org.json.simple.JSONObject
 
 import java.text.SimpleDateFormat
 
@@ -62,7 +62,7 @@ class AssignmentController extends BaseController {
             qparams['endDate'] = cmd.endDate
             qparamsTotal['endDate'] = cmd.endDate
         }
-        query += ' order by a.project.name asc, a.role.name asc, a.user.name asc'
+        query += ' order by a.project.name asc, a.permission.name asc, a.user.name asc'
         List assignmentList = Assignment.executeQuery(query, qparams)
         long assignmentListTotal = Assignment.executeQuery(queryTotal, qparamsTotal)[0]
         def projectList = Project.findAllByCompany(findLoggedUser().company, [sort: "name", order: "asc"])
@@ -240,7 +240,7 @@ class AssignmentController extends BaseController {
       User user = findLoggedUser();
 
       def efforts = Effort.findAll("from Effort ef where ef.assignment = ? and (ef.date < ? or ef.date > ?) ", [assignment,assignment.startDate, assignment.endDate]);
-      //roles = Role.executeQuery("select distinct ro from Role as ro, Assignment as ass where  ass.role = ro and ass.project = ? order by ro.name asc", [Project.get(params.projectId)])
+      //roles = Role.executeQuery("select distinct ro from Role as ro, Assignment as ass where  ass.permission = ro and ass.project = ? order by ro.name asc", [Project.get(params.projectId)])
       if (!efforts)
         result = Boolean.TRUE
 

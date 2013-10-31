@@ -1,14 +1,12 @@
-import org.springframework.security.providers.UsernamePasswordAuthenticationToken
-import org.springframework.security.GrantedAuthority
-import org.springframework.security.GrantedAuthorityImpl
-import org.codehaus.groovy.grails.plugins.springsecurity.GrailsUserImpl
-import org.json.JSONObject
+import org.json.simple.JSONObject
 import groovy.text.SimpleTemplateEngine
-import org.springframework.security.context.SecurityContextHolder as SCH
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.authority.GrantedAuthorityImpl
 
 class RegisterController extends BaseController {
 
-	def authenticateService
+	def springSecurityService
 	def emailerService
     def jabberService
     def grailsApplication
@@ -20,7 +18,7 @@ class RegisterController extends BaseController {
 	 */
 	def index = {
 		// skip if already logged in
-		if (authenticateService.isLoggedIn()) {
+		if (springSecurityService.isLoggedIn()) {
 			redirect action: show
 			return
 		}
@@ -40,7 +38,7 @@ class RegisterController extends BaseController {
 	def show = {
 
 		// get user id from session's domain class.
-		def user = authenticateService.userDomain()
+		def user = springSecurityService.userDomain()
 		if (user) {
 			render view: 'show', model: [person: User.get(user.id)]
 		}
@@ -55,7 +53,7 @@ class RegisterController extends BaseController {
 	def edit = {
 
 		def person
-		def user = authenticateService.userDomain()
+		def user = springSecurityService.userDomain()
 		if (user) {
 			person = User.get(user.id)
 		}
@@ -75,7 +73,7 @@ class RegisterController extends BaseController {
 	def update = {
 
 		def person
-		def user = authenticateService.userDomain()
+		def user = springSecurityService.userDomain()
 		if (user) {
 			person = User.get(user.id)
 		}
@@ -94,7 +92,7 @@ class RegisterController extends BaseController {
 		if (params.pass && params.pass.length() > 0
 				&& params.repass && params.repass.length() > 0) {
 			if (params.pass == params.repass) {
-				person.pass = authenticateService.encodePassword(params.pass)
+				person.pass = springSecurityService.encodePassword(params.pass)
 			}
 			else {
 				person.pass = ''
@@ -120,7 +118,7 @@ class RegisterController extends BaseController {
 	def save = { RegisterCommand cmd ->
 
 		// skip if already logged in
-		if (authenticateService.isLoggedIn()) {
+		if (springSecurityService.isLoggedIn()) {
 			redirect action: show
 			return
 		}
@@ -138,7 +136,7 @@ class RegisterController extends BaseController {
         					return
         }
 
-		def config = authenticateService.securityConfig
+		def config = springSecurityService.securityConfig
 		def defaultRole = config.security.defaultRole
 		def role = Permission.findByName(defaultRole)
 
@@ -174,14 +172,14 @@ class RegisterController extends BaseController {
         def person = new User()
         person.properties = params
         person.humour= grailsApplication.config['jenna']['defaultHumour']
-		person.password = authenticateService.encodePassword(cmd.password)
+		person.password = springSecurityService.encodePassword(cmd.password)
 
         company = new Company(name: cmd.companyName)
         permissions << Permission.findByName(Permission.ROLE_COMPANY_ADMIN)
         permissions << Permission.findByName(Permission.ROLE_PROJECT_LEADER)
 
         person.company = company
-        person.activationHash = authenticateService.encodePassword(person.account + company.name)
+        person.activationHash = springSecurityService.encodePassword(person.account + company.name)
         person.validate()
 		if (!person.hasErrors()) {
             company.addToEmployees(person)
@@ -278,11 +276,11 @@ class RegisterController extends BaseController {
 
     public void createDefaultInformation(Company company, User user){
 
-      Role role = Role.findByCompanyAndName(company,g.message(code:'default.role.name'))
+      Role role = Role.findByCompanyAndName(company,g.message(code:'default.permission.name'))
       if (!role){
         role = new Role()
-        role.name=        g.message(code:'default.role.name')
-        role.description= g.message(code:'default.role.description')
+        role.name=        g.message(code:'default.permission.name')
+        role.description= g.message(code:'default.permission.description')
         role.company=     company
       }
 
@@ -352,7 +350,7 @@ class RegisterController extends BaseController {
             return
         }
 
-        def config = authenticateService.securityConfig
+        def config = springSecurityService.securityConfig
 
         if (params.captcha.toUpperCase() != session.captcha) {
             cmd.password = ''
@@ -370,9 +368,9 @@ class RegisterController extends BaseController {
 
         def person = new User()
         person.properties = params
-        person.password = authenticateService.encodePassword(cmd.password)
+        person.password = springSecurityService.encodePassword(cmd.password)
         person.company = company
-        person.activationHash = authenticateService.encodePassword(person.account + company.name)
+        person.activationHash = springSecurityService.encodePassword(person.account + company.name)
         person.validate()
         if (!person.hasErrors()) {
             company.addToEmployees(person)
@@ -394,7 +392,7 @@ class RegisterController extends BaseController {
             GrantedAuthority[] authorities = person.permissions.collect {Permission p ->
                 new GrantedAuthorityImpl(p.name)
             } as GrantedAuthority[]
-            def authtoken = new UsernamePasswordAuthenticationToken(new GrailsUserImpl(person.account, 'dummy', true, true, true, true, authorities, person), 'dummy', authorities)
+            def authtoken = new UsernamePasswordAuthenticationToken(springSecurityService.principal, 'dummy', authorities)
             SCH.context.authentication = authtoken
             redirect uri: '/'
         } else {
@@ -416,7 +414,7 @@ class RegisterController extends BaseController {
             GrantedAuthority[] authorities = user.permissions.collect {Permission p ->
                 new GrantedAuthorityImpl(p.name)
             } as GrantedAuthority[]
-            def authtoken = new UsernamePasswordAuthenticationToken(new GrailsUserImpl(user.account, 'dummy', true, true, true, true, authorities, user), 'dummy', authorities)
+            def authtoken = new UsernamePasswordAuthenticationToken(springSecurityService.principal, 'dummy', authorities)
 			SCH.context.authentication = authtoken
         }
         redirect uri: '/'
@@ -438,7 +436,7 @@ class RegisterController extends BaseController {
         invitation.inviter = findLoggedUser()
         invitation.invitee = params.invitee
         invitation.invited = new Date()
-        invitation.code = authenticateService.encodePassword(String.valueOf(System.currentTimeMillis()) + invitation.invitee)
+        invitation.code = springSecurityService.encodePassword(String.valueOf(System.currentTimeMillis()) + invitation.invitee)
         invitation.validate()
         if (!invitation.hasErrors()) {
             invitation.save()

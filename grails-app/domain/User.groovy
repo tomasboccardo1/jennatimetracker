@@ -1,7 +1,9 @@
-import org.hibernate.type.TimeZoneType
 import org.hibernate.type.LocaleType
+import org.hibernate.type.TimeZoneType
 
 class User {
+
+    transient springSecurityService
 
     String password
     String name
@@ -19,7 +21,10 @@ class User {
     Date joined = new Date()
     Boolean remindToInviteCoworkers = true
 
-    boolean deleted  = false
+    boolean deleted = false
+    boolean accountExpired = false
+    boolean accountLocked = false
+    boolean passwordExpired = false
 
     List<Assignment> listActiveAssignments() {
         return listAssignmentsByDate(new Date())
@@ -32,6 +37,19 @@ class User {
         )
     }
 
+    def beforeInsert() {
+        encodePassword()
+    }
+
+    def beforeUpdate() {
+        if (isDirty('password')) {
+            encodePassword()
+        }
+    }
+
+    protected void encodePassword() {
+        password = springSecurityService.encodePassword(password)
+    }
 
     boolean registeredEffortsFor(Date _date) {
         Object result = Effort.executeQuery(
@@ -41,15 +59,13 @@ class User {
         return result[0] > 0
     }
 
-    String toString() {
-        "$name"
-    }
 
-    static hasMany = [efforts: Effort, assignments: Assignment, reminders: Reminder, permissions: Permission, learnings: Learning, moods: UserMood, scores:Score, skills: Skill, usersFollowed: User]
+    static hasMany = [efforts: Effort, assignments: Assignment, reminders: Reminder, permissions: Permission, learnings: Learning, moods: UserMood, scores: Score, skills: Skill, usersFollowed: User]
 
     static belongsTo = Permission
 
     static mapping = {
+        password column: 'password'
         efforts cascade: 'all,delete-orphan'
         assignments cascade: 'all,delete-orphan'
         reminders cascade: 'all,delete-orphan'
@@ -67,15 +83,17 @@ class User {
         company(nullable: false)
         usersFollowed(nullable: true)
         activationHash(nullable: true, size: 32..32)
-        dailyWorkingHours(nullable:true, max:24)
-        birthday(max:new Date(), nullable: true)
+        dailyWorkingHours(nullable: true, max: 24)
+        birthday(max: new Date(), nullable: true)
         joined(nullable: true)
         remindToInviteCoworkers(nullable: true)
 
     }
 
     static hibernateFilters = {
-      enabledFilter(condition:'deleted=0', default:true)
+        enabledFilter(condition: 'deleted=0', default: true)
     }
+
+    static transients = ['accountExpired', 'accountLocked', 'passwordExpired']
 
 }

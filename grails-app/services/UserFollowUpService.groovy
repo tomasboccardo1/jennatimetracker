@@ -1,8 +1,8 @@
-import reports.Formatters
-import org.springframework.context.MessageSource
-import org.springframework.context.NoSuchMessageException
 import de.andreasschmitt.export.ExportService
 import org.apache.commons.io.FileUtils
+import org.springframework.context.MessageSource
+import org.springframework.context.NoSuchMessageException
+import reports.Formatters
 
 class UserFollowUpService {
 

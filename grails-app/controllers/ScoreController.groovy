@@ -1,5 +1,3 @@
-import org.codehaus.groovy.grails.web.servlet.mvc.GrailsParameterMap
-
 class ScoreController extends BaseController {
 
     def index = { redirect(action: "list", params: params) }

@@ -7,7 +7,7 @@ class Permission {
 
     String name
     String description
-    boolean deleted  = false
+    boolean deleted = false
 
     String toString() {
         name
@@ -21,6 +21,10 @@ class Permission {
     }
 
     static hibernateFilters = {
-      enabledFilter(condition:'deleted=0', default:true)
+        enabledFilter(condition: 'deleted=0', default: true)
+    }
+
+    static mapping = {
+        cache true
     }
 }

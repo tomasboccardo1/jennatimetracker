@@ -40,7 +40,7 @@ class EnterHoursRequestHandler extends RequestHandler {
 
                 // Take the first one and put the project name into the arguments parameter used to create proper message.
                 Assignment assignment = Assignment.get(queue.peek())
-                // _conversation.responses << Response.build('requestTracking.assignment', [assignment.project.name, assignment.role.name])
+                // _conversation.responses << Response.build('requestTracking.assignment', [assignment.project.name, assignment.permission.name])
               
                 args = []
                 args << assignment.project.name
@@ -83,7 +83,7 @@ class EnterHoursRequestHandler extends RequestHandler {
               _conversation.context.wizard = wizard
 
               Assignment assignment = Assignment.get(_conversation.context.assignments.peek())
-                // _conversation.responses << Response.build('requestTracking.assignment', [assignment.project.name, assignment.role.name])
+                // _conversation.responses << Response.build('requestTracking.assignment', [assignment.project.name, assignment.permission.name])
 
               args = []
               args << assignment.project.name

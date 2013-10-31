@@ -1,7 +1,5 @@
 package eliza;
 
-import java.lang.Math;
-
 /**
  *  Eliza decomposition rule
  */

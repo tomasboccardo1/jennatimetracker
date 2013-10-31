@@ -1,6 +1,6 @@
 class UserController extends BaseController {
 
-    def authenticateService
+    def springSecurityService
     def emailerService
     def jabberService
     DatabaseService databaseService
@@ -45,7 +45,7 @@ class UserController extends BaseController {
         userInstance.setEnabled(Boolean.TRUE)
         userInstance.setLocale(currentUser.getLocale())
         userInstance.setTimeZone(currentUser.getTimeZone())
-        userInstance.setPassword(authenticateService.encodePassword(String.valueOf("pguide")))
+        userInstance.setPassword(springSecurityService.encodePassword(String.valueOf("pguide")))
         userInstance.chatTime = currentUser.chatTime
         userInstance.humour = "sweet"
         userInstance.localChatTime = TimeZoneUtil.toSystemTime(userInstance.chatTime, userInstance.timeZone)

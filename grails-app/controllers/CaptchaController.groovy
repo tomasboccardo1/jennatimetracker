@@ -1,10 +1,7 @@
-import java.awt.Color
-import java.awt.Font
-import java.awt.Graphics2D
-import java.awt.RenderingHints
+import javax.imageio.ImageIO
+import java.awt.*
 import java.awt.geom.Rectangle2D
 import java.awt.image.BufferedImage
-import javax.imageio.ImageIO
 
 class CaptchaController {
 

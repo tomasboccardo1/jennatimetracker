@@ -1,5 +1,5 @@
-import java.util.regex.Matcher
 import java.text.ParseException
+import java.util.regex.Matcher
 
 /**
  * @author Alejandro Gomez (alejandro.gomez@fdvsolutions.com)

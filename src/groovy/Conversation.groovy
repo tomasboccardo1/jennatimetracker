@@ -1,6 +1,7 @@
-import java.text.DateFormat
-import org.springframework.context.MessageSource
 import eliza.ElizaMain
+import org.springframework.context.MessageSource
+
+import java.text.DateFormat
 
 /**
  * @author Alejandro Gomez (alejandro.gomez@fdvsolutions.com)

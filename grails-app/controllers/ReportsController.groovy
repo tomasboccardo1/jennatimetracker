@@ -1,25 +1,23 @@
-import ar.com.fdvs.dj.domain.builders.FastReportBuilder
-import ar.com.fdvs.dj.domain.DynamicReport
 import ar.com.fdvs.dj.core.DynamicJasperHelper
 import ar.com.fdvs.dj.core.layout.ClassicLayoutManager
-import ar.com.fdvs.dj.domain.entities.columns.AbstractColumn
-import ar.com.fdvs.dj.domain.builders.ColumnBuilder
-import net.sf.jasperreports.engine.JRDataSource
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource
-import net.sf.jasperreports.engine.JasperPrint
-import net.sf.jasperreports.engine.JRException
-import net.sf.jasperreports.engine.export.JRPdfExporter
-import net.sf.jasperreports.engine.JRExporter
-import net.sf.jasperreports.engine.JRExporterParameter
+import ar.com.fdvs.dj.core.layout.ListLayoutManager
 import ar.com.fdvs.dj.domain.DJCalculation
+import ar.com.fdvs.dj.domain.DynamicReport
+import ar.com.fdvs.dj.domain.builders.ColumnBuilder
+import ar.com.fdvs.dj.domain.builders.FastReportBuilder
 import ar.com.fdvs.dj.domain.constants.GroupLayout
-import java.text.SimpleDateFormat
-import org.json.JSONObject
+import ar.com.fdvs.dj.domain.entities.columns.AbstractColumn
+import grails.converters.JSON
+import net.sf.jasperreports.engine.*
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource
+import net.sf.jasperreports.engine.export.JRPdfExporter
 import net.sf.jasperreports.engine.export.JRXlsExporter
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter
-import ar.com.fdvs.dj.core.layout.ListLayoutManager
-import grails.converters.JSON
 import org.compass.core.CompassQuery
+
+import java.text.SimpleDateFormat
+
+import org.json.simple.JSONObject
 
 class ReportsController extends BaseController {
 
@@ -276,7 +274,7 @@ class ReportsController extends BaseController {
             ri.date = it.getAt("date")
             ri.timeSpent = it.getAt("timeSpent")
             ri.project = it.getAt("project")
-            ri.role = it.getAt("role")
+            ri.role = it.getAt("permission")
             ri.assignmentStartDate = it.getAt("assignmentStartDate")
             ri.assignmentEndDate = it.getAt("assignmentEndDate")
             ri.comment = it.getAt("comment")
@@ -298,7 +296,7 @@ class ReportsController extends BaseController {
 
         AbstractColumn c1 = ColumnBuilder.getNew().setColumnProperty("project", String.class.getName()).setTitle("Project").setWidth(40).build();
         AbstractColumn c2 = ColumnBuilder.getNew().setColumnProperty("user", String.class.getName()).setTitle("User").setWidth(30).build();
-        AbstractColumn c3 = ColumnBuilder.getNew().setColumnProperty("role", String.class.getName()).setTitle("Role").setWidth(30).build();
+        AbstractColumn c3 = ColumnBuilder.getNew().setColumnProperty("permission", String.class.getName()).setTitle("Role").setWidth(30).build();
         AbstractColumn c4 = ColumnBuilder.getNew().setColumnProperty("date", Date.class.getName()).setTitle("Date").setWidth(30).build();
         AbstractColumn c5 = ColumnBuilder.getNew().setColumnProperty("timeSpent", Double.class.getName()).setTitle("Time Spent").setWidth(40).setFixedWidth(true).build();
         AbstractColumn c6 = ColumnBuilder.getNew().setColumnProperty("comment", String.class.getName()).setTitle("Comment").setWidth(60).build();
@@ -363,7 +361,7 @@ class ReportsController extends BaseController {
 
         if (params.projectId) {
             // If we have a project to filter, we filter available roles and users.
-            roles = Role.executeQuery("select distinct ro from Role as ro, Assignment as ass where  ass.role = ro and ass.project = ? order by ro.name asc", [Project.get(params.projectId)])
+            roles = Role.executeQuery("select distinct ro from Role as ro, Assignment as ass where  ass.permission = ro and ass.project = ? order by ro.name asc", [Project.get(params.projectId)])
             users = User.executeQuery("select distinct us from User as us, Assignment as ass where  ass.user = us and ass.project = ? order by us.name asc", [Project.get(params.projectId)])
         } else {
             roles = Role.withCriteria() {
@@ -393,9 +391,9 @@ class ReportsController extends BaseController {
 
             // If we have a project to filter, we filter available roles and users.
             if (params.projectId) {
-                users = User.executeQuery("select distinct us from User as us, Assignment as ass where  ass.user = us and ass.project = ? and ass.role = ? order by us.name asc", [Project.get(params.projectId), Role.get(params.roleId)])
+                users = User.executeQuery("select distinct us from User as us, Assignment as ass where  ass.user = us and ass.project = ? and ass.permission = ? order by us.name asc", [Project.get(params.projectId), Role.get(params.roleId)])
             } else {
-                users = User.executeQuery("select distinct us from User as us, Assignment as ass where  ass.user = us and ass.role = ? order by us.name asc", [Role.get(params.roleId)])
+                users = User.executeQuery("select distinct us from User as us, Assignment as ass where  ass.user = us and ass.permission = ? order by us.name asc", [Role.get(params.roleId)])
             }
 
         } else {
@@ -505,7 +503,7 @@ class ReportsController extends BaseController {
         def startDate = cmd.startDate ?: today - 7
         def endDate = cmd.endDate ?: today + 28
         String sql = '''select a.id, a.startDate, a.endDate, p.name, u.name, a.description, u.id, r.name, p.id
-from Assignment a join a.project p join a.user u join a.role r
+from Assignment a join a.project p join a.user u join a.permission r
 where a.startDate <= ?
 and a.endDate >= ?
 and a.deleted = false

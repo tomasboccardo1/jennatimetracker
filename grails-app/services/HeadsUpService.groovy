@@ -1,4 +1,3 @@
-import grails.gsp.PageRenderer
 import org.springframework.context.MessageSource
 
 import java.text.SimpleDateFormat

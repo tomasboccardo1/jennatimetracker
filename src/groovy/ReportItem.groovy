@@ -1,6 +1,3 @@
-import eliza.ElizaMain
-import java.text.DateFormat
-
 /**
  * @author Leandro Larroulet
  * Date: Aug 24, 2010

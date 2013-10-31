@@ -2,7 +2,7 @@ class PendingUsersController  extends BaseController {
 
     def index = { redirect(action: "list", params: params) }
     def emailerService
-    def authenticateService
+    def springSecurityService
 
     static Map allowedMethods = [invite: 'POST', dismiss: 'POST']  
 
@@ -68,7 +68,7 @@ class PendingUsersController  extends BaseController {
       invitation.inviter = findLoggedUser()
       invitation.invitee = inviteMe.email
       invitation.invited = new Date()
-      invitation.code = authenticateService.encodePassword(String.valueOf(System.currentTimeMillis()) + invitation.invitee)
+      invitation.code = springSecurityService.encodePassword(String.valueOf(System.currentTimeMillis()) + invitation.invitee)
       invitation.validate()
 
       if (!invitation.hasErrors()) {

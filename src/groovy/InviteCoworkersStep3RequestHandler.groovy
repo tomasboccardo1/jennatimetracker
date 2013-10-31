@@ -1,11 +1,10 @@
-import groovy.text.SimpleTemplateEngine
-
-import org.springframework.mail.MailSender
-import javax.mail.internet.MimeMessage
-import org.springframework.mail.javamail.MimeMessageHelper
-import org.springframework.mail.MailException
-import javax.mail.MessagingException
 import org.springframework.context.MessageSource
+import org.springframework.mail.MailException
+import org.springframework.mail.MailSender
+import org.springframework.mail.javamail.MimeMessageHelper
+
+import javax.mail.MessagingException
+import javax.mail.internet.MimeMessage
 
 /**
  * @author Leandro Larroulet

@@ -10,22 +10,22 @@
         $(document).ready(function() {
             chart = new Highcharts.Chart({
                 chart: {
-                    renderTo: 'moodChart',
+                    renderTo: 'moodChart'
                 },
                  title: {
                     text: ''
                 },
                 credits: {
-                      enabled: false,
+                      enabled: false
                 },
                 yAxis: {
 		            title: {
 		                text: '<g:message code="app.menu.administration.reports.mood" />'
 		            },
-		            min: 0,
+		            min: 0
 	           },
 	           xAxis: {
-	               tickInterval: 1,
+	               tickInterval: 1
 	           },
                series: [{
                     type: 'line',
@@ -66,10 +66,10 @@
 	        <label for="selectedYear"><g:message code="reports.mood.select.year"/>:</label>
 	        <g:select name="selectedYear" from="${yearList}" value="${year}" style="width:100px" />
 
-	        <g:ifAnyGranted role="ROLE_COMPANY_ADMIN,ROLE_PROJECT_LEADER">
+	        <sec:ifAnyGranted roles="ROLE_COMPANY_ADMIN,ROLE_PROJECT_LEADER">
 	            <label for="selectedYear"><g:message code="reports.mood.select.user"/>:</label>
 	            <g:select name="selectedUser" from="${usersList}" optionKey="id" value="${user.id}"  style="width:200px" />
-	        </g:ifAnyGranted>
+	        </sec:ifAnyGranted>
 	    </fieldset>
 	    <input type="submit" class="ui-button ui-state-default ui-corner-all" value="${message(code:"reports.reload.graphic")}" />
     </form>

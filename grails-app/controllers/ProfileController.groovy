@@ -1,6 +1,6 @@
 class ProfileController extends BaseController {
 
-    def authenticateService
+    def springSecurityService
     DatabaseService databaseService
 
     def index = { redirect(action: "show", params: params) }
@@ -48,7 +48,7 @@ class ProfileController extends BaseController {
 
         if (!("".equals(password)) || !("".equals(repassword))) {
             if (mustChangePassword(password, repassword)) {
-                userInstance.setPassword(authenticateService.encodePassword(password))
+                userInstance.setPassword(springSecurityService.encodePassword(password))
             } else {
                 flash.message = "user.password.change.error"
                 redirect(action: "show", id: userInstance.id)

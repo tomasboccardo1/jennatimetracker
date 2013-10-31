@@ -25,9 +25,8 @@ grails.project.dependency.resolution = {
         //mavenRepo "http://repository.jboss.com/maven2/"
     }
     dependencies {
-        // specify dependencies here under either 'build', 'compile',
-        // 'runtime', 'test' or 'provided' scopes eg.
-
+        // specify dependencies here under either
+        // 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
         compile 'javax.activation:activation:1.1'
         compile 'commons-digester:commons-digester:2.0'
         compile 'commons-logging:commons-logging:1.1.1'
@@ -42,20 +41,18 @@ grails.project.dependency.resolution = {
 
     plugins {
         compile ":hibernate:$grailsVersion"
-        compile ":acegi:0.5.3.2"
         compile ":avatar:0.6.3"
+        compile ':spring-security-oauth:2.0.1.1'
         compile ":hibernate-filter:0.3.2"
         compile ":i18n-templates:1.1.0.1"
         compile ":quartz:0.4.2"
         compile ":quartz-monitor:0.3-RC2"
         compile ":session-temp-files:1.0"
         compile ":export:1.5"
-        compile ":xfire:0.8.3"
-
+        //compile ":xfire:0.8.3"
         compile ':database-migration:1.3.6'
         runtime ":resources:1.2.1"
         runtime ":yui-minify-resources:0.1.5"
-
         build ":tomcat:$grailsVersion"
     }
 }

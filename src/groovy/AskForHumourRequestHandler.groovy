@@ -1,5 +1,4 @@
 import chat.Answer
-import org.springframework.context.MessageSource
 
 /**
  * Created with IntelliJ IDEA.

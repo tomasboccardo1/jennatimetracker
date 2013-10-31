@@ -1,8 +1,9 @@
+import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.web.servlet.LocaleResolver
+
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
-import org.springframework.security.context.SecurityContextHolder
-import org.springframework.security.userdetails.UserDetails
 
 /**
  * @author Alejandro Gomez (alejandro.gomez@fdvsolutions.com)

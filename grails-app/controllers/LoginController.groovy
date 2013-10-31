@@ -1,11 +1,7 @@
-import org.codehaus.groovy.grails.plugins.springsecurity.RedirectUtils
-import org.grails.plugins.springsecurity.service.AuthenticateService
-
-import org.springframework.security.AuthenticationTrustResolverImpl
-import org.springframework.security.DisabledException
-import org.springframework.security.context.SecurityContextHolder as SCH
-import org.springframework.security.ui.AbstractProcessingFilter
-import org.springframework.security.ui.webapp.AuthenticationProcessingFilter
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
+import org.springframework.security.authentication.DisabledException
+import org.springframework.security.web.authentication.AbstractProcessingFilter
+import org.springframework.security.web.authentication.AuthenticationProcessingFilter
 
 /**
  * Login Controller (Example).
@@ -15,9 +11,8 @@ class LoginController {
 	/**
 	 * Dependency injection for the authentication service.
 	 */
-	def authenticateService
+	def springSecurityService
 
-	private final authenticationTrustResolver = new AuthenticationTrustResolverImpl()
 
 	def index = {
 		if (isLoggedIn()) {
@@ -40,9 +35,8 @@ class LoginController {
 			return
 		}
 
-		def config = authenticateService.securityConfig.security
-
-		render view: 'auth', model: [postUrl: "${request.contextPath}${config.filterProcessesUrl}"]
+		def config = SpringSecurityUtils.securityConfig
+		render view: 'auth', model: [postUrl: "${request.contextPath}${config.apf.filterProcessesUrl}"]
 	}
 
 	// Login page (function|json) for Ajax access.
@@ -70,7 +64,7 @@ class LoginController {
 	 * Show denied page.
 	 */
 	def denied = {
-		if (isLoggedIn() && authenticationTrustResolver.isRememberMe(SCH.context?.authentication)) {
+		if (isLoggedIn() && springSecurityService.authenticationTrustResolver.isRememberMe(SCH.context?.authentication)) {
 			// have cookie but the page is guarded with IS_AUTHENTICATED_FULLY
 			redirect action: full, params: params
 		}
@@ -80,7 +74,7 @@ class LoginController {
 	 * Login page for users with a remember-me cookie but accessing a IS_AUTHENTICATED_FULLY page.
 	 */
 	def full = {
-		render view: 'auth', params: params, model: [hasCookie: authenticationTrustResolver.isRememberMe(SCH.context?.authentication)]
+		render view: 'auth', params: params, model: [hasCookie: springSecurityService.authenticationTrustResolver.isRememberMe(SCH.context?.authentication)]
 	}
 
 	// Denial page (data|view|json) for Ajax access.
@@ -119,11 +113,11 @@ class LoginController {
 	 * Check if logged in.
 	 */
 	private boolean isLoggedIn() {
-		return authenticateService.isLoggedIn()
+		return springSecurityService.isLoggedIn()
 	}
 
 	private boolean isAjax() {
-		return authenticateService.isAjax(request)
+		return springSecurityService.isAjax(request)
 	}
 
 	/** cache controls */

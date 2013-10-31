@@ -1,9 +1,9 @@
-import org.json.JSONArray
-import org.json.JSONObject
+import groovy.time.TimeCategory
+import org.json.simple.JSONArray
+import org.json.simple.JSONObject
 import org.springframework.dao.DataIntegrityViolationException
-import java.text.DateFormat
+
 import java.text.SimpleDateFormat
-import groovy.time.*
 
 class EffortController extends BaseController {
 
@@ -104,7 +104,7 @@ class EffortController extends BaseController {
     private String getAssignmentCalendarFormat(Assignment ass){
       String assignmentCalendarFormat = ""
       String project = g.message(code:"assignment.project")
-      String role = g.message(code:"assignment.role")
+      String role = g.message(code:"assignment.permission")
 
       if (ass == null){
         assignmentCalendarFormat = g.message(code:"assignment.not.specified")

@@ -1,16 +1,11 @@
-import grails.util.GrailsUtil
-import grails.util.GrailsUtil
-import org.codehaus.groovy.grails.plugins.web.taglib.JavascriptTagLib
-import java.text.DateFormat
-import java.text.SimpleDateFormat
+import org.codehaus.groovy.grails.commons.ApplicationAttributes
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.hibernate.event.EventListeners
-import org.codehaus.groovy.grails.commons.ApplicationAttributes
 
 class BootStrap {
 
-    def authenticateService
-	GrailsApplication grailsApplication
+    def springSecurityService
+    GrailsApplication grailsApplication
 
     def init = { servletContext ->
 
@@ -24,32 +19,32 @@ class BootStrap {
         System.setProperty('user.country', 'US')
         Locale.setDefault(Locale.ENGLISH)
 
-		/*
-		 Seed Data...
-		 TODO: Move to a plugin that supports this?
-		 */
-        def roleUser = Permission.findByName(Permission.ROLE_USER)
-        if (!roleUser) {
-            roleUser = new Permission(name: Permission.ROLE_USER, description: 'The user role')
-            roleUser.save()
-        }
-        def roleSysAdmin = Permission.findByName(Permission.ROLE_SYSTEM_ADMIN)
-        if (!roleSysAdmin) {
-            roleSysAdmin = new Permission(name: Permission.ROLE_SYSTEM_ADMIN, description: 'The administrator role')
-            roleSysAdmin.save()
-        }
-        def roleCompanyAdmin = Permission.findByName(Permission.ROLE_COMPANY_ADMIN)
-        if (!roleCompanyAdmin) {
-            roleCompanyAdmin = new Permission(name: Permission.ROLE_COMPANY_ADMIN, description: 'The company administrator role')
-            roleCompanyAdmin.save()
-        }
-        def roleProjectLeader = Permission.findByName(Permission.ROLE_PROJECT_LEADER)
-        if (!roleProjectLeader) {
-            roleProjectLeader = new Permission(name: Permission.ROLE_PROJECT_LEADER, description: 'The project leader role')
-            roleProjectLeader.save()
+        if (!Permission.findByName(Permission.ROLE_COMPANY_ADMIN)) {
+            def companyAdminRole = new Permission(name: Permission.ROLE_COMPANY_ADMIN,
+                    description: 'The company administrator permission')
+            companyAdminRole.save(flush: true)
         }
 
-		def clientCategory = TagCategory.findByName(TagCategory.CATEGORY_CLIENT)
+        if (!Permission.findByName(Permission.ROLE_SYSTEM_ADMIN)) {
+            def systemAdminRole = new Permission(name: Permission.ROLE_SYSTEM_ADMIN,
+                    description: 'The administrator permission')
+            systemAdminRole.save(flush: true)
+        }
+
+        if (!Permission.findByName(Permission.ROLE_PROJECT_LEADER)) {
+            def projectLeaderRole = new Permission(name: Permission.ROLE_PROJECT_LEADER,
+                    description: 'The project leader permission')
+            projectLeaderRole.save(flush: true)
+        }
+
+        if (!Permission.findByName(Permission.ROLE_USER)) {
+            def userRole = new Permission(name: Permission.ROLE_USER,
+                    description: 'The user permission')
+            userRole.save(flush: true)
+        }
+
+
+        def clientCategory = TagCategory.findByName(TagCategory.CATEGORY_CLIENT)
         if (!clientCategory) {
             clientCategory = new TagCategory(name: TagCategory.CATEGORY_CLIENT)
             clientCategory.save()
@@ -65,27 +60,35 @@ class BootStrap {
             taskCategory.save()
         }
 
-		// FIXME: Is there any better way to force Singleton beans to be loaded eagerly?
-		grailsApplication.getMainContext().getBean("jabberService")
+        grailsApplication.getMainContext().getBean("jabberService")
+        fireUpJobs()
+        checkForAdminUser()
 
-		/**
-		 * Fire up the jobs
-		 * As there's no (easy/proper) way to access the config from the static triggers definition,
-		 * we have to schedule the Jobs here (and pray not to forget any)
-		 */
+
+    }
+
+    /**
+     * Fire up the jobs
+     * As there's no (easy/proper) way to access the config from the static triggers definition,
+     * we have to schedule the Jobs here (and pray not to forget any)
+     */
+
+    def fireUpJobs() {
+
         if (grailsApplication.config.chat.cronExpression)
             ChattingJob.schedule(grailsApplication.config.chat.cronExpression)
         else
             log.info("No cron definition for ChattingJob: chat.cronExpression")
 
         if (grailsApplication.config.chat.cronExpression)
-		    InviteCoworkersJob.schedule(grailsApplication.config.chat.cronExpression)
+            InviteCoworkersJob.schedule(grailsApplication.config.chat.cronExpression)
         else
             log.info("No cron definition for InviteCoworkersJob: chat.cronExpression")
 
         if (grailsApplication.config.badMoodDescriptionHeadsUp.cronExpression)
             BadMoodDescriptionHeadsUpJob.schedule(grailsApplication.config.badMoodDescriptionHeadsUp.cronExpression)
         else
+
             log.info("No cron definition for BadMoodDescriptionHeadsUpJob: badMoodDescriptionHeadsUp.cronExpression")
 
         if (grailsApplication.config.projectFollowUp.cronExpression)
@@ -96,7 +99,7 @@ class BootStrap {
         if (grailsApplication.config.userFollowUp.cronExpression)
             UserFollowUpJob.schedule(grailsApplication.config.userFollowUp.cronExpression)
         else
-            log.info("No cron definition for UserFollowUpJob: userFollowUp.cronExpression")
+            log.info("No cron definition for UserFollowUpJob: userFollowUp.cronExpression ")
 
         if (grailsApplication.config.incompleteEffortsAlarm.cronExpression)
             IncompleteEffortsAlarmJob.schedule(grailsApplication.config.incompleteEffortsAlarm.cronExpression)
@@ -113,57 +116,40 @@ class BootStrap {
         else
             log.info("No cron definition for MoodWarningHeadsUpJob: moodWarningHeadsUp.cronExpression")
 
-		// FIXME: Reminders are not fully-implemented, so we're deactivating this
+        // FIXME: Reminders are not fully-implemented, so we're deactivating this
         //ReminderJob.schedule(grailsApplication.config.chat.cronExpression)
 
-        /**
-         * Check for admin user
-         */
-        checkForAdminUser()
-
     }
+
+
 
     def checkForAdminUser() {
         log.info("Check for admin user.")
 
 
-        def admin = User.find("from User u where u.enabled = true and exists (from u.permissions p where p.name = :admin)",['admin': Permission.ROLE_SYSTEM_ADMIN])
-        if (!admin){
-            log.info("*** Creating admin user")
-            admin = new User()
+        def admin = User.find("from User u where u.enabled = true and exists (from u.permissions p where p.name = :admin)", ['admin': Permission.ROLE_SYSTEM_ADMIN])
+        if (!admin) {
 
-            admin.setPermissions(new HashSet<Permission>())
-            admin.setName("System Administrator")
-            admin.setEnabled(true)
-            def cleanPass = "j33naAdm1n"
-            admin.setPassword(authenticateService.encodePassword(cleanPass))
-            admin.setAccount("admin")
+            def systemAdminRole = new Permission(name: Permission.ROLE_SYSTEM_ADMIN,
+                    description: 'The administrator permission')
+
+            log.info("*** Creating admin user")
 
             Company aCompany = new Company()
             aCompany.setName("Default Company")
             aCompany.save()
             aCompany.refresh()
-            admin.setCompany(aCompany)
 
-            admin.setLocale(Locale.getDefault())
-            admin.setTimeZone(TimeZone.getDefault())
+            def testUser = new User(name: "System Administrator", account: 'admin', enabled: true, password: 'j33naAdm1n'
+                    , permissions: systemAdminRole, company: aCompany, locale: Locale.getDefault(), timeZone: TimeZone.getDefault())
+                    .save(flush: true)
 
-            if (admin.save(false)){
-                Permission.findAll().each { permission ->
-                    ((Permission)permission).addToUsers(admin)
+            testUser.save(flush: true);
 
-                }
-
-            }
             log.info("\n***********************************************************" +
-                     "\n*** ADMIN LOGIN: user = admin, password = j33naAdm1n\n" +
-                     "\n***********************************************************\n\n")
+                    "\n*** ADMIN LOGIN: user = admin, password = j33naAdm1n\n" +
+                    "\n***********************************************************\n\n")
 
-        } else {
-            log.info("Admin user found!")
         }
-    }
-
-    def destroy = {
     }
 }

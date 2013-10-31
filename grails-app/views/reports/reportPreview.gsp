@@ -28,7 +28,7 @@
         <g:each in="${report}" status="i" var="reportRow">
           <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
             <td>${fieldValue(bean: reportRow, field: "project")}</td>
-            <td>${fieldValue(bean: reportRow, field: "role")}</td>
+            <td>${fieldValue(bean: reportRow, field: "permission")}</td>
             <td>${fieldValue(bean: reportRow, field: "user")}</td>
             <td><g:formatDate date="${reportRow.date}" type="date" style="short"/></td>
             <td>${fieldValue(bean: reportRow, field: "timeSpent")}</td>

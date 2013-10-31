@@ -35,9 +35,9 @@ class Assignment {
 
     static constraints = {
         //TODO: add a more complex constraint considering overlapping periods
-        //project(unique: ['user', 'role'], nullable: false)
-        //user(unique: ['project', 'role'], nullable: false)
-        //role(unique: ['project', 'user'], nullable: false)
+        //project(unique: ['user', 'permission'], nullable: false)
+        //user(unique: ['project', 'permission'], nullable: false)
+        //permission(unique: ['project', 'user'], nullable: false)
         startDate(nullable: false)
         endDate(nullable: false, validator: { val, obj ->
             obj.properties['startDate'] <= val ? null : 'default.invalid.validator.message'
