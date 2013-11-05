@@ -2,7 +2,6 @@ import java.text.SimpleDateFormat
 
 class Assignment {
 
-    //TODO: add tags to the assignment?
     Project project
     User user
     Role role

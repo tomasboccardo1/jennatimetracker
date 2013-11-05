@@ -49,6 +49,7 @@ grails.project.dependency.resolution = {
         compile ":quartz-monitor:0.3-RC2"
         compile ":session-temp-files:1.0"
         compile ":export:1.5"
+        compile ":mail:1.0.1"
         //compile ":xfire:0.8.3"
         compile ':database-migration:1.3.6'
         runtime ":resources:1.2.1"

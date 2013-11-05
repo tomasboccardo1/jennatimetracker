@@ -73,7 +73,7 @@
 </head>
 <body>
 <div class="body">
-<g:select name="userId" from="${users}" optionKey="id" value="${userId}" onchange="reload()" />
+<g:select name="userId" from="${users}" optionKey="id" optionValue="name" onchange="reload()" />
   <div id="calendar"></div>
 </div>
 </body>

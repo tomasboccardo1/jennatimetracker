@@ -110,7 +110,7 @@
                         <tr class="${(i % 2) == 0 ? 'odd' : 'even'}">
                             <td><g:link action="show" id="${assignmentInstance.id}">${fieldValue(bean: assignmentInstance, field: "id")}</g:link></td>
                             <td>${fieldValue(bean: assignmentInstance, field: "project")}</td>
-                            <td>${fieldValue(bean: assignmentInstance, field: "user")}</td>
+                            <td>${fieldValue(bean: assignmentInstance, field: "user.name")}</td>
                             <td>${fieldValue(bean: assignmentInstance, field: "role")}</td>
                             <td><g:formatDate date="${assignmentInstance.startDate}" type="date"/></td>
                             <td><g:formatDate date="${assignmentInstance.endDate}" type="date"/></td>

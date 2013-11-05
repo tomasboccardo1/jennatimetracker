@@ -10,16 +10,16 @@ class AssignmentController extends BaseController {
     // the delete, save and update actions only accept POST requests
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
-    def beforeInterceptor = [action:this.&auth]
+    def beforeInterceptor = [action: this.&auth]
 
     def auth() {
-         try {
-          findLoggedUser()
-          return true
-         } catch (Exception e){
-          redirect(controller:'login', action:'auth')
-          return false
-         }
+        try {
+            findLoggedUser()
+            return true
+        } catch (Exception e) {
+            redirect(controller: 'login', action: 'auth')
+            return false
+        }
     }
 
 
@@ -62,7 +62,8 @@ class AssignmentController extends BaseController {
             qparams['endDate'] = cmd.endDate
             qparamsTotal['endDate'] = cmd.endDate
         }
-        query += ' order by a.project.name asc, a.permission.name asc, a.user.name asc'
+
+        query += ' order by a.project.name asc, a.user.name asc'
         List assignmentList = Assignment.executeQuery(query, qparams)
         long assignmentListTotal = Assignment.executeQuery(queryTotal, qparamsTotal)[0]
         def projectList = Project.findAllByCompany(findLoggedUser().company, [sort: "name", order: "asc"])
@@ -73,9 +74,9 @@ class AssignmentController extends BaseController {
     def create = {
         def assignmentInstance = new Assignment()
         assignmentInstance.properties = params
-        def roleList = Role.findAllByCompany(findLoggedUser().company, [sort:"name", order:"asc"])
-        def userList = User.findAllByCompany(findLoggedUser().company, [sort:"name", order:"asc"])
-        def projectList = Project.findAllByCompany(findLoggedUser().company, [sort:"name", order:"asc"])
+        def roleList = Role.findAllByCompany(findLoggedUser().company, [sort: "name", order: "asc"])
+        def userList = User.findAllByCompany(findLoggedUser().company, [sort: "name", order: "asc"])
+        def projectList = Project.findAllByCompany(findLoggedUser().company, [sort: "name", order: "asc"])
 
         return [assignmentInstance: assignmentInstance, roleList: roleList, userList: userList, projectList: projectList]
     }
@@ -88,14 +89,13 @@ class AssignmentController extends BaseController {
             flash.args = [assignmentInstance.id]
             flash.defaultMessage = "Assignment ${assignmentInstance.id} created"
             redirect(action: "show", id: assignmentInstance.id)
-        }
-        else {
+        } else {
             render(view: "create", model: [assignmentInstance: assignmentInstance])
         }
     }
 
     def ajaxSave = {
-        JSONObject jsonResponse = params.id ? update(request, params) : create(request, params)
+        JSONObject jsonResponse = params.id ? update(request, params) : ajaxCreate(request, params)
         render jsonResponse.toString()
     }
 
@@ -107,8 +107,7 @@ class AssignmentController extends BaseController {
             flash.args = [params.id]
             flash.defaultMessage = "Assignment not found with id ${params.id}"
             redirect(action: "list")
-        }
-        else {
+        } else {
             JSONObject jsonResponse = new JSONObject()
             jsonResponse.put('ok', true)
             jsonResponse.put('id', assignmentInstance.id)
@@ -124,8 +123,103 @@ class AssignmentController extends BaseController {
     }
 
 
+    def show = {
+        def assignmentInstance = Assignment.get(params.id)
+        if (!assignmentInstance) {
+            flash.message = "assignment.not.found"
+            flash.args = [params.id]
+            flash.defaultMessage = "Assignment not found with id ${params.id}"
+            redirect(action: "list")
+        } else {
+            return [assignmentInstance: assignmentInstance]
+        }
+    }
 
-    public JSONObject create(request, params) {
+    def edit = {
+        def assignmentInstance = Assignment.get(params.id)
+        if (!assignmentInstance) {
+            flash.message = "assignment.not.found"
+            flash.args = [params.id]
+            flash.defaultMessage = "Assignment not found with id ${params.id}"
+
+            redirect(action: "list")
+        } else {
+            def roleList = Role.findAllByCompany(findLoggedUser().company, [sort: "name", order: "asc"])
+            def userList = User.findAllByCompany(findLoggedUser().company, [sort: "name", order: "asc"])
+            def projectList = Project.findAllByCompany(findLoggedUser().company, [sort: "name", order: "asc"])
+
+            return [assignmentInstance: assignmentInstance, rolesList: roleList, usersList: userList, projectsList: projectList]
+        }
+    }
+
+    def update = {
+        def assignmentInstance = Assignment.get(params.id)
+        if (assignmentInstance) {
+            if (params.version) {
+                def version = params.version.toLong()
+                if (assignmentInstance.version > version) {
+
+                    assignmentInstance.errors.rejectValue("version", "assignment.optimistic.locking.failure", "Another user has updated this Assignment while you were editing")
+                    render(view: "edit", model: [assignmentInstance: assignmentInstance])
+                    return
+                }
+            }
+            assignmentInstance.properties = params
+            assignmentInstance.active = params.active != null
+
+            if (!assignmentValidation(assignmentInstance)) {
+                flash.message = "assignment.errorInDates"
+                flash.args = [params.id]
+
+                def roleList = Role.findAllByCompany(findLoggedUser().company, [sort: "name", order: "asc"])
+                def userList = User.findAllByCompany(findLoggedUser().company, [sort: "name", order: "asc"])
+                def projectList = Project.findAllByCompany(findLoggedUser().company, [sort: "name", order: "asc"])
+
+                render(view: "edit", model: [assignmentInstance: assignmentInstance, rolesList: roleList, usersList: userList, projectsList: projectList])
+                return
+            }
+
+            if (!assignmentInstance.hasErrors() && assignmentInstance.save()) {
+                flash.message = "assignment.updated"
+                flash.args = [params.id]
+                flash.defaultMessage = "Assignment ${params.id} updated"
+                redirect(action: "show", id: assignmentInstance.id)
+            } else {
+                render(view: "edit", model: [assignmentInstance: assignmentInstance])
+            }
+        } else {
+            flash.message = "assignment.not.found"
+            flash.args = [params.id]
+            flash.defaultMessage = "Assignment not found with id ${params.id}"
+            redirect(action: "edit", id: params.id)
+        }
+    }
+
+    def delete = {
+        def assignmentInstance = Assignment.get(params.id)
+        if (assignmentInstance) {
+            try {
+                assignmentInstance.delete()
+                flash.message = "assignment.deleted"
+                flash.args = [params.id]
+                flash.defaultMessage = "Assignment ${params.id} deleted"
+                redirect(action: "list")
+            }
+            catch (org.springframework.dao.DataIntegrityViolationException e) {
+                flash.message = "assignment.not.deleted"
+                flash.args = [params.id]
+                flash.defaultMessage = "Assignment ${params.id} could not be deleted"
+                redirect(action: "show", id: params.id)
+            }
+        } else {
+            flash.message = "assignment.not.found"
+            flash.args = [params.id]
+            flash.defaultMessage = "Assignment not found with id ${params.id}"
+            redirect(action: "list")
+        }
+    }
+
+    public JSONObject ajaxCreate(request, params) {
         JSONObject jsonResponse
         Assignment assignmentInstance = new Assignment(params)
         if (!assignmentInstance.hasErrors() && assignmentInstance.save()) {
@@ -136,7 +230,7 @@ class AssignmentController extends BaseController {
         return jsonResponse
     }
 
-    public JSONObject update(request, params) {
+    public JSONObject ajaxUpdate(request, params) {
         JSONObject jsonResponse
         Assignment assignment = Assignment.get(params.id)
         if (assignment && assignment.project.company.id == findLoggedUser().company.id) {
@@ -159,124 +253,20 @@ class AssignmentController extends BaseController {
         return jsonResponse
     }
 
-    def show = {
-        def assignmentInstance = Assignment.get(params.id)
-        if (!assignmentInstance) {
-            flash.message = "assignment.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "Assignment not found with id ${params.id}"
-            redirect(action: "list")
-        }
-        else {
-            return [assignmentInstance: assignmentInstance]
-        }
+
+    private Boolean assignmentValidation(Assignment assignment) {
+        Boolean result = Boolean.FALSE;
+        User user = findLoggedUser();
+
+        def efforts = Effort.findAll("from Effort ef where ef.assignment = ? and (ef.date < ? or ef.date > ?) ", [assignment, assignment.startDate, assignment.endDate]);
+        //roles = Role.executeQuery("select distinct ro from Role as ro, Assignment as ass where  ass.permission = ro and ass.project = ? order by ro.name asc", [Project.get(params.projectId)])
+        if (!efforts)
+            result = Boolean.TRUE
+        return result;
     }
-
-    def edit = {
-        def assignmentInstance = Assignment.get(params.id)
-        if (!assignmentInstance) {
-            flash.message = "assignment.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "Assignment not found with id ${params.id}"
-
-            redirect(action: "list")
-        }
-        else {
-          def roleList = Role.findAllByCompany(findLoggedUser().company, [sort:"name", order:"asc"])
-          def userList = User.findAllByCompany(findLoggedUser().company, [sort:"name", order:"asc"])
-          def projectList = Project.findAllByCompany(findLoggedUser().company, [sort:"name", order:"asc"])
-
-          return [assignmentInstance: assignmentInstance, rolesList: roleList, usersList: userList, projectsList: projectList]
-        }
-    }
-
-    def update = {
-        def assignmentInstance = Assignment.get(params.id)
-        if (assignmentInstance) {
-            if (params.version) {
-                def version = params.version.toLong()
-                if (assignmentInstance.version > version) {
-
-                    assignmentInstance.errors.rejectValue("version", "assignment.optimistic.locking.failure", "Another user has updated this Assignment while you were editing")
-                    render(view: "edit", model: [assignmentInstance: assignmentInstance])
-                    return
-                }
-            }
-            assignmentInstance.properties = params
-            assignmentInstance.active = params.active != null
-
-            if (!assignmentValidation(assignmentInstance)){
-              flash.message = "assignment.errorInDates"
-              flash.args = [params.id]
-
-                def roleList = Role.findAllByCompany(findLoggedUser().company, [sort:"name", order:"asc"])
-                def userList = User.findAllByCompany(findLoggedUser().company, [sort:"name", order:"asc"])
-                def projectList = Project.findAllByCompany(findLoggedUser().company, [sort:"name", order:"asc"])
-
-              render(view: "edit", model: [assignmentInstance: assignmentInstance, rolesList: roleList, usersList: userList, projectsList: projectList])
-              return
-            }
-
-            if (!assignmentInstance.hasErrors() && assignmentInstance.save()) {
-                flash.message = "assignment.updated"
-                flash.args = [params.id]
-                flash.defaultMessage = "Assignment ${params.id} updated"
-                redirect(action: "show", id: assignmentInstance.id)
-            }
-            else {
-                render(view: "edit", model: [assignmentInstance: assignmentInstance])
-            }
-        }
-        else {
-            flash.message = "assignment.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "Assignment not found with id ${params.id}"
-            redirect(action: "edit", id: params.id)
-        }
-    }
-
-    private Boolean assignmentValidation(Assignment assignment){
-      Boolean result = Boolean.FALSE;
-      User user = findLoggedUser();
-
-      def efforts = Effort.findAll("from Effort ef where ef.assignment = ? and (ef.date < ? or ef.date > ?) ", [assignment,assignment.startDate, assignment.endDate]);
-      //roles = Role.executeQuery("select distinct ro from Role as ro, Assignment as ass where  ass.permission = ro and ass.project = ? order by ro.name asc", [Project.get(params.projectId)])
-      if (!efforts)
-        result = Boolean.TRUE
-
-      return result;
-
-    }
-
-    def delete = {
-        def assignmentInstance = Assignment.get(params.id)
-        if (assignmentInstance) {
-            try {
-                assignmentInstance.delete()
-                flash.message = "assignment.deleted"
-                flash.args = [params.id]
-                flash.defaultMessage = "Assignment ${params.id} deleted"
-                redirect(action: "list")
-            }
-            catch (org.springframework.dao.DataIntegrityViolationException e) {
-                flash.message = "assignment.not.deleted"
-                flash.args = [params.id]
-                flash.defaultMessage = "Assignment ${params.id} could not be deleted"
-                redirect(action: "show", id: params.id)
-            }
-        }
-        else {
-            flash.message = "assignment.not.found"
-            flash.args = [params.id]
-            flash.defaultMessage = "Assignment not found with id ${params.id}"
-            redirect(action: "list")
-        }
-    }
-
 }
 
 class AssignmentFilterCommand {
-
     Long project
     Long user
     Date startDate

@@ -1,3 +1,4 @@
+import org.json.simple.JSONObject
 import org.springframework.context.MessageSource
 import org.springframework.context.MessageSourceResolvable
 import org.springframework.context.NoSuchMessageException
@@ -9,7 +10,6 @@ import org.springframework.web.servlet.support.RequestContextUtils
 
 import javax.servlet.http.HttpServletRequest
 
-import org.json.simple.JSONObject
 
 /**
  * @author Alejandro Gomez (alejandro.gomez@fdvsolutions.com)
@@ -39,7 +39,7 @@ class BaseController {
 
     def setUpDefaultPagingParams(params, sortProperty = 'name') {
         params.offset = params.offset ? params.offset.toInteger() : 0
-        params.max = Math.min(params.max ? params.max.toInteger() : 10,  100)
+        params.max = Math.min(params.max ? params.max.toInteger() : 10, 100)
         if (!params.sort) {
             params.sort = sortProperty
         }
@@ -62,9 +62,9 @@ class BaseController {
     }
 
     /**
-    * Safe way to get a i18n message (doesn't throw exception, but returns a value saying that the translation is missing
-    * We should consider take a look at: http://stackoverflow.com/questions/7770616/best-practice-for-keeping-track-of-i18n-labels-that-need-translating-in-grails instead
-    */
+     * Safe way to get a i18n message (doesn't throw exception, but returns a value saying that the translation is missing
+     * We should consider take a look at: http://stackoverflow.com/questions/7770616/best-practice-for-keeping-track-of-i18n-labels-that-need-translating-in-grails instead
+     */
     @Deprecated
     String getMessage(HttpServletRequest _request, MessageSourceResolvable _message) {
         try {
@@ -80,13 +80,16 @@ class BaseController {
 
     JSONObject buildJsonOkResponse(HttpServletRequest _request, MessageSourceResolvable _title, MessageSourceResolvable _message) {
         JSONObject jsonResponse = new JSONObject()
-        jsonResponse.put('ok', true).put('title', getMessage(_request, _title)).put('message', getMessage(_request, _message))
+        jsonResponse.put('ok', true)
+        jsonResponse.put('title', getMessage(_request, _title))
+        jsonResponse.put('message', getMessage(_request, _message))
         return jsonResponse
     }
 
     JSONObject buildJsonErrorResponse(HttpServletRequest _request, MessageSourceResolvable _message) {
         JSONObject jsonResponse = new JSONObject()
-        jsonResponse.put('ok', false).put('message', getMessage(_request, _message))
+        jsonResponse.put('ok', false)
+        jsonResponse.put('message', getMessage(_request, _message))
         return jsonResponse
     }
 
@@ -96,7 +99,8 @@ class BaseController {
             errors[(error.field)] = getMessage(_request, error)
         }
         JSONObject jsonResponse = new JSONObject()
-        jsonResponse.put('ok', false).put('errors', errors)
+        jsonResponse.put('ok', false)
+        jsonResponse.put('errors', errors)
         return jsonResponse
     }
 
@@ -105,5 +109,5 @@ class BaseController {
         codes[0] = _code
         return new DefaultMessageSourceResolvable(codes, _args as Object[])
     }
-    
+
 }

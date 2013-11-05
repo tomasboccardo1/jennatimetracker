@@ -199,18 +199,6 @@ grails.plugins.springsecurity.switchUser.switchUserUrl = '/j_spring_security_swi
 grails.plugins.springsecurity.switchUser.exitUserUrl = '/j_spring_security_exit_user'
 grails.plugins.springsecurity.switchUser.targetUrl = '/'
 
-/*
-use email notification while registration and report sending FIXME?
-useMail = ConfigurationHolder.config['mailSender']['useMail']
-mailHost = ConfigurationHolder.config['mailSender']['mailHost']
-mailPort = ConfigurationHolder.config['mailSender']['mailPort']
-mailUsername = ConfigurationHolder.config['mailSender']['mailUsername']
-mailPassword = ConfigurationHolder.config['mailSender']['mailPassword']
-mailProtocol = ConfigurationHolder.config['mailSender']['mailProtocol']
-mailFrom = ConfigurationHolder.config['mailSender']['mailFrom']
-javaMailProperties = ConfigurationHolder.config['mailSender']['javaMailProperties']
-*/
-
 // HttpSessionEventPublisher
 grails.plugins.springsecurity.useHttpSessionEventPublisher = false;
 // User caching
@@ -228,7 +216,18 @@ grails.plugins.springsecurity.secureChannel.definition = [
 // Ip restriction filter
 grails.plugins.springsecurity.ipRestrictions = [:]
 
-
+//Mail configuration
+grails {
+    mail {
+        mail.disabled=ConfigurationHolder.config['mailSender']['useMail']
+        grails.mail.default=ConfigurationHolder.config['mailSender']['mailProtocol']
+        host = ConfigurationHolder.config['mailSender']['mailHost']
+        port = ConfigurationHolder.config['mailSender']['mailPort']
+        username =  ConfigurationHolder.config['mailSender']['mailUsername']
+        password = ConfigurationHolder.config['mailSender']['mailPassword']
+        props = ConfigurationHolder.config['mailSender']['javaMailProperties']
+    }
+}
 
 
 
