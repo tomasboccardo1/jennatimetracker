@@ -74,7 +74,10 @@
               <g:select name="project" from="${projectList}" optionKey="id" noSelection="${['':message(code:'default.all')]}" value="${project}"/>
 
               <label for="user"><g:message code="assignment.user" default="User"/>:</label>
-              <g:select name="user" from="${userList}" optionKey="id" noSelection="${['':message(code:'default.all')]}" value="${user}"/>
+              <g:select name="user" from="${userList}"
+                        optionKey="id"
+                        noSelection="${['':message(code:'default.all')]}"
+                        optionValue="name"/>
 
             <label for="startDate"><g:message code="project.startDate" default="Start Date"/>:</label>
             <jquery:datePicker name="startDate" value="${startDate}" default="none"/>

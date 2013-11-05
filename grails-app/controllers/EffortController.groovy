@@ -96,7 +96,14 @@ class EffortController extends BaseController {
         }
         JSONArray jsonResponse = new JSONArray()
         effortInstanceList.each { Effort effort ->
-          jsonResponse.put([id: effort.id, title: getTitleForEffort(effort), comment: effort.comment ?: '', currentDate: g.formatDate(date:effort.date, type: 'date', style:'short'), start: FULLCALENDAR_DATE_FORMATTER.format(effort.date), assignmentList: getAssignmentCalendarFormat(effort.assignment), timeSpent: effort.timeSpent])
+          jsonResponse.add(
+                  [id: effort.id, title: getTitleForEffort(effort),
+                  comment: effort.comment ?: '',
+                  currentDate: g.formatDate(date:effort.date, type: 'date', style:'short'),
+                  start: FULLCALENDAR_DATE_FORMATTER.format(effort.date),
+                  assignmentList: getAssignmentCalendarFormat(effort.assignment),
+                  timeSpent: effort.timeSpent]
+          )
         }
         render jsonResponse.toString()
     }
@@ -114,8 +121,6 @@ class EffortController extends BaseController {
         assignmentCalendarFormat += " - "
         assignmentCalendarFormat += role+": "
         assignmentCalendarFormat += ass.role?.name+"."
-
-
       }
       return assignmentCalendarFormat
 
