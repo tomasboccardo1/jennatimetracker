@@ -25,7 +25,7 @@ class EmailNotificationService {
         def body = template.toString()
 
         def email = [
-                to: ["federico.farina+1@fdvsolutions.com"],
+                to: [recipient.account],
                 subject: subject,
                 from: messageSource.getMessage('application.email', null, recipient.locale),
                 text: body,

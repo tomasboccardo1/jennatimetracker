@@ -79,7 +79,7 @@ class PendingUsersController  extends BaseController {
                 from: g.message(code: 'application.email'),
                 text: g.message(code: 'invitation.mail.body', args: [createLink(absolute:true, controller:"register", action:"acceptInvitation", params:[code:invitation.code])])
         ]
-        emailerService.sendEmails([email]) // FIXME: This should be in another thread
+        emailerService.sendEmails([email])
       }
 
     }

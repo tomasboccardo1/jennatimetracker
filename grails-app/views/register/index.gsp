@@ -117,7 +117,7 @@
 
         <div class="buttons">
             <span class="formButton">
-                <input class='save' type="submit" value="Create"></input>
+                <input class='save' type="submit" value="Create">
             </span>
         </div>
 

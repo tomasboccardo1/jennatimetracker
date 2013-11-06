@@ -1,5 +1,3 @@
-// Default configuration for the DataSource
-// To customize it, copy CusotmDataSource.groovy.example as customconf/CustomDataSource.groovy and modify accordingly
 dataSource {
     driverClassName = 'com.mysql.jdbc.Driver'
     configClass = org.grails.plugin.hibernate.filter.HibernateFilterDomainConfiguration
@@ -15,7 +13,6 @@ hibernate {
 	dialect = 'org.hibernate.dialect.MySQL5InnoDBDialect'
 }
 
-// Making tests run in-memory
 environments {
     test {
         dataSource {

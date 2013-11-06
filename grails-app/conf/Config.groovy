@@ -1,45 +1,44 @@
+import grails.util.GrailsUtil
+
 grails.config.locations = [
         customconf.CustomDataSource,
         customconf.CustomJabberBot,
         customconf.CustomEmailNotificationsConfig,
-        customconf.CustomSearchable,
-        customconf.CustomSecurityConfig
+        customconf.CustomSearchable
 ]
 
-grails.plugin.databasemigration.updateOnStart = true
-grails.plugin.databasemigration.updateOnStartFileNames = ['changelog.groovy']
+grails {
+    plugin {
+        databasemigration.updateOnStart = true
+        databasemigration.updateOnStartFileNames = ['changelog.groovy']
+    }
+}
 
-// Enables the parsing of file extensions from URLs into the request format
-grails.mime.file.extensions = true
-grails.mime.use.accept.header = false
-grails.mime.types = [
-        html: ['text/html', 'application/xhtml+xml'],
-        xml: ['text/xml', 'application/xml'],
-        text: 'text/plain',
-        js: 'text/javascript',
-        rss: 'application/rss+xml',
-        atom: 'application/atom+xml',
-        css: 'text/css',
-        csv: 'text/csv',
-        pdf: 'application/pdf',
-        rtf: 'application/rtf',
-        excel: 'application/vnd.ms-excel',
-        ods: 'application/vnd.oasis.opendocument.spreadsheet',
-        all: '*/*',
-        json: ['application/json', 'text/json'],
-        form: 'application/x-www-form-urlencoded',
-        multipartForm: 'multipart/form-data'
-]
-
-// The default codec used to encode data with ${}
-grails.views.default.codec = "none" // none, html, base64
-grails.views.gsp.encoding = "UTF-8"
-grails.converters.encoding = "UTF-8"
-
-// Enabled native2ascii conversion of i18n properties files
-grails.enable.native2ascii = true
-grails.dbconsole.enabled = false
-grails.dbconsole.urlRoot = '/admin/dbconsole'
+grails {
+    mime {
+        // Enables the parsing of file extensions from URLs into the request format
+        file.extensions = true
+        use.accept.header = false
+        types = [
+                html: ['text/html', 'application/xhtml+xml'],
+                xml: ['text/xml', 'application/xml'],
+                text: 'text/plain',
+                js: 'text/javascript',
+                rss: 'application/rss+xml',
+                atom: 'application/atom+xml',
+                css: 'text/css',
+                csv: 'text/csv',
+                pdf: 'application/pdf',
+                rtf: 'application/rtf',
+                excel: 'application/vnd.ms-excel',
+                ods: 'application/vnd.oasis.opendocument.spreadsheet',
+                all: '*/*',
+                json: ['application/json', 'text/json'],
+                form: 'application/x-www-form-urlencoded',
+                multipartForm: 'multipart/form-data'
+        ]
+    }
+}
 
 // Disabling bundling and minified resources for development
 environments {
@@ -47,16 +46,26 @@ environments {
         grails.resources.debug = true
     }
 }
+// The default codec used to encode data with ${}
+grails.views.default.codec = "none" // none, html, base64
+grails.views.gsp.encoding = "UTF-8"
+grails.converters.encoding = "UTF-8"
+// Enabled native2ascii conversion of i18n properties files
+grails.enable.native2ascii = true
+grails.dbconsole.enabled = false
+grails.dbconsole.urlRoot = '/admin/dbconsole'
 
-jenna.availableHumours = ['sweet', 'angry']
-jenna.availableLanguages = ['en', 'es']
-jenna.defaultHumour = 'sweet'
-jenna.defaultLanguage = 'en'
-jenna.authorizations = [
-        'CreateProjectRequestHandler': [Permission.ROLE_SYSTEM_ADMIN, Permission.ROLE_PROJECT_LEADER],
-        'CreateAssignmentRequestHandler': [Permission.ROLE_SYSTEM_ADMIN, Permission.ROLE_PROJECT_LEADER],
-        'ActiveAssignmentsRequestHandler': [Permission.ROLE_USER]
-]
+jenna {
+    availableHumours = ['sweet', 'angry']
+    availableLanguages = ['en', 'es']
+    defaultHumour = 'sweet'
+    defaultLanguage = 'en'
+    authorizations = [
+            'CreateProjectRequestHandler': [Permission.ROLE_SYSTEM_ADMIN, Permission.ROLE_PROJECT_LEADER],
+            'CreateAssignmentRequestHandler': [Permission.ROLE_SYSTEM_ADMIN, Permission.ROLE_PROJECT_LEADER],
+            'ActiveAssignmentsRequestHandler': [Permission.ROLE_USER]
+    ]
+}
 
 avatarPlugin {
     gravatarRating = "G"
@@ -107,3 +116,109 @@ environments {
 }
 
 
+grails {
+    plugins {
+        springsecurity {
+
+            active = true
+            userLookup.userDomainClassName = 'User'
+            userLookup.usernamePropertyName = 'account'
+            userLookup.passwordPropertyName = 'password'
+            userLookup.enabledPropertyName = 'enabled'
+            userLookup.authoritiesPropertyName = 'permissions'
+            authority.className = 'Permission'
+            authority.nameField = 'name'
+
+            /** Authentication Processing Filter */
+            failureHandler.defaultFailureUrl = '/login/authfail?login_error=1'
+            failureHandler.ajaxAuthFailUrl = '/login/authfail?ajax=true'
+            successHandler.defaultTargetUrl = '/'
+            successHandler.alwaysUseDefault = false
+            apf.filterProcessesUrl = '/j_spring_security_check'
+
+            /** Anonymous Processing Filter */
+            anon.key = 'foo'
+            anon.userAttribute = 'anonymousUser,ROLE_ANONYMOUS'
+
+            /** authenticationEntryPoint */
+            auth.loginFormUrl = '/login/auth'
+            auth.forceHttps = 'false'
+            auth.ajaxLoginFormUrl = '/login/authAjax'
+
+            /** Logout Filter */
+            logout.afterLogoutUrl = '/'
+
+            /** AccessDeniedHandler
+             *  Set errorPage to null, if you want to get error code 403 (FORBIDDEN).
+             */
+            adh.errorPage = '/login/denied'
+            adh.ajaxErrorPage = '/login/deniedAjax'
+            ajaxHeader = 'X-Requested-With'
+            password.algorithm = 'MD5'
+            //Use Base64 text ( true or false )
+            password.encodeHashAsBase64 = false
+
+            /** RememberMe Services */
+            rememberMe.cookieName = 'jenna_remember_me'
+            rememberMe.alwaysRemember = false
+            rememberMe.tokenValiditySeconds = 1209600 //14 days
+            rememberMe.parameter = '_spring_security_remember_me'
+            rememberMe.key = 'jennaRocks'
+
+            /** LoggerListener
+             * ( add 'log4j.logger.org.springframework.security=info,stdout'
+             * to log4j.*.properties to see logs )
+             */
+            registerLoggerListener = true
+
+            /** Use annotations from Controllers to define security rules */
+            controllerAnnotations.matcher = 'ant'
+            controllerAnnotations.lowercase = true
+            controllerAnnotations.staticRules = [:]
+            rejectIfNoRule = false
+
+            securityConfigType = "InterceptUrlMap"
+            basic.realmName = 'Jenna Realm'
+            useBasicAuth = false;
+
+            interceptUrlMap = [
+                    '/login/**': ['IS_AUTHENTICATED_ANONYMOUSLY'],
+                    '/admin/**': [Permission.ROLE_SYSTEM_ADMIN],
+                    '/quartz/**': [Permission.ROLE_SYSTEM_ADMIN],
+                    '/effort/**': [Permission.ROLE_USER, Permission.ROLE_PROJECT_LEADER, Permission.ROLE_COMPANY_ADMIN, Permission.ROLE_SYSTEM_ADMIN],
+                    '/project/**': [Permission.ROLE_PROJECT_LEADER],
+                    '/assignment/**': [Permission.ROLE_PROJECT_LEADER],
+                    '/permission/**': [Permission.ROLE_PROJECT_LEADER],
+                    '/tags/**': [Permission.ROLE_PROJECT_LEADER],
+                    '/chart/**': [Permission.ROLE_PROJECT_LEADER],
+                    '/report/**': [Permission.ROLE_PROJECT_LEADER, Permission.ROLE_COMPANY_ADMIN, Permission.ROLE_SYSTEM_ADMIN],
+                    '/company/**': [Permission.ROLE_SYSTEM_ADMIN],
+                    '/user/**': [Permission.ROLE_USER, Permission.ROLE_PROJECT_LEADER, Permission.ROLE_COMPANY_ADMIN, Permission.ROLE_SYSTEM_ADMIN],
+                    '/**': ['IS_AUTHENTICATED_ANONYMOUSLY']
+            ]
+
+            /** use switchUserProcessingFilter */
+            useSwitchUserFilter = false
+            switchUser.switchUserUrl = '/j_spring_security_switch_user'
+            switchUser.exitUserUrl = '/j_spring_security_exit_user'
+            switchUser.targetUrl = '/'
+
+            // HttpSessionEventPublisher
+            useHttpSessionEventPublisher = false;
+            // User caching
+            cacheUsers = !GrailsUtil.isDevelopmentEnv()
+
+            // Port mappings
+            portMapper.httpPort = 8080
+            portMapper.httpsPort = 8443
+
+            // Secure channel filter (http/https)
+            secureChannel.definition = [
+                    '/**': 'ANY_CHANNEL'
+            ]
+            // Ip restriction filter
+            ipRestrictions = [:]
+
+        }
+    }
+}
