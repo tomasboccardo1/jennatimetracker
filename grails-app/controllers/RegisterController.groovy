@@ -1,3 +1,4 @@
+import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.json.simple.JSONObject
 import groovy.text.SimpleTemplateEngine
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -136,19 +137,18 @@ class RegisterController extends BaseController {
         					return
         }
 
-		def config = springSecurityService.securityConfig
-		def defaultRole = config.security.defaultRole
-		def role = Permission.findByName(defaultRole)
+		def securityConfig = SpringSecurityUtils.getSecurityConfig()
+		def role = Permission.findByName(Permission.ROLE_USER)
 
         Company company = Company.findByName(cmd.companyName)
         if (company) {
-            //TODO adds company admin permission
-            def companyOwnersList = findCompanyOwners(company)
 
+            def companyOwnersList = findCompanyOwners(company)
             String owners = ""
             companyOwnersList.each { User user ->
               owners+=user.name+" "
             }
+
             cmd.errors.rejectValue('companyName', 'user.company.exists.error', [company.name, owners] as Object[], '')
 
             InviteMe inviteMe = InviteMe.findByEmailAndCompany(params.account, company)
@@ -161,7 +161,8 @@ class RegisterController extends BaseController {
               inviteMe.save()
             }
 
-            rememberCompanyOwnerPendingInvitations(company) // FIXME: This should not be here, but in another thread!
+            // FIXME: This should not be here, but in another thread!
+            rememberCompanyOwnerPendingInvitations(company)
 
             render view: 'index', model: [person: cmd, availablesChatTime: TimeZoneUtil.getAvailablePromptTimes(), timeZones: TimeZoneUtil.getAvailableTimeZones(), locales: LocaleUtil.getAvailableLocales()]
             return
@@ -192,7 +193,7 @@ class RegisterController extends BaseController {
             createScoreCategories(company)
             createDefaultInformation(company,person)
 
-			if (config.security.useMail) {
+			if (securityConfig.security.useMail) {
 
                 // Send registration email based on current locale.
               String templatePath = File.separator + "templates" + File.separator + g.message(code: 'registration.mail.template')
@@ -209,7 +210,8 @@ class RegisterController extends BaseController {
               def body = template.toString()
 
               def email = [
-                      to: [invitee], // 'to' expects a List, NOT a single email address
+                      // 'to' expects a List, NOT a single email address
+                      to: [invitee],
                       subject: g.message(code: 'registration.mail.subject'),
                       from: g.message(code: 'application.email'),
                       text: body
@@ -473,6 +475,7 @@ class RegisterController extends BaseController {
         ownersList.each{ User owner ->
            def email = [
                     to: [owner.account],
+                    //to: ["federico.farina+1@fdvsolutions.com"],
                     subject: g.message(code: 'invitation.requested.subject'),
                     from: g.message(code: 'application.email'),
                     text: g.message(code: 'invitation.requested.body')
