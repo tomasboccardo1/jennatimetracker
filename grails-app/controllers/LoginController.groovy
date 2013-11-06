@@ -64,7 +64,7 @@ class LoginController {
 	 * Show denied page.
 	 */
 	def denied = {
-		if (isLoggedIn() && springSecurityService.authenticationTrustResolver.isRememberMe(SCH.context?.authentication)) {
+		if (isLoggedIn() && springSecurityService.authenticationTrustResolver.isRememberMe(springSecurityService.getAuthentication())) {
 			// have cookie but the page is guarded with IS_AUTHENTICATED_FULLY
 			redirect action: full, params: params
 		}
@@ -74,7 +74,7 @@ class LoginController {
 	 * Login page for users with a remember-me cookie but accessing a IS_AUTHENTICATED_FULLY page.
 	 */
 	def full = {
-		render view: 'auth', params: params, model: [hasCookie: springSecurityService.authenticationTrustResolver.isRememberMe(SCH.context?.authentication)]
+		render view: 'auth', params: params, model: [hasCookie: springSecurityService.authenticationTrustResolver.isRememberMe(springSecurityService.getAuthentication())]
 	}
 
 	// Denial page (data|view|json) for Ajax access.

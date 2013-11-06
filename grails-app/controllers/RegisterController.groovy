@@ -4,125 +4,121 @@ import groovy.text.SimpleTemplateEngine
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.GrantedAuthorityImpl
+import org.springframework.security.core.context.SecurityContextHolder
 
 class RegisterController extends BaseController {
 
-	def springSecurityService
-	def emailerService
+    def springSecurityService
+    def emailerService
     def jabberService
     def grailsApplication
 
-	static Map allowedMethods = [save: 'POST', update: 'POST']
+    static Map allowedMethods = [save: 'POST', update: 'POST']
 
-	/**
-	 * User Registration Top page.
-	 */
-	def index = {
-		// skip if already logged in
-		if (springSecurityService.isLoggedIn()) {
-			redirect action: show
-			return
-		}
+    /**
+     * User Registration Top page.
+     */
+    def index = {
+        // skip if already logged in
+        if (springSecurityService.isLoggedIn()) {
+            redirect action: show
+            return
+        }
 
-		if (session.id) {
-			def person = new RegisterCommand()
+        if (session.id) {
+            def person = new RegisterCommand()
             bindData(person, params)
-			return [person: person, availablesChatTime: TimeZoneUtil.getAvailablePromptTimes(), timeZones: TimeZoneUtil.getAvailableTimeZones(), locales: LocaleUtil.getAvailableLocales()]
-		}
+            return [person: person, availablesChatTime: TimeZoneUtil.getAvailablePromptTimes(), timeZones: TimeZoneUtil.getAvailableTimeZones(), locales: LocaleUtil.getAvailableLocales()]
+        }
 
-		redirect uri: '/'
-	}
+        redirect uri: '/'
+    }
 
-	/**
-	 * User Information page for current user.
-	 */
-	def show = {
+    /**
+     * User Information page for current user.
+     */
+    def show = {
 
-		// get user id from session's domain class.
-		def user = springSecurityService.userDomain()
-		if (user) {
-			render view: 'show', model: [person: User.get(user.id)]
-		}
-		else {
-			redirect action: index
-		}
-	}
+        // get user id from session's domain class.
+        def user = springSecurityService.userDomain()
+        if (user) {
+            render view: 'show', model: [person: User.get(user.id)]
+        } else {
+            redirect action: index
+        }
+    }
 
-	/**
-	 * Edit page for current user.
-	 */
-	def edit = {
+    /**
+     * Edit page for current user.
+     */
+    def edit = {
 
-		def person
-		def user = springSecurityService.userDomain()
-		if (user) {
-			person = User.get(user.id)
-		}
+        def person
+        def user = springSecurityService.userDomain()
+        if (user) {
+            person = User.get(user.id)
+        }
 
-		if (!person) {
-			flash.message = "[Illegal Access] User not found with id ${params.id}"
-			redirect action: index
-			return
-		}
+        if (!person) {
+            flash.message = "[Illegal Access] User not found with id ${params.id}"
+            redirect action: index
+            return
+        }
 
-		[person: person]
-	}
+        [person: person]
+    }
 
-	/**
-	 * update action for current user's edit page
-	 */
-	def update = {
+    /**
+     * update action for current user's edit page
+     */
+    def update = {
 
-		def person
-		def user = springSecurityService.userDomain()
-		if (user) {
-			person = User.get(user.id)
-		}
-		else {
-			redirect action: index
-			return
-		}
+        def person
+        def user = springSecurityService.userDomain()
+        if (user) {
+            person = User.get(user.id)
+        } else {
+            redirect action: index
+            return
+        }
 
-		if (!person) {
-			flash.message = "[Illegal Access] User not found with id ${params.id}"
-			redirect action: index, id: params.id
-			return
-		}
+        if (!person) {
+            flash.message = "[Illegal Access] User not found with id ${params.id}"
+            redirect action: index, id: params.id
+            return
+        }
 
-		// if user want to change password. leave pass field blank, pass will not change.
-		if (params.pass && params.pass.length() > 0
-				&& params.repass && params.repass.length() > 0) {
-			if (params.pass == params.repass) {
-				person.pass = springSecurityService.encodePassword(params.pass)
-			}
-			else {
-				person.pass = ''
-				flash.message = 'The passwords you entered do not match.'
-				render view: 'edit', model: [person: person]
-				return
-			}
-		}
+        // if user want to change password. leave pass field blank, pass will not change.
+        if (params.pass && params.pass.length() > 0
+                && params.repass && params.repass.length() > 0) {
+            if (params.pass == params.repass) {
+                person.pass = springSecurityService.encodePassword(params.pass)
+            } else {
+                person.pass = ''
+                flash.message = 'The passwords you entered do not match.'
+                render view: 'edit', model: [person: person]
+                return
+            }
+        }
 
-		person.name = params.name
+        person.name = params.name
 
-		if (person.save()) {
-			redirect action: show, id: person.id
-		}
-		else {
-			render view: 'edit', model: [person: person]
-		}
-	 }
+        if (person.save()) {
+            redirect action: show, id: person.id
+        } else {
+            render view: 'edit', model: [person: person]
+        }
+    }
 
-	/**
-	 * Person save action.
-	 */
-	def save = { RegisterCommand cmd ->
+    /**
+     * Person save action.
+     */
+    def save = { RegisterCommand cmd ->
 
-		// skip if already logged in
-		if (springSecurityService.isLoggedIn()) {
-			redirect action: show
-			return
-		}
+        if (springSecurityService.isLoggedIn()) {
+            redirect action: show
+            return
+        }
 
         if (cmd.hasErrors()) {
             render view: 'index', model: [person: cmd, availablesChatTime: TimeZoneUtil.getAvailablePromptTimes(), timeZones: TimeZoneUtil.getAvailableTimeZones(), locales: LocaleUtil.getAvailableLocales()]
@@ -130,15 +126,15 @@ class RegisterController extends BaseController {
         }
 
         if (params.captcha.toUpperCase() != session.captcha) {
-        	cmd.password = ''
-        			cmd.repassword = ''
-        			flash.message = 'Access code did not match.'
-        			render view: 'index', model: [person: cmd, availablesChatTime: TimeZoneUtil.getAvailablePromptTimes(), timeZones: TimeZoneUtil.getAvailableTimeZones(), locales: LocaleUtil.getAvailableLocales()]
-        					return
+            cmd.password = ''
+            cmd.repassword = ''
+            flash.message = 'Access code did not match.'
+            render view: 'index', model: [person: cmd, availablesChatTime: TimeZoneUtil.getAvailablePromptTimes(), timeZones: TimeZoneUtil.getAvailableTimeZones(), locales: LocaleUtil.getAvailableLocales()]
+            return
         }
 
-		def securityConfig = SpringSecurityUtils.getSecurityConfig()
-		def role = Permission.findByName(Permission.ROLE_USER)
+        def securityConfig = SpringSecurityUtils.getSecurityConfig()
+        def role = Permission.findByName(Permission.ROLE_USER)
 
         Company company = Company.findByName(cmd.companyName)
         if (company) {
@@ -146,19 +142,19 @@ class RegisterController extends BaseController {
             def companyOwnersList = findCompanyOwners(company)
             String owners = ""
             companyOwnersList.each { User user ->
-              owners+=user.name+" "
+                owners += user.name + " "
             }
 
             cmd.errors.rejectValue('companyName', 'user.company.exists.error', [company.name, owners] as Object[], '')
 
             InviteMe inviteMe = InviteMe.findByEmailAndCompany(params.account, company)
-            if (inviteMe == null){
-              inviteMe = new InviteMe()
-              inviteMe.name = params.name
-              inviteMe.email = params.account
-              inviteMe.requested = new Date()
-              inviteMe.company = company
-              inviteMe.save()
+            if (inviteMe == null) {
+                inviteMe = new InviteMe()
+                inviteMe.name = params.name
+                inviteMe.email = params.account
+                inviteMe.requested = new Date()
+                inviteMe.company = company
+                inviteMe.save()
             }
 
             // FIXME: This should not be here, but in another thread!
@@ -172,8 +168,8 @@ class RegisterController extends BaseController {
 
         def person = new User()
         person.properties = params
-        person.humour= grailsApplication.config['jenna']['defaultHumour']
-		person.password = springSecurityService.encodePassword(cmd.password)
+        person.humour = grailsApplication.config['jenna']['defaultHumour']
+        person.password = springSecurityService.encodePassword(cmd.password)
 
         company = new Company(name: cmd.companyName)
         permissions << Permission.findByName(Permission.ROLE_COMPANY_ADMIN)
@@ -182,55 +178,51 @@ class RegisterController extends BaseController {
         person.company = company
         person.activationHash = springSecurityService.encodePassword(person.account + company.name)
         person.validate()
-		if (!person.hasErrors()) {
+        if (!person.hasErrors()) {
             company.addToEmployees(person)
             company.save()
             permissions.each { permission ->
-    			permission.addToUsers(person)
+                permission.addToUsers(person)
             }
 
             // Now that we've created the company, we can create Score Categories.
             createScoreCategories(company)
-            createDefaultInformation(company,person)
+            createDefaultInformation(company, person)
 
-			if (securityConfig.security.useMail) {
+            // Send registration email based on current locale.
+            String templatePath = File.separator + "templates" + File.separator + g.message(code: 'registration.mail.template')
+            File tplFile = grailsAttributes.getApplicationContext().getResource(templatePath).getFile()
 
-                // Send registration email based on current locale.
-              String templatePath = File.separator + "templates" + File.separator + g.message(code: 'registration.mail.template')
-              File tplFile = grailsAttributes.getApplicationContext().getResource(templatePath).getFile()
+            String linkHash = createLink(controller: "register", action: "activate", params: [hash: person.activationHash], absolute: true)
+            def binding = ["name": person.name, "account": person.account, "accountToAdd": g.message(code: 'application.email.account'), "linkHash": linkHash]
 
-			  String linkHash = createLink(controller:"register",action:"activate",params:[hash:person.activationHash],absolute:true)
-              def binding = ["name": person.name, "account": person.account, "accountToAdd": g.message(code: 'application.email.account'), "linkHash": linkHash]
+            String invitee = person.account
 
-              String invitee = person.account
+            def engine = new SimpleTemplateEngine()
+            def template = engine.createTemplate(tplFile).make(binding)
 
-              def engine = new SimpleTemplateEngine()
-              def template = engine.createTemplate(tplFile).make(binding)
+            def body = template.toString()
 
-              def body = template.toString()
+            def email = [
+                    to: [invitee],
+                    subject: g.message(code: 'registration.mail.subject'),
+                    from: g.message(code: 'application.email'),
+                    text: body
+            ]
+            emailerService.sendEmails([email])
 
-              def email = [
-                      // 'to' expects a List, NOT a single email address
-                      to: [invitee],
-                      subject: g.message(code: 'registration.mail.subject'),
-                      from: g.message(code: 'application.email'),
-                      text: body
-              ]
-              emailerService.sendEmails([email])
-			}
+            // Finally, we save the newly registered person.
+            person.save()
 
-          // Finally, we save the newly registered person.
-          person.save()
-
-          render view: 'success', model: [person: cmd, availablesChatTime: TimeZoneUtil.getAvailablePromptTimes(), timeZones: TimeZoneUtil.getAvailableTimeZones(), locales: LocaleUtil.getAvailableLocales()]
-          return
+            render view: 'success', model: [person: cmd, availablesChatTime: TimeZoneUtil.getAvailablePromptTimes(), timeZones: TimeZoneUtil.getAvailableTimeZones(), locales: LocaleUtil.getAvailableLocales()]
+            return
         } else {
-          cmd.password = ''
-          cmd.repassword = ''
-          cmd.errors = person.errors
-          render view: 'index', model: [person: cmd, availablesChatTime: TimeZoneUtil.getAvailablePromptTimes(), timeZones: TimeZoneUtil.getAvailableTimeZones(), locales: LocaleUtil.getAvailableLocales()]
+            cmd.password = ''
+            cmd.repassword = ''
+            cmd.errors = person.errors
+            render view: 'index', model: [person: cmd, availablesChatTime: TimeZoneUtil.getAvailablePromptTimes(), timeZones: TimeZoneUtil.getAvailableTimeZones(), locales: LocaleUtil.getAvailableLocales()]
         }
-	}
+    }
 
     def acceptInvitation = {
         Invitation invitation = Invitation.findByCode(params.code)
@@ -246,94 +238,94 @@ class RegisterController extends BaseController {
         return [person: person, availablesChatTime: TimeZoneUtil.getAvailablePromptTimes(), timeZones: TimeZoneUtil.getAvailableTimeZones(), locales: LocaleUtil.getAvailableLocales(), code: invitation.code]
     }
 
-    private void createScoreCategories(Company company){
-      def scoreCategoryKnowledgeLearning = ScoreCategory.withCriteria {
-          eq("category", "KNOWLEDGE")
-          eq("subCategory", "LEARNING")
-          eq("company", company)
-      }
-      def scoreCategoryKnowledgeVote = ScoreCategory.withCriteria {
-          eq("category", "KNOWLEDGE")
-          eq("subCategory", "VOTE")
-          eq("company", company)
-      }
-      def scoreCategoryKnowledgeTag = ScoreCategory.withCriteria {
-          eq("category", "KNOWLEDGE")
-          eq("subCategory", "TAG")
-          eq("company", company)
-      }
-      if (!scoreCategoryKnowledgeLearning){
-        scoreCategoryKnowledgeLearning = new ScoreCategory(company: company, category: "KNOWLEDGE", subCategory: "LEARNING", points: 5)
-        scoreCategoryKnowledgeLearning.save()
-      }
-      if (!scoreCategoryKnowledgeVote){
-        scoreCategoryKnowledgeVote = new ScoreCategory(company: company, category: "KNOWLEDGE", subCategory: "VOTE", points: 1)
-        scoreCategoryKnowledgeVote.save()
-      }
-      if (!scoreCategoryKnowledgeTag){
-        scoreCategoryKnowledgeTag = new ScoreCategory(company: company, category: "KNOWLEDGE", subCategory: "TAG", points: 2)
-        scoreCategoryKnowledgeTag.save()
-      }
+    private void createScoreCategories(Company company) {
+        def scoreCategoryKnowledgeLearning = ScoreCategory.withCriteria {
+            eq("category", "KNOWLEDGE")
+            eq("subCategory", "LEARNING")
+            eq("company", company)
+        }
+        def scoreCategoryKnowledgeVote = ScoreCategory.withCriteria {
+            eq("category", "KNOWLEDGE")
+            eq("subCategory", "VOTE")
+            eq("company", company)
+        }
+        def scoreCategoryKnowledgeTag = ScoreCategory.withCriteria {
+            eq("category", "KNOWLEDGE")
+            eq("subCategory", "TAG")
+            eq("company", company)
+        }
+        if (!scoreCategoryKnowledgeLearning) {
+            scoreCategoryKnowledgeLearning = new ScoreCategory(company: company, category: "KNOWLEDGE", subCategory: "LEARNING", points: 5)
+            scoreCategoryKnowledgeLearning.save()
+        }
+        if (!scoreCategoryKnowledgeVote) {
+            scoreCategoryKnowledgeVote = new ScoreCategory(company: company, category: "KNOWLEDGE", subCategory: "VOTE", points: 1)
+            scoreCategoryKnowledgeVote.save()
+        }
+        if (!scoreCategoryKnowledgeTag) {
+            scoreCategoryKnowledgeTag = new ScoreCategory(company: company, category: "KNOWLEDGE", subCategory: "TAG", points: 2)
+            scoreCategoryKnowledgeTag.save()
+        }
     }
 
-    public void createDefaultInformation(Company company, User user){
+    public void createDefaultInformation(Company company, User user) {
 
-      Role role = Role.findByCompanyAndName(company,g.message(code:'default.permission.name'))
-      if (!role){
-        role = new Role()
-        role.name=        g.message(code:'default.permission.name')
-        role.description= g.message(code:'default.permission.description')
-        role.company=     company
-      }
+        Role role = Role.findByCompanyAndName(company, g.message(code: 'default.permission.name'))
+        if (!role) {
+            role = new Role()
+            role.name = g.message(code: 'default.permission.name')
+            role.description = g.message(code: 'default.permission.description')
+            role.company = company
+        }
 
-      Tag clientTag = Tag.withCriteria(uniqueResult:true){
-        eq("company", company)
-        eq("category", TagCategory.findByName("client"))
-        eq("name", g.message(code:'default.tag.client.name'))
-      }
-      if (!clientTag){
-        clientTag = new Tag()
-        clientTag.category=TagCategory.findByName("client")
-        clientTag.name=    g.message(code:'default.tag.client.name')
-        clientTag.company= company
-      }
+        Tag clientTag = Tag.withCriteria(uniqueResult: true) {
+            eq("company", company)
+            eq("category", TagCategory.findByName("client"))
+            eq("name", g.message(code: 'default.tag.client.name'))
+        }
+        if (!clientTag) {
+            clientTag = new Tag()
+            clientTag.category = TagCategory.findByName("client")
+            clientTag.name = g.message(code: 'default.tag.client.name')
+            clientTag.company = company
+        }
 
-      Tag projectTag = Tag.withCriteria(uniqueResult:true){
-        eq("company", company)
-        eq("category", TagCategory.findByName("project"))
-        eq("name", g.message(code:'default.tag.project.name'))
-      }
-      if (!projectTag){
-        projectTag = new Tag()
-        projectTag.category=TagCategory.findByName("project")
-        projectTag.name=    g.message(code:'default.tag.project.name')
-        projectTag.company= company
-      }
+        Tag projectTag = Tag.withCriteria(uniqueResult: true) {
+            eq("company", company)
+            eq("category", TagCategory.findByName("project"))
+            eq("name", g.message(code: 'default.tag.project.name'))
+        }
+        if (!projectTag) {
+            projectTag = new Tag()
+            projectTag.category = TagCategory.findByName("project")
+            projectTag.name = g.message(code: 'default.tag.project.name')
+            projectTag.company = company
+        }
 
-      Project project = Project.findByCompanyAndName(company,g.message(code:'default.project.name'))
-      if (!project){
-        project = new Project()
-        project.name=         g.message(code:'default.project.name')
-        project.description=  g.message(code:'default.project.description')
-        project.startDate=    new Date()-1
-        project.endDate=      new Date()+365
-        project.company=      company
-        project.active=       true
-      }
+        Project project = Project.findByCompanyAndName(company, g.message(code: 'default.project.name'))
+        if (!project) {
+            project = new Project()
+            project.name = g.message(code: 'default.project.name')
+            project.description = g.message(code: 'default.project.description')
+            project.startDate = new Date() - 1
+            project.endDate = new Date() + 365
+            project.company = company
+            project.active = true
+        }
 
-      Assignment ass = new Assignment()
-      ass.description= g.message(code:'default.assignment.description')
-      ass.project=     project
-      ass.user=        user
-      ass.role=        role
-      ass.startDate=   new Date()-1
-      ass.endDate=     new Date()+365
+        Assignment ass = new Assignment()
+        ass.description = g.message(code: 'default.assignment.description')
+        ass.project = project
+        ass.user = user
+        ass.role = role
+        ass.startDate = new Date() - 1
+        ass.endDate = new Date() + 365
 
-      role.save()
-      clientTag.save()
-      projectTag.save()
-      project.save()
-      ass.save()
+        role.save()
+        clientTag.save()
+        projectTag.save()
+        project.save()
+        ass.save()
     }
 
     def saveInvitation = { RegisterCommand cmd ->
@@ -344,15 +336,13 @@ class RegisterController extends BaseController {
         }
         cmd.companyName = invitation.inviter.company.name
         cmd.account = invitation.invitee
-        // not on grails 1.1.1
-        //cmd.clearErrors()
         cmd.validate()
         if (cmd.hasErrors()) {
             render view: 'acceptInvitation', model: [person: cmd, availablesChatTime: TimeZoneUtil.getAvailablePromptTimes(), timeZones: TimeZoneUtil.getAvailableTimeZones(), locales: LocaleUtil.getAvailableLocales(), code: invitation.code]
             return
         }
 
-        def config = springSecurityService.securityConfig
+        def config = Grails.securityConfig
 
         if (params.captcha.toUpperCase() != session.captcha) {
             cmd.password = ''
@@ -384,18 +374,17 @@ class RegisterController extends BaseController {
             person.save()
 
             // Now that we've created the company, we can create Score Categories.
-            createDefaultInformation(company,person)
+            createDefaultInformation(company, person)
 
 
             jabberService.addAccount(person.account, person.name)
 
             invitation.accepted = new Date()
             invitation.save()
-            GrantedAuthority[] authorities = person.permissions.collect {Permission p ->
+            GrantedAuthority[] authorities = person.permissions.collect { Permission p ->
                 new GrantedAuthorityImpl(p.name)
             } as GrantedAuthority[]
-            def authtoken = new UsernamePasswordAuthenticationToken(springSecurityService.principal, 'dummy', authorities)
-            SCH.context.authentication = authtoken
+            springSecurityService.reauthenticate(person.account);
             redirect uri: '/'
         } else {
             cmd.password = ''
@@ -413,11 +402,11 @@ class RegisterController extends BaseController {
 
             jabberService.addAccount(user.account, user.name)
 
-            GrantedAuthority[] authorities = user.permissions.collect {Permission p ->
+            GrantedAuthority[] authorities = user.permissions.collect { Permission p ->
                 new GrantedAuthorityImpl(p.name)
             } as GrantedAuthority[]
-            def authtoken = new UsernamePasswordAuthenticationToken(springSecurityService.principal, 'dummy', authorities)
-			SCH.context.authentication = authtoken
+
+            springSecurityService.reauthenticate(user.account);
         }
         redirect uri: '/'
     }
@@ -447,7 +436,7 @@ class RegisterController extends BaseController {
                     to: [invitation.invitee],
                     subject: g.message(code: 'invitation.mail.subject'),
                     from: g.message(code: 'application.email'),
-                    text: g.message(code: 'invitation.mail.body', [createLink(absoulte:true, controller:"register",action:"acceptInvitation",params:[code:invitation.code])] as Object[])
+                    text: g.message(code: 'invitation.mail.body', [createLink(absoulte: true, controller: "register", action: "acceptInvitation", params: [code: invitation.code])] as Object[])
             ]
             emailerService.sendEmails([email])
             jsonResponse = buildJsonOkResponse(request, buildMessageSourceResolvable('confirm'), buildMessageSourceResolvable('invitation.sent', [invitation.invitee]))
@@ -459,23 +448,22 @@ class RegisterController extends BaseController {
     }
 
     List findCompanyOwners(Company company) {
-      def owners = User.createCriteria().list {
-          eq('company', company)
-          permissions {
-              eq('name', Permission.ROLE_COMPANY_ADMIN)
-          }
-      }
-      return owners
+        def owners = User.createCriteria().list {
+            eq('company', company)
+            permissions {
+                eq('name', Permission.ROLE_COMPANY_ADMIN)
+            }
+        }
+        return owners
     }
 
-    void rememberCompanyOwnerPendingInvitations(Company company){
+    void rememberCompanyOwnerPendingInvitations(Company company) {
 
         def ownersList = findCompanyOwners(company)
 
-        ownersList.each{ User owner ->
-           def email = [
+        ownersList.each { User owner ->
+            def email = [
                     to: [owner.account],
-                    //to: ["federico.farina+1@fdvsolutions.com"],
                     subject: g.message(code: 'invitation.requested.subject'),
                     from: g.message(code: 'application.email'),
                     text: g.message(code: 'invitation.requested.body')

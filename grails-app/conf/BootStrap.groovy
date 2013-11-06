@@ -60,6 +60,7 @@ class BootStrap {
             taskCategory.save()
         }
 
+        // FIXME: Is there any better way to force Singleton beans to be loaded eagerly?
         grailsApplication.getMainContext().getBean("jabberService")
         fireUpJobs()
         checkForAdminUser()
