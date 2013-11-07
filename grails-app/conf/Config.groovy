@@ -1,4 +1,7 @@
 import grails.util.GrailsUtil
+import org.scribe.builder.api.GoogleApi
+
+
 
 grails.config.locations = [
         customconf.CustomDataSource,
@@ -6,6 +9,15 @@ grails.config.locations = [
         customconf.CustomEmailNotificationsConfig,
         customconf.CustomSearchable
 ]
+
+environments{
+    production{
+        grails.serverURL = "http://apps.fdvlabs.com/projectguide"
+    }
+    development{
+        grails.serverURL = "http://localhost:8080/projectguide"
+    }
+}
 
 grails {
     plugin {
@@ -222,3 +234,21 @@ grails {
         }
     }
 }
+
+oauth {
+    providers {
+        google {
+            api = GoogleApi
+            key = "829584903408.apps.googleusercontent.com"
+            secret = "xZwkbo5uCZf2kgzB7avhjF-9"
+            scope = 'https://www.googleapis.com/auth/userinfo.email'
+            callback = "${grails.serverURL}/oauth/google/callback"
+            successUri = "${grails.serverURL}/springSecurityOAuth/onSuccess?provider=google"
+        }
+    }
+    debug = true
+}
+
+// Added by the Spring Security OAuth plugin:
+grails.plugins.springsecurity.oauth.domainClass = 'OAuthID'
+grails.plugins.springsecurity.oauth.registration.askToLinkOrCreateAccountUri="${grails.serverURL}/springSecurityOAuth/askToLinkOrCreateAccount"

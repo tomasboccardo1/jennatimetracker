@@ -60,8 +60,7 @@ class User {
     }
 
 
-    static hasMany = [efforts: Effort, assignments: Assignment, reminders: Reminder, permissions: Permission, learnings: Learning, moods: UserMood, scores: Score, skills: Skill, usersFollowed: User]
-
+    static hasMany = [efforts: Effort, assignments: Assignment, reminders: Reminder, permissions: Permission, learnings: Learning, moods: UserMood, scores: Score, skills: Skill, usersFollowed: User, oAuthIDs: OAuthID]
     static belongsTo = Permission
 
     static mapping = {
