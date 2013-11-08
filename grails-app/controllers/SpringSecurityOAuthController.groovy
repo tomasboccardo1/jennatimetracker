@@ -15,12 +15,15 @@
  */
 
 
+
+import grails.converters.JSON
 import grails.plugin.springsecurity.oauth.OAuthToken
 import org.codehaus.groovy.grails.plugins.springsecurity.GormUserDetailsService
 import org.codehaus.groovy.grails.plugins.springsecurity.GrailsUser
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.springframework.security.core.authority.GrantedAuthorityImpl
 import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.core.token.Token
 import org.springframework.security.web.savedrequest.DefaultSavedRequest
 
 import User
@@ -128,19 +131,29 @@ class SpringSecurityOAuthController {
         OAuthToken oAuthToken = session[SPRING_SECURITY_OAUTH_TOKEN]
         assert oAuthToken, "There is no auth token in the session!"
 
+
+        def response = oauthService.accessResource("google", session[oauthService.findSessionKeyForAccessToken('google')], "GET", "https://www.googleapis.com/oauth2/v1/userinfo");
+        def googleResponse = JSON.parse(response?.getBody())
+
+        def email = googleResponse.getAt("email")
+        def name = googleResponse.getAt("name")
+        def locale = googleResponse.getAt("locale")
+
         if (request.post) {
             if (!springSecurityService.loggedIn) {
-                def config = SpringSecurityUtils.securityConfig
 
                 boolean created = command.validate() && User.withTransaction { status ->
-                    User user = new User(account: command.account,
-                                         password: command.password1,
-                                         name: command.name,
-                                         company: command.companyName,
-                                         chatTime: command.chatTime,
-                                         timeZone: command.timeZone,
-                                         locale: command.locale,
-                                         enabled: true)
+                    def userRole = Permission.findByName(Permission.ROLE_USER);
+                    User user = new User(
+                            account: email,
+                            password: command.password1,
+                            name: name,
+                            company: Company.findByName(command.company),
+                            chatTime: command.chatTime,
+                            timeZone: command.timeZone,
+                            locale: locale,
+                            permissions: userRole,
+                            enabled: true)
 
                     user.addToOAuthIDs(provider: oAuthToken.providerName, accessToken: oAuthToken.socialId, user: user)
                     // updateUser(user, oAuthToken)
@@ -148,11 +161,6 @@ class SpringSecurityOAuthController {
                     if (!user.validate() || !user.save()) {
                         status.setRollbackOnly()
                         return false
-                    }
-
-                    for (roleName in config.oauth.registration.roleNames) {
-                        user.setPermissions(Permission.findByName(roleName))
-                        user.save(flush: true);
                     }
 
                     oAuthToken = updateOAuthToken(oAuthToken, user)
@@ -343,17 +351,13 @@ class SpringSecurityOAuthController {
 
 class OAuthCreateAccountCommand {
 
-    String account
     String password1
     String password2
-    String name
-    String companyName
+    String company
     String chatTime
     TimeZone timeZone
-    Locale locale
 
     static constraints = {
-        account(nullable: false, blank: false, email: true, size: 5..255)
 
         password1 blank: false, minSize: 8, maxSize: 64, validator: { password1, command ->
             if (command.account && command.account.equals(password1)) {
@@ -365,9 +369,6 @@ class OAuthCreateAccountCommand {
                 return 'OAuthCreateAccountCommand.password.error.mismatch'
             }
         }
-        name(nullable: false, blank: false, size: 2..255)
-        chatTime(nullable: true)
-        companyName(nullable: false)
     }
 }
 

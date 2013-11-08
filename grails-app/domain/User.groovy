@@ -73,7 +73,7 @@ class User {
     }
 
     static constraints = {
-        password(nullable: false, blank: false, size: 32..32)
+        password(nullable: false, blank: false, size: 8..32)
         name(nullable: false, blank: false, unique: false, size: 2..255)
         account(nullable: false, blank: false, email: true, unique: true, size: 5..255)
         chatTime(nullable: true)

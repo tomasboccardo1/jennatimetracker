@@ -10,11 +10,11 @@ grails.config.locations = [
         customconf.CustomSearchable
 ]
 
-environments{
-    production{
+environments {
+    production {
         grails.serverURL = "http://apps.fdvlabs.com/projectguide"
     }
-    development{
+    development {
         grails.serverURL = "http://localhost:8080/projectguide"
     }
 }
@@ -241,7 +241,8 @@ oauth {
             api = GoogleApi
             key = "829584903408.apps.googleusercontent.com"
             secret = "xZwkbo5uCZf2kgzB7avhjF-9"
-            scope = 'https://www.googleapis.com/auth/userinfo.email'
+            scope = "https://www.googleapis.com/auth/userinfo.email " +
+                    "https://www.googleapis.com/auth/userinfo.profile"
             callback = "${grails.serverURL}/oauth/google/callback"
             successUri = "${grails.serverURL}/springSecurityOAuth/onSuccess?provider=google"
         }
@@ -251,4 +252,4 @@ oauth {
 
 // Added by the Spring Security OAuth plugin:
 grails.plugins.springsecurity.oauth.domainClass = 'OAuthID'
-grails.plugins.springsecurity.oauth.registration.askToLinkOrCreateAccountUri="${grails.serverURL}/springSecurityOAuth/askToLinkOrCreateAccount"
+grails.plugins.springsecurity.oauth.registration.askToLinkOrCreateAccountUri = "${grails.serverURL}/springSecurityOAuth/askToLinkOrCreateAccount"

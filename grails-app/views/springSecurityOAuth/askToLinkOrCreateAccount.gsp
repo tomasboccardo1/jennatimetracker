@@ -72,12 +72,6 @@
             <legend><g:message code="springSecurity.oauth.registration.create.legend"
                                default="Create a new account"/></legend>
 
-            <div class="fieldcontain ${hasErrors(bean: createAccountCommand, field: 'account', 'error')} ">
-                <label for='account'><g:message code="OAuthCreateAccountCommand.account.label"
-                                                default="Account"/>:</label>
-                <g:textField name='account' value='${createAccountCommand?.account}'/>
-            </div>
-
             <div class="fieldcontain ${hasErrors(bean: createAccountCommand, field: 'password1', 'error')} ">
                 <label for='password1'><g:message code="OAuthCreateAccountCommand.password1.label"
                                                   default="Password"/>:</label>
@@ -90,14 +84,10 @@
                 <g:passwordField name='password2' value='${createAccountCommand?.password2}'/>
             </div>
 
-            <div class="fieldcontain ${hasErrors(bean: createAccountCommand, field: 'name', 'error')} ">
-                <label for='name'>Full Name:</label>
-                <g:textField name="name" value="${createAccountCommand?.name}"/>
-            </div>
-
-            <div class="fieldcontain ${hasErrors(bean: createAccountCommand, field: 'companyName', 'error')} ">
+            <div class="fieldcontain ${hasErrors(bean: createAccountCommand, field: 'company', 'error')} ">
                 <label for='name'>Company:</label>
-                <g:textField name='name' value='${createAccountCommand?.companyName}'/>
+                <g:select name="company"
+                          from="${Company.findAll()}"/>
             </div>
 
             <div class="fieldcontain ${hasErrors(bean: createAccountCommand, field: 'chatTime', 'error')} ">
