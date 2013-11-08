@@ -3,23 +3,22 @@
     <title>Create or Link Account</title>
     <style type="text/css">
     fieldset {
-        border: 1px solid green;
+        border: 1px solid white;
         padding: 1em;
         font: 100%/1 sans-serif;
     }
 
     fieldset legend {
         padding: 0.2em 0.5em;
-        border: 1px solid green;
-        color: green;
+        border: 1px solid white;
+        color: white;
         font-weight: bold;
-        font-size: 90%;
+        font-size: 14px;
         text-align: left;
     }
 
-    fieldset label select{
+    fieldset label select {
         float: left;
-        width: 25%;
         margin-top: 5px;
         margin-right: 0.5em;
         padding-top: 0.2em;
@@ -27,8 +26,15 @@
         font-weight: bold;
     }
 
-    label{
+    select {
+        width: 50%;
+    }
+
+    label {
         margin-top: 15px;
+        color: white;
+        font-size: 12px;
+        margin-bottom: 5px;
     }
 
     fieldset input[type="submit"] {
@@ -50,9 +56,9 @@
         <div class="errors">${flash.error}</div>
     </g:if>
 
-    <h4><g:message code="springSecurity.oauth.registration.link.not.exists"
-                   default="No user was found with this account."
-                   args="[session.springSecurityOAuthToken.providerName]"/></h4>
+    <h4 style="color: #ffffff"><g:message code="springSecurity.oauth.registration.link.not.exists"
+                                          default="No user was found with this account."
+                                          args="[session.springSecurityOAuthToken.providerName]"/></h4>
     <br/>
 
     <g:hasErrors bean="${createAccountCommand}">
@@ -127,8 +133,13 @@
                 </td>
             </tr>
 
-            <g:submitButton
-                    name="${message(code: 'springSecurity.oauth.registration.create.button', default: 'Create')}"/>
+            <div class="buttons" style="margin-top: 15px">
+                <span class="formButton">
+                    <g:submitButton
+                            class="save"
+                            name="${message(code: 'springSecurity.oauth.registration.create.button', default: 'Create')}"/>
+                </span>
+            </div>
         </fieldset>
     </g:form>
 
@@ -156,15 +167,24 @@
                                                  default="Password"/>:</label>
                 <g:passwordField name='password' value='${linkAccountCommand?.password}'/>
             </div>
-            <g:submitButton
-                    name="${message(code: 'springSecurity.oauth.registration.login.button', default: 'Login')}"/>
+
+
+            <div class="buttons" style="margin-top: 15px">
+                <span class="formButton">
+                    <g:submitButton
+                            class="save"
+                            name="${message(code: 'springSecurity.oauth.registration.login.button', default: 'Login')}"/>
+                </span>
+            </div>
+
         </fieldset>
     </g:form>
 
     <br/>
 
-    <g:link controller="login" action="auth"><g:message code="springSecurity.oauth.registration.back"
-                                                        default="Back to login page"/></g:link>
+    <g:link controller="login" action="auth" style="font-size: 14px"><g:message
+            code="springSecurity.oauth.registration.back"
+            default="Back to login page"/></g:link>
 </div>
 
 </body>
