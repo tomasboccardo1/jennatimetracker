@@ -80,11 +80,6 @@
                         <label for="timeZone">Time Zone:</label>
                     </td>
                     <td valign="top" class="value ${hasErrors(bean: person, field: 'timeZone', 'errors')}">
-	                    <%--
-	                    Would be nice to use:
-	                        <g:timeZoneSelect name="timeZone" value="${person.timeZone?.getID()}" />
-	                    However, http://jira.grails.org/browse/GRAILS-6590 prevents us from using it :(                    
-	                    --%>
                         <g:select id="timeZone" name="timeZone"
                                   from="${timeZones}"
                                   value="${person.timeZone?.getID()}" />

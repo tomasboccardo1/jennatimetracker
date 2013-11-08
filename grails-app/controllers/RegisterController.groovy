@@ -133,7 +133,6 @@ class RegisterController extends BaseController {
             return
         }
 
-        def securityConfig = SpringSecurityUtils.getSecurityConfig()
         def role = Permission.findByName(Permission.ROLE_USER)
 
         Company company = Company.findByName(cmd.companyName)

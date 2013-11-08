@@ -133,9 +133,16 @@ class SpringSecurityOAuthController {
                 def config = SpringSecurityUtils.securityConfig
 
                 boolean created = command.validate() && User.withTransaction { status ->
-                    User user = new User(account: command.account, password: command.password1, enabled: true)
-                    user.addToOAuthIDs(provider: oAuthToken.providerName, accessToken: oAuthToken.socialId, user: user)
+                    User user = new User(account: command.account,
+                                         password: command.password1,
+                                         name: command.name,
+                                         company: command.companyName,
+                                         chatTime: command.chatTime,
+                                         timeZone: command.timeZone,
+                                         locale: command.locale,
+                                         enabled: true)
 
+                    user.addToOAuthIDs(provider: oAuthToken.providerName, accessToken: oAuthToken.socialId, user: user)
                     // updateUser(user, oAuthToken)
 
                     if (!user.validate() || !user.save()) {
@@ -145,7 +152,7 @@ class SpringSecurityOAuthController {
 
                     for (roleName in config.oauth.registration.roleNames) {
                         user.setPermissions(Permission.findByName(roleName))
-                        user.save(flush:true);
+                        user.save(flush: true);
                     }
 
                     oAuthToken = updateOAuthToken(oAuthToken, user)
@@ -158,11 +165,9 @@ class SpringSecurityOAuthController {
                 }
             }
         }
-
         render view: 'askToLinkOrCreateAccount', model: [createAccountCommand: command]
     }
 
-    // utils
 
     protected renderError(code, msg) {
         log.error msg + " (returning ${code})"
@@ -341,25 +346,18 @@ class OAuthCreateAccountCommand {
     String account
     String password1
     String password2
+    String name
+    String companyName
+    String chatTime
+    TimeZone timeZone
+    Locale locale
 
     static constraints = {
-        account blank: false, validator: { String account, command ->
-            User.withNewSession { session ->
-                if (account && User.countByAccount(account)) {
-                    return 'OAuthCreateAccountCommand.account.error.unique'
-                }
-            }
-        }
+        account(nullable: false, blank: false, email: true, size: 5..255)
+
         password1 blank: false, minSize: 8, maxSize: 64, validator: { password1, command ->
             if (command.account && command.account.equals(password1)) {
                 return 'OAuthCreateAccountCommand.password.error.account'
-            }
-
-            if (password1 && password1.length() >= 8 && password1.length() <= 64 &&
-                    (!password1.matches('^.*\\p{Alpha}.*$') ||
-                     !password1.matches('^.*\\p{Digit}.*$') ||
-                     !password1.matches('^.*[!@#$%^&].*$'))) {
-                return 'OAuthCreateAccountCommand.password.error.strength'
             }
         }
         password2 nullable: true, blank: true, validator: { password2, command ->
@@ -367,6 +365,9 @@ class OAuthCreateAccountCommand {
                 return 'OAuthCreateAccountCommand.password.error.mismatch'
             }
         }
+        name(nullable: false, blank: false, size: 2..255)
+        chatTime(nullable: true)
+        companyName(nullable: false)
     }
 }
 
