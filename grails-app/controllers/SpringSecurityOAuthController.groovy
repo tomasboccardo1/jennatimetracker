@@ -41,6 +41,7 @@ class SpringSecurityOAuthController {
     def grailsApplication
     def oauthService
     def springSecurityService
+    def emailerService
 
     /**
      * This can be used as a callback for a successful OAuth authentication
@@ -76,11 +77,17 @@ class SpringSecurityOAuthController {
             // internal account or link to an existing one.
             session[SPRING_SECURITY_OAUTH_TOKEN] = oAuthToken
 
+            def response = oauthService.accessResource("google", session[oauthService.findSessionKeyForAccessToken('google')], "GET", "https://www.googleapis.com/oauth2/v1/userinfo");
+            def googleResponse = JSON.parse(response?.getBody())
+
+            def email = googleResponse.getAt("email")
+
+
             def redirectUrl = SpringSecurityUtils.securityConfig.oauth.registration.askToLinkOrCreateAccountUri
             assert redirectUrl, "grails.plugins.springsecurity.oauth.registration.askToLinkOrCreateAccountUri" +
                     " configuration option must be set!"
             log.debug "Redirecting to askToLinkOrCreateAccountUri: ${redirectUrl}"
-            redirect(redirectUrl instanceof Map ? redirectUrl : [uri: redirectUrl])
+            render view: 'askToLinkOrCreateAccount', model: [account: email]
         }
     }
 
@@ -98,6 +105,11 @@ class SpringSecurityOAuthController {
     def linkAccount = { OAuthLinkAccountCommand command ->
         OAuthToken oAuthToken = session[SPRING_SECURITY_OAUTH_TOKEN]
         assert oAuthToken, "There is no auth token in the session!"
+
+        def response = oauthService.accessResource("google", session[oauthService.findSessionKeyForAccessToken('google')], "GET", "https://www.googleapis.com/oauth2/v1/userinfo");
+        def googleResponse = JSON.parse(response?.getBody())
+
+        def email = googleResponse.getAt("email")
 
         if (request.post) {
             boolean linked = command.validate() && User.withTransaction { status ->
@@ -123,7 +135,7 @@ class SpringSecurityOAuthController {
             }
         }
 
-        render view: 'askToLinkOrCreateAccount', model: [linkAccountCommand: command]
+        render view: 'askToLinkOrCreateAccount', model: [linkAccountCommand: command, account: email]
         return
     }
 
@@ -142,18 +154,21 @@ class SpringSecurityOAuthController {
         if (request.post) {
             if (!springSecurityService.loggedIn) {
 
+                def company = Company.findByName(command.company)
+
                 boolean created = command.validate() && User.withTransaction { status ->
                     def userRole = Permission.findByName(Permission.ROLE_USER);
+
                     User user = new User(
                             account: email,
                             password: command.password1,
                             name: name,
-                            company: Company.findByName(command.company),
+                            company: company,
                             chatTime: command.chatTime,
                             timeZone: command.timeZone,
                             locale: locale,
                             permissions: userRole,
-                            enabled: true)
+                            enabled: false)
 
                     user.addToOAuthIDs(provider: oAuthToken.providerName, accessToken: oAuthToken.socialId, user: user)
                     // updateUser(user, oAuthToken)
@@ -168,14 +183,34 @@ class SpringSecurityOAuthController {
                 }
 
                 if (created) {
-                    authenticateAndRedirect(oAuthToken, defaultTargetUrl)
-                    return
+                    InviteMe inviteMe = InviteMe.findByEmailAndCompany(email, company)
+                    if (inviteMe == null) {
+                        inviteMe = new InviteMe()
+                        inviteMe.name = name
+                        inviteMe.email = email
+                        inviteMe.requested = new Date()
+                        inviteMe.company = company
+                        inviteMe.save()
+                    }
+
+                    rememberCompanyOwnerPendingInvitations(company)
+                    flash.message = "registration.email.sent"
+                    flash.args=[email]
                 }
             }
         }
-        render view: 'askToLinkOrCreateAccount', model: [createAccountCommand: command]
+        render view: 'askToLinkOrCreateAccount', model: [createAccountCommand: command, locale: locale, account: email]
     }
 
+    List findCompanyOwners(Company company) {
+        def owners = User.createCriteria().list {
+            eq('company', company)
+            permissions {
+                eq('name', Permission.ROLE_COMPANY_ADMIN)
+            }
+        }
+        return owners
+    }
 
     protected renderError(code, msg) {
         log.error msg + " (returning ${code})"
@@ -194,11 +229,25 @@ class SpringSecurityOAuthController {
         return oAuthToken
     }
 
+    void rememberCompanyOwnerPendingInvitations(Company company) {
+
+        def ownersList = findCompanyOwners(company)
+
+        ownersList.each { User owner ->
+            def email = [
+                    to: ["federico.farina@fdvsolutions.com"],
+                    subject: g.message(code: 'invitation.requested.subject'),
+                    from: g.message(code: 'application.email'),
+                    text: g.message(code: 'invitation.requested.body')
+            ]
+            emailerService.sendEmails([email])
+        }
+    }
+
     protected OAuthToken updateOAuthToken(OAuthToken oAuthToken, User user) {
         def conf = SpringSecurityUtils.securityConfig
 
         // user
-
         String usernamePropertyName = conf.userLookup.usernamePropertyName
         String passwordPropertyName = conf.userLookup.passwordPropertyName
         String enabledPropertyName = conf.userLookup.enabledPropertyName
@@ -214,7 +263,6 @@ class SpringSecurityOAuthController {
         boolean passwordExpired = passwordExpiredPropertyName ? user."${passwordExpiredPropertyName}" : false
 
         // authorities
-
         String authoritiesPropertyName = conf.userLookup.authoritiesPropertyName
         String authorityPropertyName = conf.authority.nameField
         Collection<?> userAuthorities = user."${authoritiesPropertyName}"
