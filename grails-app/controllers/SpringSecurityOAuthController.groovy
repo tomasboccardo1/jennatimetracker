@@ -199,7 +199,7 @@ class SpringSecurityOAuthController {
                 }
             }
         }
-        render view: 'askToLinkOrCreateAccount', model: [createAccountCommand: command, locale: locale, account: email]
+        render view: 'askToLinkOrCreateAccount', model: [createAccountCommand: command, locale: new Locale(locale).getDisplayName(), account: email]
     }
 
     List findCompanyOwners(Company company) {
