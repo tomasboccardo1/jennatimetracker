@@ -130,28 +130,33 @@ class BootStrap {
         def admin = User.find("from User u where u.enabled = true and exists (from u.permissions p where p.name = :admin)", ['admin': Permission.ROLE_SYSTEM_ADMIN])
         if (!admin) {
 
+
             def systemAdminRole = new Permission(name: Permission.ROLE_SYSTEM_ADMIN,
                     description: 'The administrator permission')
 
             log.info("*** Creating admin user")
 
-            Company aCompany = new Company()
-            aCompany.setName("Default Company")
-            aCompany.save(flush: true)
+            def defaultCompany = "Default Company"
+            def person = new User()
+            def company = new Company(name: defaultCompany)
+            company.addToEmployees(person)
+            company.save()
 
-            aCompany.refresh()
-
-            def testUser = new User(name: "System Administrator", account: 'admin', enabled: true, password: 'j33naAdm1n'
-                    , permissions: systemAdminRole, company: aCompany, locale: Locale.getDefault(), timeZone: TimeZone.getDefault());
+            def testUser = new User(
+                    name: "System Administrator",
+                    account: 'admin@fdvsolutions.com',
+                    enabled: true,
+                    password: 'j33naAdm1n',
+                    permissions: systemAdminRole,
+                    company: company,
+                    locale: Locale.getDefault(),
+                    timeZone: TimeZone.getDefault());
 
             testUser.save(flush: true);
-
-            testUser.refresh()
-
             log.info("\n***********************************************************" +
-                    "\n*** ADMIN LOGIN: user = admin, password = j33naAdm1n\n" +
+                    "\n*** ADMIN LOGIN: user = admin@fdvsolutions.com, password = j33naAdm1n\n" +
                     "\n***********************************************************\n\n")
-
         }
+
     }
 }
