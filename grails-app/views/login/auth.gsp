@@ -38,6 +38,7 @@
             </div>
 
             <oauth:connect provider="google">Connect with google</oauth:connect>
+            <oauth:connect provider="facebook" id="facebook-connect-link">Connect to Facebook</oauth:connect>
 
             <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
                 <input type="submit" class="ui-state-default ui-corner-all" value="Ok">

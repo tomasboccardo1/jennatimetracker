@@ -16,14 +16,14 @@
 
 
 
-import grails.converters.JSON
 import grails.plugin.springsecurity.oauth.OAuthToken
+import oauth.Provider
+import oauth.ProviderFactory
 import org.codehaus.groovy.grails.plugins.springsecurity.GormUserDetailsService
 import org.codehaus.groovy.grails.plugins.springsecurity.GrailsUser
 import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.springframework.security.core.authority.GrantedAuthorityImpl
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.security.core.token.Token
 import org.springframework.security.web.savedrequest.DefaultSavedRequest
 
 import User
@@ -72,16 +72,15 @@ class SpringSecurityOAuthController {
         if (oAuthToken.principal instanceof GrailsUser) {
             authenticateAndRedirect(oAuthToken, defaultTargetUrl)
         } else {
-            // This OAuth account hasn't been registered against an internal
-            // account yet. Give the oAuthID the opportunity to create a new
-            // internal account or link to an existing one.
+            /* This OAuth account hasn't been registered against an internal
+            / account yet. Give the oAuthID the opportunity to create a new
+            / internal account or link to an existing one.*/
             session[SPRING_SECURITY_OAUTH_TOKEN] = oAuthToken
-
-            def response = oauthService.accessResource("google", session[oauthService.findSessionKeyForAccessToken('google')], "GET", "https://www.googleapis.com/oauth2/v1/userinfo");
-            def googleResponse = JSON.parse(response?.getBody())
-
-            def email = googleResponse.getAt("email")
-
+            def token=session[oauthService.findSessionKeyForAccessToken(params.provider)]
+            ProviderFactory providerFactory=new ProviderFactory()
+            Provider provider=providerFactory.makeProvider(params.provider,token)
+            def email=provider.getEmail();
+            session.setAttribute("provider",provider)
 
             def redirectUrl = SpringSecurityUtils.securityConfig.oauth.registration.askToLinkOrCreateAccountUri
             assert redirectUrl, "grails.plugins.springsecurity.oauth.registration.askToLinkOrCreateAccountUri" +
@@ -105,11 +104,8 @@ class SpringSecurityOAuthController {
     def linkAccount = { OAuthLinkAccountCommand command ->
         OAuthToken oAuthToken = session[SPRING_SECURITY_OAUTH_TOKEN]
         assert oAuthToken, "There is no auth token in the session!"
-
-        def response = oauthService.accessResource("google", session[oauthService.findSessionKeyForAccessToken('google')], "GET", "https://www.googleapis.com/oauth2/v1/userinfo");
-        def googleResponse = JSON.parse(response?.getBody())
-
-        def email = googleResponse.getAt("email")
+        Provider provider=session.getAttribute("provider")
+        def email=provider.getEmail();
 
         if (request.post) {
             boolean linked = command.validate() && User.withTransaction { status ->
@@ -143,13 +139,10 @@ class SpringSecurityOAuthController {
         OAuthToken oAuthToken = session[SPRING_SECURITY_OAUTH_TOKEN]
         assert oAuthToken, "There is no auth token in the session!"
 
-
-        def response = oauthService.accessResource("google", session[oauthService.findSessionKeyForAccessToken('google')], "GET", "https://www.googleapis.com/oauth2/v1/userinfo");
-        def googleResponse = JSON.parse(response?.getBody())
-
-        def email = googleResponse.getAt("email")
-        def name = googleResponse.getAt("name")
-        def locale = googleResponse.getAt("locale")
+        Provider provider=session.getAttribute("provider")
+        def email=provider.getEmail();
+        def name = provider.getName()
+        def locale = provider.getLocale()
 
         if (request.post) {
             if (!springSecurityService.loggedIn) {
@@ -195,7 +188,7 @@ class SpringSecurityOAuthController {
 
                     rememberCompanyOwnerPendingInvitations(company)
                     flash.message = "registration.email.sent"
-                    flash.args=[email]
+                    flash.args = [email]
                 }
             }
         }

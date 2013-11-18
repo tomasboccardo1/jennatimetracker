@@ -1,4 +1,5 @@
 import grails.util.GrailsUtil
+import org.scribe.builder.api.FacebookApi
 import org.scribe.builder.api.GoogleApi
 
 
@@ -246,9 +247,17 @@ oauth {
             callback = "${grails.serverURL}/oauth/google/callback"
             successUri = "${grails.serverURL}/springSecurityOAuth/onSuccess?provider=google"
         }
+        facebook {
+            api = FacebookApi
+            key = "1378928025682476"
+            secret = "881c6999711c47c9f5060e0e1a11ea8e"
+            callback = "${grails.serverURL}/oauth/facebook/callback"
+            successUri = "${grails.serverURL}/springSecurityOAuth/onSuccess?provider=facebook"
+        }
     }
     debug = true
 }
+
 
 // Added by the Spring Security OAuth plugin:
 grails.plugins.springsecurity.oauth.domainClass = 'OAuthID'

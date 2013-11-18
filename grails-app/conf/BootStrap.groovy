@@ -4,7 +4,6 @@ import org.hibernate.event.EventListeners
 
 class BootStrap {
 
-    def springSecurityService
     GrailsApplication grailsApplication
 
     def init = { servletContext ->
@@ -138,14 +137,16 @@ class BootStrap {
 
             Company aCompany = new Company()
             aCompany.setName("Default Company")
-            aCompany.save()
+            aCompany.save(flush: true)
+
             aCompany.refresh()
 
             def testUser = new User(name: "System Administrator", account: 'admin', enabled: true, password: 'j33naAdm1n'
-                    , permissions: systemAdminRole, company: aCompany, locale: Locale.getDefault(), timeZone: TimeZone.getDefault())
-                    .save(flush: true)
+                    , permissions: systemAdminRole, company: aCompany, locale: Locale.getDefault(), timeZone: TimeZone.getDefault());
 
             testUser.save(flush: true);
+
+            testUser.refresh()
 
             log.info("\n***********************************************************" +
                     "\n*** ADMIN LOGIN: user = admin, password = j33naAdm1n\n" +
