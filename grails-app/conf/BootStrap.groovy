@@ -42,7 +42,6 @@ class BootStrap {
             userRole.save(flush: true)
         }
 
-
         def clientCategory = TagCategory.findByName(TagCategory.CATEGORY_CLIENT)
         if (!clientCategory) {
             clientCategory = new TagCategory(name: TagCategory.CATEGORY_CLIENT)
@@ -59,7 +58,6 @@ class BootStrap {
             taskCategory.save()
         }
 
-        // FIXME: Is there any better way to force Singleton beans to be loaded eagerly?
         grailsApplication.getMainContext().getBean("jabberService")
         fireUpJobs()
         checkForAdminUser()
@@ -124,35 +122,32 @@ class BootStrap {
 
 
     def checkForAdminUser() {
+
         log.info("Check for admin user.")
-
-
         def admin = User.find("from User u where u.enabled = true and exists (from u.permissions p where p.name = :admin)", ['admin': Permission.ROLE_SYSTEM_ADMIN])
         if (!admin) {
-
 
             def systemAdminRole = new Permission(name: Permission.ROLE_SYSTEM_ADMIN,
                     description: 'The administrator permission')
 
+            def permissions=[]
+            permissions << systemAdminRole
             log.info("*** Creating admin user")
 
             def defaultCompany = "Default Company"
             def person = new User()
             def company = new Company(name: defaultCompany)
+            person.company=company;
             company.addToEmployees(person)
             company.save()
-
-            def testUser = new User(
-                    name: "System Administrator",
-                    account: 'admin@fdvsolutions.com',
-                    enabled: true,
-                    password: 'j33naAdm1n',
-                    permissions: systemAdminRole,
-                    company: company,
-                    locale: Locale.getDefault(),
-                    timeZone: TimeZone.getDefault());
-
-            testUser.save(flush: true);
+            person.name="System Administrator"
+            person.account="admin@fdvsolutions.com"
+            person.enabled=true
+            person.password="j33naAdm1n"
+            person.permissions=permissions
+            person.locale=Locale.getDefault()
+            person.timeZone=TimeZone.getDefault()
+            person.save();
             log.info("\n***********************************************************" +
                     "\n*** ADMIN LOGIN: user = admin@fdvsolutions.com, password = j33naAdm1n\n" +
                     "\n***********************************************************\n\n")

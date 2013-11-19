@@ -27,7 +27,7 @@ class PendingUsersController extends BaseController {
     }
 
     def invite = {
-        User currentUser = findLoggedUser()
+
 
         InviteMe inviteMe = InviteMe.get(params.inviteId)
 
@@ -54,6 +54,7 @@ class PendingUsersController extends BaseController {
             }
         }
 
+        User currentUser = findLoggedUser()
         def requestedInvitationsList = InviteMe.findAllByCompany(currentUser.company)
         render(view: "list", model: [requestedInvitations: requestedInvitationsList])
     }

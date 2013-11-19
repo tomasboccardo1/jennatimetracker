@@ -63,9 +63,7 @@ class UserController extends BaseController {
                 permission.addToUsers(userInstance)
             }
 
-            // TODO: Validate if this is correctly being executed.
             jabberService.addAccount(userInstance.account, userInstance.name)
-
             flash.message = "user.created"
             flash.args = [userInstance.id]
             flash.defaultMessage = "User ${userInstance.id} created"

@@ -400,7 +400,6 @@ class RegisterController extends BaseController {
             user.save(flush: true)
 
             jabberService.addAccount(user.account, user.name)
-
             GrantedAuthority[] authorities = user.permissions.collect { Permission p ->
                 new GrantedAuthorityImpl(p.name)
             } as GrantedAuthority[]

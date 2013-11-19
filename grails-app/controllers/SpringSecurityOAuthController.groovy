@@ -42,6 +42,7 @@ class SpringSecurityOAuthController {
     def oauthService
     def springSecurityService
     def emailerService
+    def jabberService
 
     /**
      * This can be used as a callback for a successful OAuth authentication
@@ -76,11 +77,11 @@ class SpringSecurityOAuthController {
             / account yet. Give the oAuthID the opportunity to create a new
             / internal account or link to an existing one.*/
             session[SPRING_SECURITY_OAUTH_TOKEN] = oAuthToken
-            def token=session[oauthService.findSessionKeyForAccessToken(params.provider)]
-            ProviderFactory providerFactory=new ProviderFactory()
-            Provider provider=providerFactory.makeProvider(params.provider,token)
-            def email=provider.getEmail();
-            session.setAttribute("provider",provider)
+            def token = session[oauthService.findSessionKeyForAccessToken(params.provider)]
+            ProviderFactory providerFactory = new ProviderFactory()
+            Provider provider = providerFactory.makeProvider(params.provider, token)
+            def email = provider.getEmail();
+            session.setAttribute("provider", provider)
 
             def redirectUrl = SpringSecurityUtils.securityConfig.oauth.registration.askToLinkOrCreateAccountUri
             assert redirectUrl, "grails.plugins.springsecurity.oauth.registration.askToLinkOrCreateAccountUri" +
@@ -104,8 +105,8 @@ class SpringSecurityOAuthController {
     def linkAccount = { OAuthLinkAccountCommand command ->
         OAuthToken oAuthToken = session[SPRING_SECURITY_OAUTH_TOKEN]
         assert oAuthToken, "There is no auth token in the session!"
-        Provider provider=session.getAttribute("provider")
-        def email=provider.getEmail();
+        Provider provider = session.getAttribute("provider")
+        def email = provider.getEmail();
 
         if (request.post) {
             boolean linked = command.validate() && User.withTransaction { status ->
@@ -139,8 +140,8 @@ class SpringSecurityOAuthController {
         OAuthToken oAuthToken = session[SPRING_SECURITY_OAUTH_TOKEN]
         assert oAuthToken, "There is no auth token in the session!"
 
-        Provider provider=session.getAttribute("provider")
-        def email=provider.getEmail();
+        Provider provider = session.getAttribute("provider")
+        def email = provider.getEmail();
         def name = provider.getName()
         def locale = provider.getLocale()
 
@@ -171,6 +172,8 @@ class SpringSecurityOAuthController {
                         return false
                     }
 
+                    //Add user account to chattingJob
+                    jabberService.addAccount(user.account, user.name)
                     oAuthToken = updateOAuthToken(oAuthToken, user)
                     return true
                 }
@@ -269,105 +272,6 @@ class SpringSecurityOAuthController {
         return oAuthToken
     }
 
-/*
-    private def updateUser(User user, OAuthToken oAuthToken) {
-        if (!user.validate()) {
-            return
-        }
-
-        if (oAuthToken instanceof TwitterOAuthToken) {
-            TwitterOAuthToken twitterOAuthToken = (TwitterOAuthToken) oAuthToken
-
-            if (!user.username) {
-                user.username = twitterOAuthToken.twitterProfile.screenName
-                if (!user.validate()) {
-                    user.username = null
-                }
-            }
-
-            if (!user.firstName || !user.lastName) {
-                def names = twitterOAuthToken.twitterProfile.name?.split(' ')
-                if (names) {
-                    if (!user.lastName) {
-                        user.lastName = names[0]
-                        if (!user.validate()) {
-                            user.lastName = null
-                        }
-                    }
-
-                    if (!user.firstName) {
-                        user.firstName = names[-1]
-                        if (!user.validate()) {
-                            user.firstName = null
-                        }
-                    }
-                }
-            }
-        } else if (oAuthToken instanceof FacebookOAuthToken) {
-            FacebookOAuthToken facebookOAuthToken = (FacebookOAuthToken) oAuthToken
-
-            if (!user.username) {
-                user.username = facebookOAuthToken.facebookProfile.username
-                if (!user.validate()) {
-                    user.username = null
-                }
-            }
-
-            if (!user.email) {
-                user.email = facebookOAuthToken.facebookProfile.email
-                if (!user.validate()) {
-                    user.email = null
-                }
-            }
-
-            if (!user.lastName) {
-                user.lastName = facebookOAuthToken.facebookProfile.lastName
-                if (!user.validate()) {
-                    user.lastName = null
-                }
-            }
-
-            if (!user.firstName) {
-                user.firstName = facebookOAuthToken.facebookProfile.firstName
-                if (!user.validate()) {
-                    user.firstName = null
-                }
-            }
-        } else if (oAuthToken instanceof GoogleOAuthToken) {
-            GoogleOAuthToken googleOAuthToken = (GoogleOAuthToken) oAuthToken
-
-            if (!user.email) {
-                user.email = googleOAuthToken.email
-                if (!user.validate()) {
-                    user.email = null
-                }
-            }
-        } else if (oAuthToken instanceof YahooOAuthToken) {
-            YahooOAuthToken yahooOAuthToken = (YahooOAuthToken) oAuthToken
-
-            if (!user.username) {
-                user.username = yahooOAuthToken.profile.nickname
-                if (!user.validate()) {
-                    user.username = null
-                }
-            }
-
-            if (!user.lastName) {
-                user.lastName = yahooOAuthToken.profile.familyName
-                if (!user.validate()) {
-                    user.lastName = null
-                }
-            }
-
-            if (!user.firstName) {
-                user.firstName = yahooOAuthToken.profile.givenName
-                if (!user.validate()) {
-                    user.firstName = null
-                }
-            }
-        }
-    }
-*/
 
     protected Map getDefaultTargetUrl() {
         def config = SpringSecurityUtils.securityConfig
@@ -414,8 +318,8 @@ class OAuthLinkAccountCommand {
     String password
 
     static constraints = {
+        password(nullable: false, blank: false, size: 8..32)
         account blank: false
-        password blank: false
     }
 
 }

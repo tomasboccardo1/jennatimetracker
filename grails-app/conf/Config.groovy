@@ -18,6 +18,9 @@ environments {
     development {
         grails.serverURL = "http://localhost:8080/projectguide"
     }
+    testing {
+        grails.serverURL= "http://192.168.1.31:8080/projectguide"
+    }
 }
 
 grails {
@@ -53,16 +56,21 @@ grails {
     }
 }
 
-// Disabling bundling and minified resources for development
+// Disabling bundling and minified resources for development and testing environments
 environments {
     development {
         grails.resources.debug = true
     }
+    testing{
+        grails.resources.debug =true
+    }
 }
+
 // The default codec used to encode data with ${}
 grails.views.default.codec = "none" // none, html, base64
 grails.views.gsp.encoding = "UTF-8"
 grails.converters.encoding = "UTF-8"
+
 // Enabled native2ascii conversion of i18n properties files
 grails.enable.native2ascii = true
 grails.dbconsole.enabled = false
@@ -115,7 +123,6 @@ log4j = { root ->
     info file: 'log4j.logger.org.springframework.security'
 }
 
-
 environments {
     production {
         conversationExpiracy = 1000 * 60 * 2
@@ -127,7 +134,6 @@ environments {
         moodWarningHeadsUp.cronExpression = '0 0 9 ? * MON-FRI'
     }
 }
-
 
 grails {
     plugins {
@@ -257,7 +263,6 @@ oauth {
     }
     debug = true
 }
-
 
 // Added by the Spring Security OAuth plugin:
 grails.plugins.springsecurity.oauth.domainClass = 'OAuthID'
