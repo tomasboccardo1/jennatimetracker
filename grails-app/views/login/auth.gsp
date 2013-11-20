@@ -16,7 +16,6 @@
     }
     .right{
         color: white;
-        background-color: red;
         overflow: hidden;
         display: block;
         z-index: 1002;
@@ -37,10 +36,12 @@
     <img src="${resource(dir: 'images', file: 'login.png')}" alt="">
 
 
-    <div style="position: relative; overflow: hidden; display: block; z-index: 1002; outline-color: -moz-use-text-color; outline-style: none; outline-width: 0px; height: auto; width: 250px; float: right;">
 
-        <div style="margin-bottom: 20px;position: relative; overflow: hidden; display: block; z-index: 1002; outline-color: -moz-use-text-color; outline-style: none; outline-width: 0px; height: auto; width: 230px; float: right;"
-             class="ui-dialog ui-widget ui-widget-content ui-corner-all" tabindex="-1" role="dialog" aria-labelledby="ui-dialog-title-dialog">
+    <div    class="right"
+            style="position: relative; width: 250px;">
+
+        <div style="position: relative; margin-bottom: 20px;"
+             class="right ui-dialog ui-widget ui-widget-content ui-corner-all" tabindex="-1" role="dialog" aria-labelledby="ui-dialog-title-dialog">
 
             <form method="post" id="loginForm" action="${postUrl}">
                 <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix" unselectable="on"
