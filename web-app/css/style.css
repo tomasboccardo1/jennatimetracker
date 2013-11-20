@@ -329,7 +329,7 @@ ol.commentlist {
 
 .style8 {font-size: 0.8em}
 
-.style9 {color: #869a33}
+.style9 {color: #289fcf}
 
 /* From grails style */
 html * {
@@ -338,7 +338,7 @@ html * {
 }
 
 a:link, a:visited, a:hover {
-    color: #869a33;
+    color: #289fcf;
     font-weight: medium;
     text-decoration: none;
 }

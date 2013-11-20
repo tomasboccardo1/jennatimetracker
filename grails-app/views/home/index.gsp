@@ -13,13 +13,13 @@
                     plotBackgroundColor: 'rgb(247, 247, 247)',
                     plotBorderWidth: null,
                     plotShadow: false,
-                    backgroundColor: 'rgb(247, 247, 247)',
+                    backgroundColor: 'rgb(247, 247, 247)'
                 },
                  title: {
                     text: ''
                 },
                 credits: {
-                      enabled: false,
+                      enabled: false
 
                 },
                 tooltip: {
@@ -81,7 +81,7 @@
                     }
                 },
                 credits: {
-                      enabled: false,
+                      enabled: false
                 },
                 tooltip: {
                     formatter: function() {
@@ -89,8 +89,8 @@
                     }
                 },
                 series: [{
-                    data: data,
-                }],
+                    data: data
+                }]
             });
         });
 
@@ -131,7 +131,7 @@
                     }
                 },
                 credits: {
-                      enabled: false,
+                      enabled: false
                 },
                 plotOptions: {
                     column: {
