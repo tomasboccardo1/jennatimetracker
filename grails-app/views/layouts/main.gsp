@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Jenna Timetracker - <g:layoutTitle default="${message(code: 'app.tagline')}"/></title>
+    <title>Project Guide- <g:layoutTitle default="${message(code: 'app.tagline')}"/></title>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
     <meta name="description" content="Forget about tracking time!"/>
     <link rel="shortcut icon" href="${resource(dir: 'images', file: 'favicon.ico')}" type="image/x-icon"/>
@@ -189,7 +189,7 @@
 <body>
 <div id="main">
     <header id="header">
-        <h1><a href="${resource(dir: '/', file: '')}" class="style8">Jenna Timetracker</a></h1>
+        <h1><a href="${resource(dir: '/', file: '')}" class="style8">Project Guide</a></h1>
 
         <p id="subHeading"><g:message code="app.tagline"/></p>
     </header>
@@ -327,7 +327,7 @@
 </div>
 
 <div id="footer">
-    <p class="style1">Jenna Timetracker v<g:message code="${grailsApplication.metadata['app.version']}"/> <g:message
+    <p class="style1">Project Guide v<g:message code="${grailsApplication.metadata['app.version']}"/> <g:message
             code="app.powered"/></p>
 </div>
 

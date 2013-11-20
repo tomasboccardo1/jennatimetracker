@@ -15,7 +15,7 @@
 
     An email with an activation link has been sent to your account. <br><br>
 
-    Please activate your account in order to use Jenna. <br><br>
+    Please activate your account in order to use Project Guide. <br><br>
 
     <input type="button" class="ui-state-default ui-corner-all" value="I have already activated my account and want to login!" onclick="login();">
 
