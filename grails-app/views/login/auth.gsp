@@ -35,8 +35,6 @@
     <br><br><br>
     <img src="${resource(dir: 'images', file: 'login.png')}" alt="">
 
-
-
     <div    class="right"
             style="position: relative; width: 250px;">
 

@@ -256,6 +256,7 @@ oauth {
         facebook {
             api = FacebookApi
             key = "1378928025682476"
+            scope="email"
             secret = "881c6999711c47c9f5060e0e1a11ea8e"
             callback = "${grails.serverURL}/oauth/facebook/callback"
             successUri = "${grails.serverURL}/springSecurityOAuth/onSuccess?provider=facebook"

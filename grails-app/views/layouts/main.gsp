@@ -86,7 +86,6 @@
         text-indent: -9999px;
     }
 
-        /* solo icon buttons must have block properties for the text-indent to work */
     </style>
 
     <script type="text/javascript">
@@ -173,7 +172,7 @@
                 showSpeed: 400
             });
             $('#reports-button').fgmenu({
-                content: $('#reports-button').next().html(), // grab content from thisvamos a page
+                content: $('#reports-button').next().html(), // grab content from this page
                 showSpeed: 400
             });
             $('#administration-button').fgmenu({

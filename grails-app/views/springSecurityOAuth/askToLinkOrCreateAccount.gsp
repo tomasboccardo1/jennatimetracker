@@ -87,6 +87,8 @@
 
         <g:form action="createAccount" method="post" autocomplete="off">
             <fieldset>
+
+
                 <legend><g:message code="springSecurity.oauth.registration.create.legend"
                                    default="Create a new account"/></legend>
 
