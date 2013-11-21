@@ -81,9 +81,9 @@
             </div>
         </g:hasErrors>
 
-        <h4 style="color: #ffffff"><g:message code="springSecurity.oauth.registration.link.not.exists"
-                                              default="No user was found with this account."
-                                              args="[session.springSecurityOAuthToken.providerName]"/></h4>
+        <fieldset>
+            <h4 style="color: #ffffff"><g:message code="oauth.chat.not.supported"/></h4>
+        </fieldset>
 
         <g:form action="createAccount" method="post" autocomplete="off">
             <fieldset>
@@ -103,7 +103,7 @@
                 </div>
 
                 <div class="fieldcontain">
-                    <label for='name'>Company:</label>
+                    <label for='company'>Company:</label>
                     <g:select name="company"
                               from="${Company.findAll()}"/>
                 </div>

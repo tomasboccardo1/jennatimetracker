@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-
-
 import grails.plugin.springsecurity.oauth.OAuthToken
 import oauth.Provider
 import oauth.ProviderFactory
@@ -44,18 +42,10 @@ class SpringSecurityOAuthController {
     def emailerService
     def jabberService
 
-    /**
-     * This can be used as a callback for a successful OAuth authentication
-     * attempt. It logs the associated user in if he or she has an internal
-     * Spring Security account and redirects to <tt>targetUri</tt> (provided as a URL
-     * parameter or in the session). Otherwise it redirects to a URL for
-     * linking OAuth identities to Spring Security accounts. The application must implement
-     * the page and provide the associated URL via the <tt>oauth.registration.askToLinkOrCreateAccountUri</tt>
-     * configuration setting.
-     */
     def onSuccess = {
-        // Validate the 'provider' URL. Any errors here are either misconfiguration
-        // or web crawlers (or malicious users).
+        /* Validate the 'provider' URL. Any errors here are either misconfiguration
+           or web crawlers (or malicious users).*/
+
         if (!params.provider) {
             renderError 400, "The Spring Security OAuth callback URL must include the 'provider' URL parameter."
             return
@@ -95,18 +85,14 @@ class SpringSecurityOAuthController {
         authenticateAndRedirect(null, defaultTargetUrl)
     }
 
-    def askToLinkOrCreateAccount = {
-    }
-
     /**
      * Associates an OAuthID with an existing account. Needs the user's password to ensure
      * that the user owns that account, and authenticates to verify before linking.
      */
     def linkAccount = { OAuthLinkAccountCommand command ->
+
         OAuthToken oAuthToken = session[SPRING_SECURITY_OAUTH_TOKEN]
         assert oAuthToken, "There is no auth token in the session!"
-        Provider provider = session.getAttribute("provider")
-        def email = provider.getEmail();
 
         if (request.post) {
             boolean linked = command.validate() && User.withTransaction { status ->
@@ -132,7 +118,7 @@ class SpringSecurityOAuthController {
             }
         }
 
-        render view: 'askToLinkOrCreateAccount', model: [linkAccountCommand: command, account: email]
+        render view: 'askToLinkOrCreateAccount', model: [linkAccountCommand: command]
         return
     }
 
@@ -165,7 +151,6 @@ class SpringSecurityOAuthController {
                             enabled: false)
 
                     user.addToOAuthIDs(provider: oAuthToken.providerName, accessToken: oAuthToken.socialId, user: user)
-                    // updateUser(user, oAuthToken)
 
                     if (!user.validate() || !user.save()) {
                         status.setRollbackOnly()
