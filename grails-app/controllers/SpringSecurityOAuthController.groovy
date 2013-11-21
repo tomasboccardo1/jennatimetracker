@@ -137,7 +137,6 @@ class SpringSecurityOAuthController {
                 def company = Company.findByName(command.company)
 
                 boolean created = command.validate() && User.withTransaction { status ->
-                    def userRole = Permission.findByName(Permission.ROLE_USER);
 
                     User user = new User(
                             account: email,
@@ -147,7 +146,6 @@ class SpringSecurityOAuthController {
                             chatTime: command.chatTime,
                             timeZone: command.timeZone,
                             locale: locale,
-                            permissions: userRole,
                             enabled: false)
 
                     user.addToOAuthIDs(provider: oAuthToken.providerName, accessToken: oAuthToken.socialId, user: user)
@@ -155,6 +153,14 @@ class SpringSecurityOAuthController {
                     if (!user.validate() || !user.save()) {
                         status.setRollbackOnly()
                         return false
+                    }
+
+                    def userRole = Permission.findByName(Permission.ROLE_USER);
+                    def permissions = []
+                    permissions << userRole
+
+                    permissions.each { permission ->
+                        permission.addToUsers(user)
                     }
 
                     //Add user account to chattingJob
