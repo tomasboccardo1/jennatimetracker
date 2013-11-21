@@ -289,7 +289,8 @@ class OAuthCreateAccountCommand {
 
     static constraints = {
 
-        password2 nullable: true, blank: true, validator: { password2, command ->
+        password1(nullable: false, blank: false, size: 8..32)
+        password2 nullable: false, blank: false, validator: { password2, command ->
             if (command.password1 != password2) {
                 return 'OAuthCreateAccountCommand.password.error.mismatch'
             }
