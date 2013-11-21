@@ -1,7 +1,6 @@
 target
-
-
 *.log
+*.war
 
 grails-app/conf/customconf/*.groovy
 
