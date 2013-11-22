@@ -55,10 +55,13 @@ li a:hover {
     text-decoration:none;
 }
 
+body {
+    background:url(../images/bgMain.png.png);
+}
+
 
 .wrapper {
     width:100%;
-    /*padding-top:15px;*/
 }
 
 h1 {

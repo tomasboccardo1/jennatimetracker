@@ -122,11 +122,11 @@ body {
 	color:#fff;
 }
 
-#fbutton{
+.fbutton{
 	background-image:url(../images/fbutton.png);
 }
 
-#gbutton{
+.gbutton{
 	background-image:url(../images/gbutton.png);
 }
 

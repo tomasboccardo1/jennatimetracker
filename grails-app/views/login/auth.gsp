@@ -28,9 +28,17 @@
             <h6>Iniciar Sesión usando:</h6>
 
             <div class="social">
-                <a href="" provider="" id="fbutton" class="registerbtn">Facebook Login</a>
-                <a href="/projectguide/oauth/google/authenticate" provider="google" id="gbutton"
-                   class="registerbtn">Google Login</a>
+                <div >
+                    <oauth:connect provider="facebook"
+                                   class="registerbtn fbutton">
+                        Facebook Login
+                    </oauth:connect>
+                    <oauth:connect
+                            provider="google"
+                            class="registerbtn gbutton">
+                        Google Login
+                    </oauth:connect>
+                </div>
             </div>
             <a href="javascript: register();" id=registrarse>Soy nuevo, quiero registrarme!</a>
         </form>
