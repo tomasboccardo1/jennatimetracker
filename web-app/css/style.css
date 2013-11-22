@@ -194,7 +194,7 @@ ul#menu .current_page_item {
 }
 
 #content {
-    width:646px;
+    width:725px;
     height:auto;
     padding:20px;
     background:url("../images/contentbg.png");
@@ -661,7 +661,7 @@ fieldset { padding:0; border:0; margin-top:25px; }
 /* ----------- New Dashboard ----------- */
 
 .div-new-dashboard{
-    width: 646px;
+    width: 725px;
     height: auto;
     padding-top:20px;
     margin: -14px 0 0 -14px;
@@ -669,7 +669,7 @@ fieldset { padding:0; border:0; margin-top:25px; }
 }
 
 .div-new-dashboard-title{
-    width: 645px;
+    width: 725px;
     height: 30px;
     color: white;
     float: left;
@@ -680,14 +680,14 @@ fieldset { padding:0; border:0; margin-top:25px; }
 }
     
 .div-new-dashboard-row{
-    width: 696px;
+    width: 725px;
     height: 210px;
     margin: 10px 0 0 1px;
     padding: 0px;
     float: left;
 }
 .div-new-dashboard-column{
-    width: 205px;
+    width: 235px;
     height: 205px;
     margin: 0px 0px 0 0px;
     padding: 0px;
@@ -701,7 +701,7 @@ fieldset { padding:0; border:0; margin-top:25px; }
 }    
         
 .div-new-dashboard-column-title{
-    width: 205px;
+    width: 235px;
     height: 24px;
     text-align: center;
     vertical-align: middle;
@@ -715,7 +715,7 @@ fieldset { padding:0; border:0; margin-top:25px; }
 }
         
 .div-new-dashboard-column-content{
-    width: 205px;
+    width: 235px;
     height: 80px;
     float: left;
     text-align:left;
@@ -729,7 +729,7 @@ fieldset { padding:0; border:0; margin-top:25px; }
 }
             
 .div-new-dashboard-column-content2{
-    width: 205px;
+    width: 235px;
     height: 190px;
     margin: 0px 0 0px 0px;
     padding:0 0 0 10px;
@@ -746,23 +746,8 @@ fieldset { padding:0; border:0; margin-top:25px; }
     text-align: left;
 }
         
-.div-new-dashboard-column #container{
-    min-width: 190px;
+.div-new-dashboard-column .container{
+    min-width: 225px;
     height: 160px;
-    margin: 10px 0 0px 10px;
-    padding: 0 0 0 0px;
 }
         
-.div-new-dashboard-column #container2{
-    min-width: 190px;
-    height: 180px;
-    margin: 10px 0 0px 10px;
-    padding: 0 0 0 0px;
-}
-        
-.div-new-dashboard-column #container3{
-    min-width: 190px;
-    height: 160px;
-    margin: 10px 0 0px 10px;
-    padding: 0 0 0 0px;
-}

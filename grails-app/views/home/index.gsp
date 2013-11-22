@@ -187,11 +187,11 @@
 				</div>
 				<div class="div-new-dashboard-column div-margin">
 					<div class="div-new-dashboard-column-title"><g:message code="dashboard.section.hours.by.project"/></div>
-					<div id="container"></div>
+					<div id="container" class="container"></div>
 				</div>
 				<div class="div-new-dashboard-column">
 					<div class="div-new-dashboard-column-title"><g:message code="dashboard.section.my.efforts"/></div>
-					<div id="container3"></div>
+					<div id="container3" class="container"></div>
 				</div>
 			</div>
 
@@ -212,7 +212,7 @@
 				</div>
 				<div class="div-new-dashboard-column div-margin">
 					<div class="div-new-dashboard-column-title"><g:message code="dashboard.section.knowledge.ranking"/></div>
-					<div id="container2"></div>
+					<div id="container2" class="container"></div>
 				</div>
 				<div class="div-new-dashboard-column">
 					<div class="div-new-dashboard-column-title"><g:message code="dashboard.section.my.team.partners"/></div>
