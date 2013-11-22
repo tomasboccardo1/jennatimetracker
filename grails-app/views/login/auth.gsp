@@ -1,98 +1,42 @@
 <head>
+    <link href="${resource(dir: 'css', file: 'login.css')}" rel="stylesheet" type="text/css"/>
     <meta name='layout' content='main'/>
-    <style>
-    .button {
-        display: block;
-        width: 115px;
-        height: 25px;
-        background: #289fcf;
-        padding: 5px;
-        margin: auto;
-        position: relative;
-        font-size: 12px;
-        text-align: center;
-        border-radius: 5px;
-        font-weight: bold;
-    }
-    .right{
-        color: white;
-        overflow: hidden;
-        display: block;
-        z-index: 1002;
-        outline-color: -moz-use-text-color;
-        outline-style: none;
-        outline-width: 0px;
-        height: auto;
-        width: 230px;
-        float: right;
-    }
-
-    </style>
 </head>
 
 <body>
-<div class='body'>
-    <br><br><br>
-    <img src="${resource(dir: 'images', file: 'login.png')}" alt="">
 
-    <div    class="right"
-            style="position: relative; width: 250px;">
+<div class="main login">
+    <img src="${resource(dir: 'images', file: 'AIAlogo.png')}" id="logo"/>
 
-        <div style="position: relative; margin-bottom: 20px;"
-             class="right ui-dialog ui-widget ui-widget-content ui-corner-all" tabindex="-1" role="dialog" aria-labelledby="ui-dialog-title-dialog">
+    <div>
+        <h1>Login</h1>
 
-            <form method="post" id="loginForm" action="${postUrl}">
-                <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix" unselectable="on"
-                     style="-moz-user-select: none;">
-                    <span class="ui-dialog-title" id="ui-dialog-title-dialog" unselectable="on"
-                          style="-moz-user-select: none;">Login</span>
-                </div>
+        <form method="post" id="loginForm" action="${postUrl}">
+            <g:if test='${flash.message}'>
+                <p id="validateTips">
 
-                <div id="dialog" class="ui-dialog-content ui-widget-content"
-                     style="height: auto; min-height: 64px; width: auto;">
-                    <g:if test='${flash.message}'>
-                        <p id="validateTips">
+                <div class='errors'>${flash.message}</div>
+                </p>
+            </g:if>
+            <input type="text" id="j_username" name="j_username" value="" maxlength="50"/>
+            <input type="password" id="j_password" name="j_password" value="" maxlength="50"/>
 
-                        <div class='errors'>${flash.message}</div>
-                        </p>
-                    </g:if>
-                    <fieldset>
-                        <label for="j_username">Username:</label>
-                        <input type="text" id="j_username" name="j_username" value="" maxlength="50"
-                               style="width: 200px;"/>
-                        <label for="j_password">Password:</label>
-                        <input type="password" id="j_password" name="j_password" value="" maxlength="50"
-                               style="display: block; margin-bottom: 20px; width: 200px"/>
+            <span><input type='checkbox' class='chk' name='_spring_security_remember_me' id='remember_me'
+                         <g:if test='${hasCookie}'>checked='checked'</g:if>/>        Remember me</span>
 
-                        <div class="rememberme">
-                            <input type='checkbox' class='chk' name='_spring_security_remember_me' id='remember_me'
-                                   <g:if test='${hasCookie}'>checked='checked'</g:if>/>
-                            <label for='remember_me' style="display: inline; margin-bottom: 20px">Remember me</label>
-                        </div>
-                    </fieldset>
-                </div>
+            <input type="submit" value="Enter">
+            <h6>Iniciar Sesión usando:</h6>
 
-                <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
-                    <input type="submit" class="ui-state-default ui-corner-all" value="Ok">
-                    <input type="button" class="ui-state-default ui-corner-all" value="Register!" onclick="register();">
-                </div>
-            </form>
-
-        </div>
-
-        <div >
-            <oauth:connect
-                    class="button right"
-                    style="color: white; background-color: red; margin-bottom: 15px;"
-                    provider="google">Login with Google</oauth:connect>
-        </br>
-            <oauth:connect provider="facebook"
-                           class="button right"
-                           style="color: white; background-color: blue"
-                           id="facebook-connect-link">Login with Facebook</oauth:connect>
-        </div>
+            <div class="social">
+                <a href="" provider="" id="fbutton" class="registerbtn">Facebook Login</a>
+                <a href="/projectguide/oauth/google/authenticate" provider="google" id="gbutton"
+                   class="registerbtn">Google Login</a>
+            </div>
+            <a href="javascript: register();" id=registrarse>Soy nuevo, quiero registrarme!</a>
+        </form>
     </div>
 </div>
+
 
 <script type='text/javascript'>
     function register() {

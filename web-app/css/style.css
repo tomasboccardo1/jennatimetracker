@@ -35,16 +35,6 @@ a img {
     float: right;
 }
 
-body {
-    background:#3d3d3d url('../images/fondoweb.jpg') repeat-x;
-    text-align:center;
-    margin:0;
-    padding:0;
-    font-size:60.5%;
-    font-family:GillSans, Calibri, Trebuchet, sans-serif;
-    color:#333333;
-}
-
 p a {
     color:#ae3b88;
     text-decoration:none;
@@ -68,7 +58,7 @@ li a:hover {
 
 .wrapper {
     width:100%;
-    padding-top:15px;
+    /*padding-top:15px;*/
 }
 
 h1 {
@@ -262,19 +252,6 @@ ul#menu .current_page_item {
     text-align:center;
 }
 
-/* ----------- Footer ----------- */
-
-#footer {
-    width:100%;
-    background-color:#000000;
-    background-image:url("../images/footerbg.png");
-    background-repeat:repeat-x;
-    clear:both;
-    margin-bottom:0;
-    color:#FFFFFF;
-    height:200px;
-    padding-top: 20px;
-}
 
 /* ----------- Comments ----------- */
 

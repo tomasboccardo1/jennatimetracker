@@ -4,89 +4,9 @@
     <meta charset="utf-8">
     <title>Project Guide- <g:layoutTitle default="${message(code: 'app.tagline')}"/></title>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-    <meta name="description" content="Forget about tracking time!"/>
     <link rel="shortcut icon" href="${resource(dir: 'images', file: 'favicon.ico')}" type="image/x-icon"/>
     <r:require modules="core"/>
     <r:layoutResources/>
-
-    <style type="text/css">
-    body {
-        font-size: 62.5%;
-        margin: 0;
-        padding: 0;
-    }
-
-    #menuLog {
-        font-size: 1.4em;
-        margin: 20px;
-    }
-
-    .hidden {
-        position: absolute;
-        top: 0;
-        left: -9999px;
-        width: 1px;
-        height: 1px;
-        overflow: hidden;
-    }
-
-    .fg-button {
-        clear: left;
-        margin: 0 4px 40px 20px;
-        padding: .4em 1em;
-        text-decoration: none !important;
-        cursor: pointer;
-        position: relative;
-        text-align: center;
-        zoom: 1;
-    }
-
-    .fg-button .ui-icon {
-        position: absolute;
-        top: 50%;
-        margin-top: -8px;
-        left: 50%;
-        margin-left: -8px;
-    }
-
-    a.fg-button {
-        float: left;
-    }
-
-    button.fg-button {
-        width: auto;
-        overflow: visible;
-    }
-
-        /* removes extra button width in IE */
-
-    .fg-button-icon-left {
-        padding-left: 2.1em;
-    }
-
-    .fg-button-icon-right {
-        padding-right: 2.1em;
-    }
-
-    .fg-button-icon-left .ui-icon {
-        right: auto;
-        left: .2em;
-        margin-left: 0;
-    }
-
-    .fg-button-icon-right .ui-icon {
-        left: auto;
-        right: .2em;
-        margin-left: 0;
-    }
-
-    .fg-button-icon-solo {
-        display: block;
-        width: 8px;
-        text-indent: -9999px;
-    }
-
-    </style>
 
     <script type="text/javascript">
         var confirmOK = false;
@@ -187,13 +107,6 @@
 
 <body>
 <div id="main">
-    <header id="header">
-        <h1><a href="${resource(dir: '/', file: '')}" class="style8">Project Guide</a></h1>
-
-        <p id="subHeading"><g:message code="app.tagline"/></p>
-    </header>
-
-
     <sec:ifLoggedIn>
         <div id="mainDiv">
 
@@ -326,8 +239,10 @@
 </div>
 
 <div id="footer">
-    <p class="style1">Project Guide v<g:message code="${grailsApplication.metadata['app.version']}"/> <g:message
-            code="app.powered"/></p>
+    <p class="style1">
+        AIA Project Guide v5.2.5 is proudly powered by
+        <a href="http://www.fdvsolutions.com">FDV Solutions</a>
+    </p>
 </div>
 
 <div id="loading" title="<g:message code="app.loading"/>"></div>
