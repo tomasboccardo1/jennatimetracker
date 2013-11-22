@@ -8,6 +8,86 @@
     <r:require modules="core"/>
     <r:layoutResources/>
 
+    <style type="text/css">
+
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    #menuLog {
+        font-size: 1.4em;
+        margin: 20px;
+    }
+
+    .hidden {
+        position: absolute;
+        top: 0;
+        left: -9999px;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+    }
+
+    .fg-button {
+        clear: left;
+        margin: 0 4px 0px 20px;
+        padding: .4em 1em;
+        text-decoration: none !important;
+        cursor: pointer;
+        position: relative;
+        text-align: center;
+        zoom: 1;
+    }
+
+    .fg-button .ui-icon {
+        position: absolute;
+        top: 50%;
+        margin-top: -8px;
+        left: 50%;
+        margin-left: -8px;
+    }
+
+    a.fg-button {
+        float: left;
+    }
+
+    button.fg-button {
+        width: auto;
+        overflow: visible;
+    }
+
+        /* removes extra button width in IE */
+
+    .fg-button-icon-left {
+        padding-left: 2.1em;
+    }
+
+    .fg-button-icon-right {
+        padding-right: 2.1em;
+    }
+
+    .fg-button-icon-left .ui-icon {
+        right: auto;
+        left: .2em;
+        margin-left: 0;
+    }
+
+    .fg-button-icon-right .ui-icon {
+        left: auto;
+        right: .2em;
+        margin-left: 0;
+    }
+
+    .fg-button-icon-solo {
+        display: block;
+        width: 8px;
+        text-indent: -9999px;
+    }
+
+    </style>
+
+
     <script type="text/javascript">
         var confirmOK = false;
         var autocompleting = false;
@@ -255,7 +335,6 @@
 
 <div id="errorDialog" title="">
     <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 50px 0;"></span>
-
     <p id="errorText"></p>
 </div>
 <r:layoutResources/>

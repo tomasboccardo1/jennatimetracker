@@ -55,7 +55,7 @@
             <div class="message"><g:message code="${flash.message}" args="${flash.args}" default="${flash.defaultMessage}" /></div>
             </g:if>
 
-      <div style="overflow: hidden; display: block; outline-color: -moz-use-text-color; outline-style: none; outline-width: 0px; height: auto; width: auto;"
+      <div style="margin-bottom: 20px; position: relative; overflow: hidden; display: block; outline-color: -moz-use-text-color; outline-style: none; outline-width: 0px; height: auto; width: auto;"
               class="ui-dialog ui-widget ui-widget-content ui-corner-all" tabindex="-1" role="dialog"
               aria-labelledby="ui-dialog-title-dialog">
         <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix" unselectable="on"
