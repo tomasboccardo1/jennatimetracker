@@ -56,18 +56,8 @@ li a:hover {
 }
 
 body {
-    background-image:url(../images/bgMain.png);
-    margin:0;
-    padding:0;
-    height:100%;
-    background-size:100% 100%;
-    -webkit-background-size:100% 100%;
-    -khtml-background-size:100% 100%;
-    -moz-background-size:100% 100%;
-    background-repeat:no-repeat;
-    background-attachment:fixed;
+    background:url(../images/bgLogin.png) center Top #000 no-repeat;
 }
-
 
 .wrapper {
     width:100%;
