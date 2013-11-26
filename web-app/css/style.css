@@ -99,9 +99,6 @@ strong {
     margin-top:-2px;
 }
 
-#header {
-    margin: 1.1em;
-}
 
 /* ----------- Menu ----------- */
 
@@ -176,24 +173,6 @@ ul#menu .current_page_item {
 }
 
 /* ----------- Centerpieces ----------- */
-
-#main{
-    width:800px;
-    margin:0 auto 0 auto;
-    text-align:left;
-}
-
-#content {
-    width:725px;
-    height:auto;
-    padding:20px;
-    background:url("../images/contentbg.png");
-    margin-left:0;
-    float:left;
-    font-size:1.2em;
-    line-height:0.7em;
-    margin-bottom: 50px;
-}
 
 #content h2 {
     font-size:1.6em;
@@ -493,14 +472,6 @@ th.desc a {
     color: white;
 }
 
-.nav {
-    background: #fff url(../images/shadow.jpg) bottom repeat-x;
-    border: 1px solid #ccc;
-    border-style: solid none solid none;
-    margin-top: 5px;
-    padding: 7px 12px;
-}
-
 .menuButton {
     font-size: 10px;
     padding: 0 5px;
@@ -651,15 +622,13 @@ fieldset { padding:0; border:0; margin-top:25px; }
 /* ----------- New Dashboard ----------- */
 
 .div-new-dashboard{
-    width: 725px;
     height: auto;
-    padding-top:20px;
-    margin: -14px 0 0 -14px;
-    float: right;
+    width: 100%;
+    text-align: center;
 }
 
 .div-new-dashboard-title{
-    width: 725px;
+    width: 800px;
     height: 30px;
     color: white;
     float: left;
@@ -670,14 +639,12 @@ fieldset { padding:0; border:0; margin-top:25px; }
 }
     
 .div-new-dashboard-row{
-    width: 725px;
+    display: inline-block;
     height: 210px;
-    margin: 10px 0 0 1px;
-    padding: 0px;
-    float: left;
+    margin: 10px auto 0 auto;
 }
 .div-new-dashboard-column{
-    width: 235px;
+    width: 250px;
     height: 205px;
     margin: 0px 0px 0 0px;
     padding: 0px;
@@ -691,7 +658,7 @@ fieldset { padding:0; border:0; margin-top:25px; }
 }    
         
 .div-new-dashboard-column-title{
-    width: 235px;
+    width: 250px;
     height: 24px;
     text-align: center;
     vertical-align: middle;
@@ -705,7 +672,7 @@ fieldset { padding:0; border:0; margin-top:25px; }
 }
         
 .div-new-dashboard-column-content{
-    width: 235px;
+    width: 250px;
     height: 80px;
     float: left;
     text-align:left;
@@ -719,7 +686,7 @@ fieldset { padding:0; border:0; margin-top:25px; }
 }
             
 .div-new-dashboard-column-content2{
-    width: 235px;
+    width: 250px;
     height: 190px;
     margin: 0px 0 0px 0px;
     padding:0 0 0 10px;

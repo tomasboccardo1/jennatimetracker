@@ -16,11 +16,6 @@
         padding: 0;
     }
 
-    #menuLog {
-        font-size: 1.4em;
-        margin: 20px;
-    }
-
     .hidden {
         position: absolute;
         top: 0;
@@ -80,11 +75,7 @@
         margin-left: 0;
     }
 
-    .fg-button-icon-solo {
-        display: block;
-        width: 8px;
-        text-indent: -9999px;
-    }
+
 
     </style>
 
@@ -187,7 +178,7 @@
 </head>
 
 <body>
-<div id="main" class="main">
+<div id="main">
     <sec:ifLoggedIn>
         <div id="mainDiv">
             <img src="${resource(dir: 'images', file: 'AIAlogo.png')}" id="logo"/>

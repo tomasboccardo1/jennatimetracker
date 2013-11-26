@@ -1,10 +1,10 @@
 <html>
-    <head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<meta name="layout" content="main" />
-		<r:require modules="jquery-form"/>
-		<r:require modules="highcharts"/>
-        <r:script>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="layout" content="main"/>
+    <r:require modules="jquery-form"/>
+    <r:require modules="highcharts"/>
+    <r:script>
         var chart;
         $(document).ready(function() {
             chart = new Highcharts.Chart({
@@ -32,22 +32,22 @@
                     name: 'Time spent by project',
                     data: [
                             <g:each in="${timeSpentTop}" var="project">
-                        {
-                            name:'${project.projectName}',
+        {
+            name:'${project.projectName}',
                             y: <g:formatNumber number="${project.timePct}" format="#0.00" locale="en"/>,
                         },
-                        </g:each>
-                    ]
-                }]
-            });
-        });
+    </g:each>
+        ]
+    }]
+});
+});
 
-        var chart;
-        $(document).ready(function() {
+var chart;
+$(document).ready(function() {
 
-            var colors = Highcharts.getOptions().colors,
-                categories = [<g:each in="${knowledge}" var="k">'${k.user}', </g:each>],
-                data = [<g:each in="${knowledge}" var="k">${k.points}, </g:each>];
+var colors = Highcharts.getOptions().colors,
+    categories = [<g:each in="${knowledge}" var="k">'${k.user}',</g:each>],
+                data = [<g:each in="${knowledge}" var="k">${k.points},</g:each>];
 
             function setChart(name, categories, data, color) {
                 chart.xAxis[0].setCategories(categories);
@@ -107,7 +107,7 @@
                     text: ''
                 },
                 xAxis: {
-                    categories: [<g:each in="${dates}" var="dateName">'${dateName}', </g:each>]
+                    categories: [<g:each in="${dates}" var="dateName">'${dateName}',</g:each>]
                 },
                 yAxis: {
                     min: 0,
@@ -145,91 +145,110 @@
                     }
                 },
                     series: [
-                        <g:each in="${orderedEfforts}" var="efforts" status="status">
-                        {
-                            name: '${projects[status]}',
-                            data:[<g:each in="${efforts}" var="timeSpent">${timeSpent > 0 ? timeSpent : 'null'}, </g:each> ]
+        <g:each in="${orderedEfforts}" var="efforts" status="status">
+            {
+                name: '${projects[status]}',
+                            data:[<g:each in="${efforts}"
+                                          var="timeSpent">${timeSpent > 0 ? timeSpent : 'null'},</g:each> ]
 
                         },
-                        </g:each>
-                ]
-            });
-        });
+        </g:each>
+        ]
+    });
+});
 
     </r:script>
-    </head>
-    <body>
+</head>
 
-    <div class="body">
+<body>
 
-		<div class="div-new-dashboard">
+<div class="body">
 
-			<div class="div-new-dashboard-title"><g:message code="dashboard.title"/></div>
+    <div class="div-new-dashboard">
 
-			<div class="div-new-dashboard-row">
-				<div class="div-new-dashboard-column">
-					<div class="div-new-dashboard-column-title"><g:message code="dashboard.section.new.projects"/></div>
-					<div class="div-new-dashboard-column-content">
-						<ul>
-                            <g:each in="${newProjects}" var="project">
-                                <li>${project.name} <g:formatDate date="${project.startDate}" format="dd-MMM" /></li>
-                            </g:each>
-                        </ul>
-					</div>
-					<div class="div-new-dashboard-column-title"><g:message code="dashboard.section.birthdays"/></div>
-					<div class="div-new-dashboard-column-content">
-						<ul>
-                            <g:each in="${birthdays}" var="user">
-                                <li>${user.name} <g:formatDate date="${user.birthday}" format="dd-MMM" /></li>
-                            </g:each>
-                        </ul>
-					</div>
-				</div>
-				<div class="div-new-dashboard-column div-margin">
-					<div class="div-new-dashboard-column-title"><g:message code="dashboard.section.hours.by.project"/></div>
-					<div id="container" class="container"></div>
-				</div>
-				<div class="div-new-dashboard-column">
-					<div class="div-new-dashboard-column-title"><g:message code="dashboard.section.my.efforts"/></div>
-					<div id="container3" class="container"></div>
-				</div>
-			</div>
+        <div class="div-new-dashboard-title">
+                <g:message code="dashboard.title"/>
+        </div>
 
-			<div class="div-new-dashboard-row">
-				<div class="div-new-dashboard-column">
-					<div class="div-new-dashboard-column-title"><g:message code="dashboard.section.my.projects"/></div>
-					<div class="div-new-dashboard-column-content2">
-					   <ul>
-                            <g:each in="${myProjects}" var="project">
-                                <li>
-                                    <a href="<g:createLink controller="dashboard" action="projectFollowUp" params="${ [dateStart: g.formatDate('date': startDate, type: 'date', locale: 'en'), dateEnd: g.formatDate('date': endDate, type: 'date', locale: 'en'), projectId: project.id] }"/>">
-                                        ${project.name}
-                                    </a>
-                                </li>
-                            </g:each>
-                        </ul>
-					</div>
-				</div>
-				<div class="div-new-dashboard-column div-margin">
-					<div class="div-new-dashboard-column-title"><g:message code="dashboard.section.knowledge.ranking"/></div>
-					<div id="container2" class="container"></div>
-				</div>
-				<div class="div-new-dashboard-column">
-					<div class="div-new-dashboard-column-title"><g:message code="dashboard.section.my.team.partners"/></div>
-					<div class="div-new-dashboard-column-content2">
-						<ul>
-                            <g:each in="${myPartners}" var="partner">
-                                <li>
-                                    <a href="<g:createLink controller="user" action="showReports" id="${partner.id}"/>">${partner.name}</a>
-                                </li>
-                            </g:each>
-                        </ul>
-					</div>
-				</div>
-			</div>
+        <div class="div-new-dashboard-row">
+            <div class="div-new-dashboard-column">
+                <div class="div-new-dashboard-column-title"><g:message code="dashboard.section.new.projects"/></div>
 
-		</div>
+                <div class="div-new-dashboard-column-content">
+                    <ul>
+                        <g:each in="${newProjects}" var="project">
+                            <li>${project.name} <g:formatDate date="${project.startDate}" format="dd-MMM"/></li>
+                        </g:each>
+                    </ul>
+                </div>
+
+                <div class="div-new-dashboard-column-title"><g:message code="dashboard.section.birthdays"/></div>
+
+                <div class="div-new-dashboard-column-content">
+                    <ul>
+                        <g:each in="${birthdays}" var="user">
+                            <li>${user.name} <g:formatDate date="${user.birthday}" format="dd-MMM"/></li>
+                        </g:each>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="div-new-dashboard-column div-margin">
+                <div class="div-new-dashboard-column-title"><g:message code="dashboard.section.hours.by.project"/></div>
+
+                <div id="container" class="container"></div>
+            </div>
+
+            <div class="div-new-dashboard-column">
+                <div class="div-new-dashboard-column-title"><g:message code="dashboard.section.my.efforts"/></div>
+
+                <div id="container3" class="container"></div>
+            </div>
+        </div>
+
+        <div class="div-new-dashboard-row">
+            <div class="div-new-dashboard-column">
+                <div class="div-new-dashboard-column-title"><g:message code="dashboard.section.my.projects"/></div>
+
+                <div class="div-new-dashboard-column-content2">
+                    <ul>
+                        <g:each in="${myProjects}" var="project">
+                            <li>
+                                <a href="<g:createLink controller="dashboard" action="projectFollowUp"
+                                                       params="${[dateStart: g.formatDate('date': startDate, type: 'date', locale: 'en'), dateEnd: g.formatDate('date': endDate, type: 'date', locale: 'en'), projectId: project.id]}"/>">
+                                    ${project.name}
+                                </a>
+                            </li>
+                        </g:each>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="div-new-dashboard-column div-margin">
+                <div class="div-new-dashboard-column-title"><g:message
+                        code="dashboard.section.knowledge.ranking"/></div>
+
+                <div id="container2" class="container"></div>
+            </div>
+
+            <div class="div-new-dashboard-column">
+                <div class="div-new-dashboard-column-title"><g:message code="dashboard.section.my.team.partners"/></div>
+
+                <div class="div-new-dashboard-column-content2">
+                    <ul>
+                        <g:each in="${myPartners}" var="partner">
+                            <li>
+                                <a href="<g:createLink controller="user" action="showReports"
+                                                       id="${partner.id}"/>">${partner.name}</a>
+                            </li>
+                        </g:each>
+                    </ul>
+                </div>
+            </div>
+        </div>
 
     </div>
-	</body>
+
+</div>
+</body>
 </html>
