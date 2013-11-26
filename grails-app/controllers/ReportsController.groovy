@@ -92,7 +92,7 @@ class ReportsController extends BaseController {
         def total
 
         if (params.search) {
-            def result = searchableService.search([offset: params.offset, max: params.max,escape: true]) {
+            def result = searchableService.search([offset: params.offset, max: params.max, escape: true]) {
                 alias('Learning')
                 must(term('company', user.company))
                 must(queryString(params.search) {
@@ -194,13 +194,13 @@ class ReportsController extends BaseController {
         /*FedeF
         * TODO: Ahora esta harcodeada la fecha de abajo porque en la tabla usuarios hay algunos que no tienen completo el campo joined, llenar la tabla o establecer una fecha.
         */
-        String startDate,endDate;
+        String startDate, endDate;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd")
         endDate = sdf.format(new Date());
-        try{
-            startDate=sdf.format(user.joined)
-        }catch(Exception e){
-            startDate="2005-01-01"
+        try {
+            startDate = sdf.format(user.joined)
+        } catch (Exception e) {
+            startDate = "2005-01-01"
         }
         def points = databaseService.getUsersPoints(startDate, endDate, user.company, user.id)[0].points
         return [userInstance: user, availablesChatTime: TimeZoneUtil.getAvailablePromptTimes(), timeZones: TimeZoneUtil.getAvailableTimeZones(), locales: LocaleUtil.getAvailableLocales(), assignments: assignments, totalUsers: totalUsers, userRanking: userRanking, userPoints: points]
@@ -267,14 +267,13 @@ class ReportsController extends BaseController {
         def reportRows = databaseService.getReport(startDate, endDate, projectId, roleId, userId, user.company)
         def List report = new ArrayList()
 
-
         reportRows.each {
             ReportItem ri = new ReportItem()
             ri.user = it.getAt("user")
             ri.date = it.getAt("date")
             ri.timeSpent = it.getAt("timeSpent")
             ri.project = it.getAt("project")
-            ri.role = it.getAt("permission")
+            ri.role = it.getAt("role")
             ri.assignmentStartDate = it.getAt("assignmentStartDate")
             ri.assignmentEndDate = it.getAt("assignmentEndDate")
             ri.comment = it.getAt("comment")
@@ -296,7 +295,7 @@ class ReportsController extends BaseController {
 
         AbstractColumn c1 = ColumnBuilder.getNew().setColumnProperty("project", String.class.getName()).setTitle("Project").setWidth(40).build();
         AbstractColumn c2 = ColumnBuilder.getNew().setColumnProperty("user", String.class.getName()).setTitle("User").setWidth(30).build();
-        AbstractColumn c3 = ColumnBuilder.getNew().setColumnProperty("permission", String.class.getName()).setTitle("Role").setWidth(30).build();
+        AbstractColumn c3 = ColumnBuilder.getNew().setColumnProperty("role", String.class.getName()).setTitle("Role").setWidth(30).build();
         AbstractColumn c4 = ColumnBuilder.getNew().setColumnProperty("date", Date.class.getName()).setTitle("Date").setWidth(30).build();
         AbstractColumn c5 = ColumnBuilder.getNew().setColumnProperty("timeSpent", Double.class.getName()).setTitle("Time Spent").setWidth(40).setFixedWidth(true).build();
         AbstractColumn c6 = ColumnBuilder.getNew().setColumnProperty("comment", String.class.getName()).setTitle("Comment").setWidth(60).build();
@@ -361,7 +360,7 @@ class ReportsController extends BaseController {
 
         if (params.projectId) {
             // If we have a project to filter, we filter available roles and users.
-            roles = Role.executeQuery("select distinct ro from Role as ro, Assignment as ass where  ass.permission = ro and ass.project = ? order by ro.name asc", [Project.get(params.projectId)])
+            roles = Role.executeQuery("select distinct ro from Role as ro, Assignment as ass where  ass.role = ro and ass.project = ? order by ro.name asc", [Project.get(params.projectId)])
             users = User.executeQuery("select distinct us from User as us, Assignment as ass where  ass.user = us and ass.project = ? order by us.name asc", [Project.get(params.projectId)])
         } else {
             roles = Role.withCriteria() {
@@ -391,9 +390,9 @@ class ReportsController extends BaseController {
 
             // If we have a project to filter, we filter available roles and users.
             if (params.projectId) {
-                users = User.executeQuery("select distinct us from User as us, Assignment as ass where  ass.user = us and ass.project = ? and ass.permission = ? order by us.name asc", [Project.get(params.projectId), Role.get(params.roleId)])
+                users = User.executeQuery("select distinct us from User as us, Assignment as ass where  ass.user = us and ass.project = ? and ass.role = ? order by us.name asc", [Project.get(params.projectId), Role.get(params.roleId)])
             } else {
-                users = User.executeQuery("select distinct us from User as us, Assignment as ass where  ass.user = us and ass.permission = ? order by us.name asc", [Role.get(params.roleId)])
+                users = User.executeQuery("select distinct us from User as us, Assignment as ass where  ass.user = us and ass.role = ? order by us.name asc", [Role.get(params.roleId)])
             }
 
         } else {
@@ -503,7 +502,7 @@ class ReportsController extends BaseController {
         def startDate = cmd.startDate ?: today - 7
         def endDate = cmd.endDate ?: today + 28
         String sql = '''select a.id, a.startDate, a.endDate, p.name, u.name, a.description, u.id, r.name, p.id
-from Assignment a join a.project p join a.user u join a.permission r
+from Assignment a join a.project p join a.user u join a.role r
 where a.startDate <= ?
 and a.endDate >= ?
 and a.deleted = false

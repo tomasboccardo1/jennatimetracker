@@ -50,8 +50,8 @@
         <thead>
             <tr>
 	            <g:sortableColumn property="user" title="User" titleKey="learning.user" params="${[search:search]}" />
-	            <th><g:message code="learning.learning" default="Learning" style="width:80%"/></th>
-	            <g:sortableColumn property="date" title="Date" titleKey="learning.date" params="${[search:search]}"/>
+	            <th><g:message code="learning.learning" default="Learning" style="width:70%"/></th>
+	            <g:sortableColumn property="date" title="Date" titleKey="learning.date" params="${[search:search]}" style="width:10%"/>
 	            <g:sortableColumn property="points" title="Votes" titleKey="learning.points" params="${[search:search]}" style="width:5%"/>
             </tr>
         </thead>

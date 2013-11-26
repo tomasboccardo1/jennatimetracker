@@ -21,13 +21,15 @@
 </head>
 
 <body>
+
 <div class="body">
 
-    <h1 style="text-align: center; display: inline; margin:0px;"><g:message code="report.type"/></h1>
+    <div style="background: #000000">
+        <h1 style="text-align: center;"><g:message code="report.type"/></h1>
+        <h3 style="float: right; color: white; clear: both; margin-bottom:100px;">${user?.account}</h3>
+    </div>
 
-    <h3 style="float: right ; margin:0px; display:inline;">${user?.account}</h3>
-
-    <h1><span class="style7"><g:message code="report.workHours" /></span></h1>
+    <h1><span class="style7"><g:message code="report.workHours"/></span></h1>
 
     <p>&nbsp;</p>
 
@@ -37,14 +39,14 @@
             <thead>
             <tr>
 
-                <th><g:message code="assignment.project" /></th>
-                <th><g:message code="learning.date" /></th>
-                <th><g:message code="effort.comment" /></th>
-                <th><g:message code="effort.timeSpent" /></th>
+                <th><g:message code="assignment.project"/></th>
+                <th><g:message code="learning.date"/></th>
+                <th><g:message code="effort.comment"/></th>
+                <th><g:message code="effort.timeSpent"/></th>
             </tr>
             </thead>
             <tbody>
-                <g:each in="${workReport}">
+            <g:each in="${workReport}">
                 <tr class="prop even">
                     <td valign="top">${it.project}</td>
                     <td valign="top"><g:formatDate value="${it.date}" type="date"/></td>
@@ -62,7 +64,7 @@
 
     <p>&nbsp;</p>
 
-    <h1><span class="style7"><g:message code="report.mood" /></span></h1>
+    <h1><span class="style7"><g:message code="report.mood"/></span></h1>
 
     <p>&nbsp;</p>
     <g:if test="${flash.message}">
@@ -95,7 +97,7 @@
 
     <p>&nbsp;</p>
 
-    <h1><span class="style7"><g:message code="report.knowledgeAcquired" /></span></h1>
+    <h1><span class="style7"><g:message code="report.knowledgeAcquired"/></span></h1>
 
     <p>&nbsp;</p>
 
@@ -103,8 +105,8 @@
         <g:hiddenField name="id" value="${user?.id}"/>
         <table>
             <thead>
-            <th><g:message code="learning.date" /></th>
-            <th><g:message code="learning.learning" /></th>
+            <th><g:message code="learning.date"/></th>
+            <th><g:message code="learning.learning"/></th>
 
             </thead>
             <tbody>
@@ -123,7 +125,7 @@
 
     <p>&nbsp;</p>
 
-    <h1><span class="style7"><g:message code="report.knowledgeVoted" /></span></h1>
+    <h1><span class="style7"><g:message code="report.knowledgeVoted"/></span></h1>
 
     <p>&nbsp;</p>
 
