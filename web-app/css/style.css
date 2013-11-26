@@ -12,6 +12,8 @@ So without further ado, In the order of appearance I present to you
 
 /* ----------- Basic ----------- */
 
+* { font: 12px "Gill Sans", sans-serif; }
+
 img {
     border: none;
     behavior: url(iepngfix.htc);
@@ -656,8 +658,8 @@ fieldset {
 .div-new-dashboard-column {
     width: 250px;
     height: 245px;
-    margin: 0px 0px 0 0px;
-    padding: 0px;
+    margin: 0 0 0 0;
+    padding: 0;
     float: left;
     background-color: #f7f7f7;
     border: 1px solid #E2DBDF;
@@ -683,10 +685,11 @@ fieldset {
 
 .div-new-dashboard-column-content {
     width: 250px;
-    height: 80px;
+    height: 100px;
     float: left;
     text-align: left;
     font-size: 14px;
+    padding-top: 10px;
     font-weight: bold;
 }
 
@@ -699,7 +702,7 @@ fieldset {
     width: 250px;
     height: 190px;
     margin: 0px 0 0px 0px;
-    padding: 0 0 0 10px;
+    padding-top: 10px;
     float: left;
     text-align: left;
 }
@@ -715,6 +718,7 @@ fieldset {
 
 .div-new-dashboard-column .container {
     min-width: 225px;
-    height: 160px;
+    padding-top: 10px;
+    height: 220px;
 }
         

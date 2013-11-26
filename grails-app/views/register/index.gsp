@@ -12,7 +12,7 @@
 
 <body>
 
-<div class="body">
+<div class="body" style="margin-top: 50px;">
     <h1 style="color:white">User Registration</h1>
     <g:if test="${flash.message}">
         <div class="message">${flash.message}</div>
