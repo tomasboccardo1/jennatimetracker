@@ -57,6 +57,7 @@ li a:hover {
 
 body{
     background: url(../images/bgLogin.png) fixed center top #000 no-repeat;
+    background-position: 100%;
     margin:0;
 }
 
@@ -243,7 +244,6 @@ ol.commentlist {
 .style1 {
     font-size: 14px;
     padding: 20px 0 20px 0;
-    min-height: 200px;
     color: white;
     text-align: center;
     background: #000000;
@@ -594,11 +594,11 @@ fieldset { padding:0; border:0; margin-top:25px; }
     
 .div-new-dashboard-row{
     display: inline-block;
-    height: 210px;
+    height: 250px;
 }
 .div-new-dashboard-column{
     width: 250px;
-    height: 205px;
+    height: 245px;
     margin: 0px 0px 0 0px;
     padding: 0px;
     float: left;
