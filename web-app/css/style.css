@@ -36,7 +36,7 @@ a img {
 }
 
 p a {
-    color:#ae3b88;
+    color: cornflowerblue;
     text-decoration:none;
 }
 
@@ -46,7 +46,7 @@ p a:hover {
 }
 
 li a {
-    color:#ae3b88;
+    color: cornflowerblue;
     text-decoration:none;
 }
 
@@ -55,8 +55,9 @@ li a:hover {
     text-decoration:none;
 }
 
-body {
-    background:url(../images/bgLogin.png) center Top #000 no-repeat;
+body{
+    background: url(../images/bgLogin.png) fixed center top #000 no-repeat;
+    margin:0;
 }
 
 .wrapper {
@@ -118,48 +119,6 @@ strong {
     color: #370c42;
 }
 
-#menu {
-    float:left;
-}
-
-ul#menu {
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
-    text-align: left;
-    border-left:#c3adae dotted 1px;
-}
-
-ul#menu li {
-    display: block;
-    float: left;
-    padding: 2px 8px 0px 8px;
-    margin: 0;
-    border-right:#c3adae dotted 1px;
-}
-
-ul#menu li a {
-    height: 8px;
-    padding: 0;
-    margin: 0 0 10px 0;
-    color: #ffffff;
-    text-decoration: none;
-    display: block;
-    text-align: center;
-}
-
-ul#menu li a:hover {
-    color: #abc047;
-}
-
-ul#menu li:hover {
-      background:url('../images/menuhover2.png') repeat-x;
-}
-
-ul#menu .current_page_item {
-    color: #289fcf;
-      background:url('../images/menuhover2.png') repeat-x;
-}
 
 #rightnavi {
     float:right;
@@ -193,7 +152,7 @@ ul#menu .current_page_item {
 #content .time {
     text-transform:uppercase;
     margin-top:-12px;
-    border-bottom:#ae537b dotted 1px;
+    border-bottom:cornflowerblue dotted 1px;
     color:#E8CDEB;
 }
 
@@ -256,7 +215,7 @@ ol.commentlist {
 }
 
 .commentlist a:link, .commentlist a:visited {
-    color:#ae537b;
+    color:cornflowerblue;
 }
 
 .commentlist a:hover, .commentlist a:active {
@@ -283,10 +242,11 @@ ol.commentlist {
 
 .style1 {
     font-size: 14px;
-    margin: 20px 0 20px 0;
+    padding: 20px 0 20px 0;
+    min-height: 200px;
     color: white;
-    clear: both;
     text-align: center;
+    background: #000000;
 }
 
 .style7 {font-size: 0.7em}
@@ -301,11 +261,6 @@ html * {
     /*padding: 0; SELECT NOT DISPLAYED CORRECTLY IN FIREFOX */
 }
 
-a:link, a:visited, a:hover {
-    color: #289fcf;
-    font-weight: medium;
-    text-decoration: none;
-}
 
 input, select, textarea {
     background-color: #fcfcfc;
@@ -631,7 +586,6 @@ fieldset { padding:0; border:0; margin-top:25px; }
     width: 800px;
     height: 30px;
     color: white;
-    float: left;
     font: 25px "Gill Sans" "sans-serif";
     text-align:center;
     line-height: 30px;
@@ -641,7 +595,6 @@ fieldset { padding:0; border:0; margin-top:25px; }
 .div-new-dashboard-row{
     display: inline-block;
     height: 210px;
-    margin: 10px auto 0 auto;
 }
 .div-new-dashboard-column{
     width: 250px;
