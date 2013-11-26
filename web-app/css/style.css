@@ -13,12 +13,12 @@ So without further ado, In the order of appearance I present to you
 /* ----------- Basic ----------- */
 
 img {
-    border:none;
+    border: none;
     behavior: url(iepngfix.htc);
 }
 
 a img {
-    border:none
+    border: none
 }
 
 .aligncenter {
@@ -37,45 +37,44 @@ a img {
 
 p a {
     color: cornflowerblue;
-    text-decoration:none;
+    text-decoration: none;
 }
 
 p a:hover {
-    color:#333333;
-    text-decoration:none;
+    color: #333333;
+    text-decoration: none;
 }
 
 li a {
     color: cornflowerblue;
-    text-decoration:none;
+    text-decoration: none;
 }
 
 li a:hover {
-    color:#333333;
-    text-decoration:none;
+    color: #333333;
+    text-decoration: none;
 }
 
-body{
+body {
     background: url(../images/bgLogin.png) fixed center top #000 no-repeat;
-    background-position: 100%;
-    margin:0;
+    margin: 0;
 }
 
 .wrapper {
-    width:100%;
+    width: 100%;
 }
 
 h1 {
-    padding:0;
-    margin:0;
+    padding: 0;
+    margin: 0;
 }
 
 h1 a {
     color: #ffffff;
     font-family: GillSans, Myriad Pro, Times New Roman, times-roman, Myriad Pro, serif;
     font-size: 1.7em;
-    text-decoration:none;
-    font-weight:100;
+    text-decoration: none;
+    font-weight: 100;
 }
 
 h3 {
@@ -83,48 +82,46 @@ h3 {
 }
 
 h4 {
-    font-size:1.2em;
-    font-weight:bold;
+    font-size: 1.2em;
+    font-weight: bold;
 }
 
 strong {
-    border-bottom:#FFCCFF dotted 1px;
+    border-bottom: #FFCCFF dotted 1px;
 }
 
 /* ----------- Heading ----------- */
 
 #subHeading {
-    font-size:1.2em;
+    font-size: 1.2em;
     font-family: Myriad Pro, Times New Roman, times-roman, Myriad Pro, serif;
     text-transform: uppercase;
-    color:#666666;
-    margin-top:-2px;
+    color: #666666;
+    margin-top: -2px;
 }
-
 
 /* ----------- Menu ----------- */
 
 #topnavi {
-    width:100%;
-    margin:0;
+    width: 100%;
+    margin: 0;
     height: 24px;
     font: 1.4em Futura, 'Century Gothic', 'Apple Gothic', sans-serif
 }
 
 #topnavi a {
     color: #ffffff;
-    text-decoration:none;
+    text-decoration: none;
 }
 
 #topnavi a:hover {
     color: #370c42;
 }
 
-
 #rightnavi {
-    float:right;
-    text-align:right;
-    margin-right:0;
+    float: right;
+    text-align: right;
+    margin-right: 0;
     padding: 20px 5px 0px 5px;
     height: 40px;
     color: #ffffff;
@@ -135,110 +132,109 @@ strong {
 /* ----------- Centerpieces ----------- */
 
 #content h2 {
-    font-size:1.6em;
-    font-weight:100;
-    text-transform:uppercase;
-    color:#ffffff;
+    font-size: 1.6em;
+    font-weight: 100;
+    text-transform: uppercase;
+    color: #ffffff;
 }
 
 #content h2 a {
-    color:#ffffff;
-    text-decoration:none;
+    color: #ffffff;
+    text-decoration: none;
 }
 
 #content h2 a:hover {
-    color:#eee;
+    color: #eee;
 }
 
 #content .time {
-    text-transform:uppercase;
-    margin-top:-12px;
-    border-bottom:cornflowerblue dotted 1px;
-    color:#E8CDEB;
+    text-transform: uppercase;
+    margin-top: -12px;
+    border-bottom: cornflowerblue dotted 1px;
+    color: #E8CDEB;
 }
 
 #content .gray {
-    color:#844a76;
+    color: #844a76;
 }
 
 #content .edit {
-    float:right;
+    float: right;
 }
 
 #content .time a {
-    color:#ae3b88;
-    text-decoration:none;
+    color: #ae3b88;
+    text-decoration: none;
 }
 
 #content .time a:hover {
-    color:#3e2245;
-    text-decoration:none;
-    border-bottom:#ae3b88 solid 1px;
+    color: #3e2245;
+    text-decoration: none;
+    border-bottom: #ae3b88 solid 1px;
 }
 
 .post {
-    padding:0 0 30px 0
+    padding: 0 0 30px 0
 }
 
 .details {
-    padding:2px 15px 2px 15px;
+    padding: 2px 15px 2px 15px;
 }
 
 .details a:hover {
-    color:#333333;
-    border-bottom:#ae3b88 solid 1px;
+    color: #333333;
+    border-bottom: #ae3b88 solid 1px;
 }
 
 /* ----------- Previous & Next link ----------- */
 
 .navigation {
-    text-align:center;
+    text-align: center;
 }
-
 
 /* ----------- Comments ----------- */
 
 ol.commentlist {
-    margin:0;
-    padding:0;
+    margin: 0;
+    padding: 0;
 }
 
 .commentlist li {
-    list-style:none;
-    margin-bottom:14px;
+    list-style: none;
+    margin-bottom: 14px;
 }
 
 .commentlist cite {
     padding: 7px;
-    display:block;
-    font-style:normal;
-    color:#ffffff;
+    display: block;
+    font-style: normal;
+    color: #ffffff;
 }
 
 .commentlist a:link, .commentlist a:visited {
-    color:cornflowerblue;
+    color: cornflowerblue;
 }
 
 .commentlist a:hover, .commentlist a:active {
-    color:#ffffff;
+    color: #ffffff;
 }
 
 .commentlist cite img {
-    padding:1px;
-    border:1px solid #aab59a;
-    float:left;
-    margin-right:9px;
+    padding: 1px;
+    border: 1px solid #aab59a;
+    float: left;
+    margin-right: 9px;
 }
 
 .commentlist .author {
     font: small-caps bold 1.2em Myriad Pro, "GillSans", Times, serif;
-    text-decoration:underline;
+    text-decoration: underline;
 }
 
 .commenttext {
-    border-top:1px dotted #ffffff;
+    border-top: 1px dotted #ffffff;
     padding: 0 20px 10px 20px;
-    color:#fafcf6;
+    color: #fafcf6;
 }
 
 .style1 {
@@ -249,18 +245,23 @@ ol.commentlist {
     background: #000000;
 }
 
-.style7 {font-size: 0.7em}
+.style7 {
+    font-size: 0.7em
+}
 
-.style8 {font-size: 0.8em}
+.style8 {
+    font-size: 0.8em
+}
 
-.style9 {color: #289fcf}
+.style9 {
+    color: #289fcf
+}
 
 /* From grails style */
 html * {
     margin: 0;
     /*padding: 0; SELECT NOT DISPLAYED CORRECTLY IN FIREFOX */
 }
-
 
 input, select, textarea {
     background-color: #fcfcfc;
@@ -269,9 +270,11 @@ input, select, textarea {
     margin: 2px 0;
     padding: 2px 4px;
 }
+
 select {
-   padding: 2px 2px 2px 0;
+    padding: 2px 2px 2px 0;
 }
+
 textarea {
     width: 250px;
     height: 150px;
@@ -299,10 +302,12 @@ div.errors {
     margin: 10px 0 5px 0;
     padding: 5px 0 5px 0;
 }
+
 div.errors ul {
     list-style: none;
     padding: 0;
 }
+
 div.errors li {
     background: url(../images/skin/exclamation.png) 8px 0% no-repeat;
     line-height: 16px;
@@ -312,6 +317,7 @@ div.errors li {
 td.errors select {
     border: 1px solid red;
 }
+
 td.errors input {
     border: 1px solid red;
 }
@@ -322,9 +328,11 @@ table {
     border: 1px solid #ccc;
     width: 100%
 }
+
 tr {
     border: 0;
 }
+
 td, th {
     font: 11px verdana, arial, helvetica, sans-serif;
     line-height: 12px;
@@ -332,6 +340,7 @@ td, th {
     text-align: left;
     vertical-align: top;
 }
+
 th {
     background: #fff url(../images/shadow.jpg);
     color: #111111;
@@ -340,6 +349,7 @@ th {
     line-height: 17px;
     padding: 2px 6px;
 }
+
 th a:link, th a:visited, th a:hover {
     color: #333;
     display: block;
@@ -347,13 +357,16 @@ th a:link, th a:visited, th a:hover {
     text-decoration: none;
     width: 100%;
 }
+
 th.asc a, th.desc a {
     background-position: right;
     background-repeat: no-repeat;
 }
+
 th.asc a {
     background-image: url(../images/skin/sorted_asc.gif);
 }
+
 th.desc a {
     background-image: url(../images/skin/sorted_desc.gif);
 }
@@ -361,6 +374,7 @@ th.desc a {
 .odd {
     background: #f7f7f7;
 }
+
 .even {
     background: #fff;
 }
@@ -370,9 +384,11 @@ th.desc a {
 .list table {
     border-collapse: collapse;
 }
+
 .list th, .list td {
     border-left: 1px solid #ddd;
 }
+
 .list th:hover, .list tr:hover {
     background: #289fcf;
 }
@@ -380,19 +396,21 @@ th.desc a {
 /* PAGINATION */
 
 .paginateButtons {
-    background: #fff url(../images/shadow.jpg) bottom repeat-x;
+    background: #ffffff url(../images/shadow.jpg) bottom repeat-x;
     border: 1px solid #ccc;
     border-top: 0;
     color: #666;
-    font-size: 10px;
+    font-size: 16px;
     overflow: hidden;
     padding: 10px 3px;
 }
+
 .paginateButtons a {
-    color: #666;
+    color: black;
     margin: 0 3px;
     padding: 2px 6px;
 }
+
 .paginateButtons span {
     padding: 2px 3px;
 }
@@ -406,21 +424,25 @@ th.desc a {
 .prop {
     padding: 5px;
 }
+
 .prop .name {
     text-align: left;
     width: 15%;
     white-space: nowrap;
 }
+
 .prop .value {
     text-align: left;
     width: 85%;
 }
+
 .prop .nameNoLogged {
     text-align: left;
     width: 15%;
     white-space: nowrap;
     color: white;
 }
+
 .prop .valueNoLogged {
     text-align: left;
     width: 85%;
@@ -428,24 +450,28 @@ th.desc a {
 }
 
 .menuButton {
-    font-size: 10px;
+    font-size: 14px;
     padding: 0 5px;
     margin: 0 3px;
 }
+
 .menuButton a {
     color: #333;
     padding: 4px 6px;
 }
+
 .menuButton a.home {
     background: url(../images/skin/house.png) center left no-repeat;
     color: #333;
     padding-left: 25px;
 }
+
 .menuButton a.list {
     background: url(../images/skin/database_table.png) center left no-repeat;
     color: #333;
     padding-left: 25px;
 }
+
 .menuButton a.create {
     background: url(../images/skin/database_add.png) center left no-repeat;
     color: #333;
@@ -461,6 +487,7 @@ th.desc a {
     overflow: hidden;
     padding: 10px 3px;
 }
+
 .buttons span {
     padding: 2px 3px;
 }
@@ -483,50 +510,79 @@ th.desc a {
     padding-left: 25px;
     float: none;
 }
+
 .buttons input.edit, .buttons a.edit {
     background: url(../images/skin/database_edit.png) center left no-repeat;
     color: #333;
     padding-left: 25px;
     float: none;
 }
+
 .buttons input.save, .buttons a.save {
     background: url(../images/skin/database_save.png) center left no-repeat;
     color: #333;
     padding-left: 25px;
     float: none;
 }
+
 /* ACTION BUTTONS */
-label { display:block; text-align:left;}
+label {
+    text-align: left;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
 /*label, input { display:block; }*/
-label, select { display:block; }
-input.text { margin-bottom:12px; width:95%; padding: .4em; }
-select { margin-bottom:12px; width:95%; padding: .1em; }
-fieldset { padding:0; border:0; margin-top:25px; }
+label, select {
+    display: block;
+}
 
-#loading { background: url(../images/ajaxLoad.gif) no-repeat center; }
+input.text {
+    margin-bottom: 12px;
+    width: 95%;
+    padding: .4em;
+}
 
+select {
+    margin-bottom: 12px;
+    width: 95%;
+    padding: .5em;
+}
+
+fieldset {
+    padding: 0;
+    border: 0;
+    margin-top: 25px;
+}
+
+#loading {
+    background: url(../images/ajaxLoad.gif) no-repeat center;
+}
 
 .invite:hover {
-    background:transparent url(../images/invite-hover.png) no-repeat scroll 0 0;
+    background: transparent url(../images/invite-hover.png) no-repeat scroll 0 0;
 }
+
 .invite {
-    background:transparent url(../images/invite.png) no-repeat scroll 0 0;
-    width:170px;
-    height:170px;
-    position:absolute;
-    margin-top:0;
-    margin-left:0;
+    background: transparent url(../images/invite.png) no-repeat scroll 0 0;
+    width: 170px;
+    height: 170px;
+    position: absolute;
+    margin-top: 0;
+    margin-left: 0;
 }
+
 .logout:hover {
-    background:transparent url(../images/logout_f.png) no-repeat scroll 0 0;
+    background: transparent url(../images/logout_f.png) no-repeat scroll 0 0;
 }
+
 .logout {
-    background:transparent url(../images/logout_o.png) no-repeat scroll 0 0;
-    width:76px;
-    height:20px;
-    position:absolute;
-    margin-top:0;
-    margin-left:0;
+    background: transparent url(../images/logout_o.png) no-repeat scroll 0 0;
+    width: 76px;
+    height: 20px;
+    position: absolute;
+    margin-top: 0;
+    margin-left: 0;
 }
 
 .export {
@@ -576,41 +632,42 @@ fieldset { padding:0; border:0; margin-top:25px; }
 
 /* ----------- New Dashboard ----------- */
 
-.div-new-dashboard{
+.div-new-dashboard {
     height: auto;
     width: 100%;
     text-align: center;
 }
 
-.div-new-dashboard-title{
+.div-new-dashboard-title {
     width: 800px;
     height: 30px;
     color: white;
     font: 25px "Gill Sans" "sans-serif";
-    text-align:center;
+    text-align: center;
     line-height: 30px;
     background: black;
 }
-    
-.div-new-dashboard-row{
+
+.div-new-dashboard-row {
     display: inline-block;
     height: 250px;
 }
-.div-new-dashboard-column{
+
+.div-new-dashboard-column {
     width: 250px;
     height: 245px;
     margin: 0px 0px 0 0px;
     padding: 0px;
     float: left;
-    background-color:#f7f7f7;
-    border:1px solid #E2DBDF;
+    background-color: #f7f7f7;
+    border: 1px solid #E2DBDF;
 }
-        
-.div-margin{
+
+.div-margin {
     margin: 0px 5px 0 5px;
-}    
-        
-.div-new-dashboard-column-title{
+}
+
+.div-new-dashboard-column-title {
     width: 250px;
     height: 24px;
     text-align: center;
@@ -619,44 +676,44 @@ fieldset { padding:0; border:0; margin-top:25px; }
     font: 12px "Gill Sans", sans-serif;
     color: white;
     margin: auto;
-    font-weight:bold;
+    font-weight: bold;
     line-height: 24px;
     background: white url(../images/shadow.jpg);
 }
-        
-.div-new-dashboard-column-content{
+
+.div-new-dashboard-column-content {
     width: 250px;
     height: 80px;
     float: left;
-    text-align:left;
-    font-size:14px;
-    font-weight:bold;
+    text-align: left;
+    font-size: 14px;
+    font-weight: bold;
 }
-        
-.div-new-dashboard-column-content ul, .div-new-dashboard-column-content2 ul{
+
+.div-new-dashboard-column-content ul, .div-new-dashboard-column-content2 ul {
     font-size: 12px;
     font-weight: normal;
 }
-            
-.div-new-dashboard-column-content2{
+
+.div-new-dashboard-column-content2 {
     width: 250px;
     height: 190px;
     margin: 0px 0 0px 0px;
-    padding:0 0 0 10px;
+    padding: 0 0 0 10px;
     float: left;
-    text-align:left;
-}    
-            
-.div-new-dashboard-column-content2 table{
-    border:0px solid #ccc;
+    text-align: left;
+}
+
+.div-new-dashboard-column-content2 table {
+    border: 0px solid #ccc;
     margin: 10px 0 0px -7px;
 }
-            
+
 .div-new-dashboard-column-content2 td, th {
     text-align: left;
 }
-        
-.div-new-dashboard-column .container{
+
+.div-new-dashboard-column .container {
     min-width: 225px;
     height: 160px;
 }

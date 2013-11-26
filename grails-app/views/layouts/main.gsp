@@ -181,8 +181,9 @@
 <div id="main">
     <sec:ifLoggedIn>
         <div id="mainDiv">
-            <img src="${resource(dir: 'images', file: 'AIAlogo.png')}" id="logo"/>
-
+            <a href="${createLink(uri: '/')}">
+                <img src="${resource(dir: 'images', file: 'AIAlogo.png')}" id="logo"/>
+            </a>
             <div id="header">
                 <img src="${resource(dir: 'images', file: 'logIn.png')}"/>
                 <a href="${createLink(controller: 'logout')}">Cerrar Sesión</a>

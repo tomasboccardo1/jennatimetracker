@@ -917,7 +917,7 @@ body .ui-tooltip {
 
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
     font-family: Gill Sans, sans-serif;
-    font-size: 1em;
+    font-size: 1.5em;
 }
 
 .ui-widget-content {
