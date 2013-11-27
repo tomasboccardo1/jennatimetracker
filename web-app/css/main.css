@@ -64,17 +64,14 @@
     width:100%
 }
 
-.nav li {
+.nav li a {
     float: left;
     width: 20%;
-    padding-top: 15px;
+    padding-top: 10px;
     text-align:center;
+    padding-bottom: 10px;
 }
 
-.nav ul li:hover {
-    background-color:#00a2ce;
-    height:30px;
-}
 
 .nav li{
     text-decoration:none;
@@ -83,7 +80,7 @@
     color:#fff
 }
 
-.nav li a {
+.nav li a, nav li:hover{
     text-decoration:none;
     font-size:small;
     font-weight:lighter;

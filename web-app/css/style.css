@@ -52,10 +52,13 @@ li a {
     text-decoration: none;
 }
 
-li a:hover {
-    color: #333333;
+li a:hover, li a:focus {
+    color: white;
+    background-color: cornflowerblue;
     text-decoration: none;
 }
+
+
 
 .wrapper {
     width: 100%;
