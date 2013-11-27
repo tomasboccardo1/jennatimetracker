@@ -84,6 +84,7 @@
         var confirmOK = false;
         var autocompleting = false;
 
+
         $(function () {
 
             $("#loading").dialog({
@@ -127,6 +128,9 @@
                     }
                 }
             });
+
+            $(window).load(resizeFooter);
+            $(window).resize(resizeFooter);
         });
 
         function showDialog(response, statusText) {
@@ -140,6 +144,19 @@
                 $("#errorDialog").dialog('open');
             }
         }
+
+        // Dynamically resize footer to fill page, IE8 doesn't like this.
+        function resizeFooter() {
+            var windowHeight = window.innerHeight;
+            var contentHeight = $("#main").height();
+            var flexFooter = windowHeight - contentHeight -50;
+            if (flexFooter < 50)
+                flexFooter = 50;
+            var footer=$(".style1")
+            footer.css("height", flexFooter);
+            footer.css("line-height", flexFooter + "px");
+        }
+
     </script>
 
     <script type="text/javascript">
@@ -178,135 +195,139 @@
 </head>
 
 <body>
-<div id="main">
-    <sec:ifLoggedIn>
-        <div id="mainDiv">
-            <a href="${createLink(uri: '/')}">
-                <img src="${resource(dir: 'images', file: 'AIAlogo.png')}" id="logo"/>
-            </a>
-            <div id="header">
-                <img src="${resource(dir: 'images', file: 'logIn.png')}"/>
-                <a href="${createLink(controller: 'logout')}">Cerrar Sesión</a>
-            </div>
 
-            <div class="nav">
-                <ul id="secciones">
-                    <li>
-                        <a tabindex="0" href="#my-info"
-                           id="my-info-button"><g:message
-                                code="app.menu.my.info"/></a>
-
-                        <div id="my-info" class="hidden">
-                            <ul>
-                                <li><a href="${createLink(controller: 'effort', action: 'myList')}"><g:message
-                                        code="app.menu.my.efforts"/></a></li>
-                                <li><a href="${createLink(controller: 'home')}">Dashboard</a></li>
-                                <li><a href="${createLink(controller: 'profile', action: 'show')}"><g:message
-                                        code="app.menu.my.profile"/></a></li>
-                            </ul>
-                        </div>
-                    </li>
-
-                    <sec:ifAnyGranted roles="ROLE_PROJECT_LEADER">
-                        <li>
-                            <a tabindex="0" href="#management"
-                               id="management-button"><g:message
-                                    code="app.menu.management"/></a>
-
-                            <div id="management" class="hidden">
-                                <ul>
-                                    <li><a href="${createLink(controller: 'assignment')}"><g:message
-                                            code="app.menu.management.assignments"/></a></li>
-                                    <li><a href="${createLink(controller: 'effort', action: 'list')}"><g:message
-                                            code="app.menu.management.efforts"/></a></li>
-                                    <li><a href="${createLink(controller: 'project')}"><g:message
-                                            code="app.menu.management.projects"/></a></li>
-                                    <li><a href="${createLink(controller: 'role')}"><g:message
-                                            code="app.menu.management.roles"/></a></li>
-                                    <li><a href="${createLink(controller: 'tag')}"><g:message
-                                            code="app.menu.management.tags"/></a></li>
-                                    <li><a href="${createLink(controller: 'skill')}"><g:message
-                                            code="app.menu.management.skill"/></a></li>
-                                    <li><a href="${createLink(controller: 'technology')}"><g:message
-                                            code="app.menu.management.technology"/></a></li>
-                                </ul>
-                            </div>
-                        </li>
-                    </sec:ifAnyGranted>
-
-
-                    <sec:ifAnyGranted roles="ROLE_USER,ROLE_COMPANY_ADMIN,ROLE_PROJECT_LEADER">
-                        <li>
-                            <a tabindex="0" href="#reports"
-                               id="reports-button"><g:message
-                                    code="app.menu.administration.reports"/></a>
-
-                            <div id="reports" class="hidden">
-                                <ul>
-                                    <sec:ifAnyGranted roles="ROLE_SYSTEM_ADMIN,ROLE_PROJECT_LEADER">
-                                        <li><a href="${createLink(controller: 'reports')}"
-                                               title="Reports"><g:message
-                                                    code="app.menu.administration.reports.time.spent"/></a></li>
-                                    </sec:ifAnyGranted>
-                                    <li><a href="${createLink(controller: 'reports', action: 'knowledge')}"><g:message
-                                            code="app.menu.administration.reports.knowledge"/></a></li>
-                                    <li><a href="${createLink(controller: 'reports', action: 'ranking')}"><g:message
-                                            code="app.menu.administration.reports.knowledge.ranking"/></a></li>
-                                    <li><a href="${createLink(controller: 'reports', action: 'mood')}"><g:message
-                                            code="app.menu.administration.reports.mood"/></a></li>
-                                    <li><a href="${createLink(controller: 'reports', action: 'usersGantt')}"><g:message
-                                            code="app.menu.administration.reports.usersGantt"/></a></li>
-                                    <li><a href="${createLink(controller: 'user', action: 'list')}"><g:message
-                                            code="app.menu.administration.reports.users"/></a></li>
-                                    <li><a href="${createLink(controller: 'dashboard', action: 'project')}"><g:message
-                                            code="app.menu.administration.reports.projects"/></a></li>
-                                </ul>
-                            </div>
-                        </li>
-                    </sec:ifAnyGranted>
-
-                    <sec:ifAnyGranted roles="ROLE_COMPANY_ADMIN,ROLE_PROJECT_LEADER">
-                        <li>
-
-                            <a tabindex="0" href="#administration"
-                               id="administration-button"><g:message
-                                    code="app.menu.administration"/></a>
-
-                            <div id="administration" class="hidden">
-                                <ul>
-                                    <sec:ifAnyGranted roles="ROLE_SYSTEM_ADMIN">
-                                        <li><a href="${createLink(controller: 'company')}"><g:message
-                                                code="app.menu.administration.companies"/></a></li>
-                                        <li><a href="${createLink(controller: 'quartz')}"><g:message
-                                                code="app.menu.administration.scheduled.jobs"/></a></li>
-                                    </sec:ifAnyGranted>
-
-                                    <sec:ifAnyGranted roles="ROLE_COMPANY_ADMIN">
-                                        <li><a href="${createLink(controller: 'pendingUsers')}"><g:message
-                                                code="app.menu.administration.pending.users"/></a></li>
-                                        <li><a href="${createLink(controller: 'score')}"><g:message
-                                                code="app.menu.administration.scores"/></a></li>
-                                    </sec:ifAnyGranted>
-
-                                </ul>
-                            </div>
-                        </li>
-                    </sec:ifAnyGranted>
-            </div>
-        </div>
-    </sec:ifLoggedIn>
-    <div class="wrapper">
+<div id="mainContent">
+    <div id="main">
         <sec:ifLoggedIn>
-            <div id="content">
-                <g:layoutBody/>
+            <div id="mainDiv">
+                <a href="${createLink(uri: '/')}">
+                    <img src="${resource(dir: 'images', file: 'AIAlogo.png')}" id="logo"/>
+                </a>
+
+                <div id="header">
+                    <img src="${resource(dir: 'images', file: 'logIn.png')}"/>
+                    <a href="${createLink(controller: 'logout')}">Cerrar Sesión</a>
+                </div>
+
+                <div class="nav">
+                    <ul id="secciones">
+                        <li>
+                            <a tabindex="0" href="#my-info"
+                               id="my-info-button"><g:message
+                                    code="app.menu.my.info"/></a>
+
+                            <div id="my-info" class="hidden">
+                                <ul>
+                                    <li><a href="${createLink(controller: 'effort', action: 'myList')}"><g:message
+                                            code="app.menu.my.efforts"/></a></li>
+                                    <li><a href="${createLink(controller: 'home')}">Dashboard</a></li>
+                                    <li><a href="${createLink(controller: 'profile', action: 'show')}"><g:message
+                                            code="app.menu.my.profile"/></a></li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <sec:ifAnyGranted roles="ROLE_PROJECT_LEADER">
+                            <li>
+                                <a tabindex="0" href="#management"
+                                   id="management-button"><g:message
+                                        code="app.menu.management"/></a>
+
+                                <div id="management" class="hidden">
+                                    <ul>
+                                        <li><a href="${createLink(controller: 'assignment')}"><g:message
+                                                code="app.menu.management.assignments"/></a></li>
+                                        <li><a href="${createLink(controller: 'effort', action: 'list')}"><g:message
+                                                code="app.menu.management.efforts"/></a></li>
+                                        <li><a href="${createLink(controller: 'project')}"><g:message
+                                                code="app.menu.management.projects"/></a></li>
+                                        <li><a href="${createLink(controller: 'role')}"><g:message
+                                                code="app.menu.management.roles"/></a></li>
+                                        <li><a href="${createLink(controller: 'tag')}"><g:message
+                                                code="app.menu.management.tags"/></a></li>
+                                        <li><a href="${createLink(controller: 'skill')}"><g:message
+                                                code="app.menu.management.skill"/></a></li>
+                                        <li><a href="${createLink(controller: 'technology')}"><g:message
+                                                code="app.menu.management.technology"/></a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </sec:ifAnyGranted>
+
+
+                        <sec:ifAnyGranted roles="ROLE_USER,ROLE_COMPANY_ADMIN,ROLE_PROJECT_LEADER">
+                            <li>
+                                <a tabindex="0" href="#reports"
+                                   id="reports-button"><g:message
+                                        code="app.menu.administration.reports"/></a>
+
+                                <div id="reports" class="hidden">
+                                    <ul>
+                                        <sec:ifAnyGranted roles="ROLE_SYSTEM_ADMIN,ROLE_PROJECT_LEADER">
+                                            <li><a href="${createLink(controller: 'reports')}"
+                                                   title="Reports"><g:message
+                                                        code="app.menu.administration.reports.time.spent"/></a></li>
+                                        </sec:ifAnyGranted>
+                                        <li><a href="${createLink(controller: 'reports', action: 'knowledge')}"><g:message
+                                                code="app.menu.administration.reports.knowledge"/></a></li>
+                                        <li><a href="${createLink(controller: 'reports', action: 'ranking')}"><g:message
+                                                code="app.menu.administration.reports.knowledge.ranking"/></a></li>
+                                        <li><a href="${createLink(controller: 'reports', action: 'mood')}"><g:message
+                                                code="app.menu.administration.reports.mood"/></a></li>
+                                        <li><a href="${createLink(controller: 'reports', action: 'usersGantt')}"><g:message
+                                                code="app.menu.administration.reports.usersGantt"/></a></li>
+                                        <li><a href="${createLink(controller: 'user', action: 'list')}"><g:message
+                                                code="app.menu.administration.reports.users"/></a></li>
+                                        <li><a href="${createLink(controller: 'dashboard', action: 'project')}"><g:message
+                                                code="app.menu.administration.reports.projects"/></a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </sec:ifAnyGranted>
+
+                        <sec:ifAnyGranted roles="ROLE_COMPANY_ADMIN,ROLE_PROJECT_LEADER">
+                            <li>
+
+                                <a tabindex="0" href="#administration"
+                                   id="administration-button"><g:message
+                                        code="app.menu.administration"/></a>
+
+                                <div id="administration" class="hidden">
+                                    <ul>
+                                        <sec:ifAnyGranted roles="ROLE_SYSTEM_ADMIN">
+                                            <li><a href="${createLink(controller: 'company')}"><g:message
+                                                    code="app.menu.administration.companies"/></a></li>
+                                            <li><a href="${createLink(controller: 'quartz')}"><g:message
+                                                    code="app.menu.administration.scheduled.jobs"/></a></li>
+                                        </sec:ifAnyGranted>
+
+                                        <sec:ifAnyGranted roles="ROLE_COMPANY_ADMIN">
+                                            <li><a href="${createLink(controller: 'pendingUsers')}"><g:message
+                                                    code="app.menu.administration.pending.users"/></a></li>
+                                            <li><a href="${createLink(controller: 'score')}"><g:message
+                                                    code="app.menu.administration.scores"/></a></li>
+                                        </sec:ifAnyGranted>
+
+                                    </ul>
+                                </div>
+                            </li>
+                        </sec:ifAnyGranted>
+                </div>
             </div>
         </sec:ifLoggedIn>
-        <sec:ifNotLoggedIn>
-            <div id="otherContent">
-                <g:layoutBody/>
-            </div>
-        </sec:ifNotLoggedIn>
+        <div class="wrapper">
+            <sec:ifLoggedIn>
+                <div id="content">
+                    <g:layoutBody/>
+                </div>
+            </sec:ifLoggedIn>
+            <sec:ifNotLoggedIn>
+                <div id="otherContent">
+                    <g:layoutBody/>
+                </div>
+            </sec:ifNotLoggedIn>
 
+        </div>
     </div>
 </div>
 

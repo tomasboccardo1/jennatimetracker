@@ -57,11 +57,6 @@ li a:hover {
     text-decoration: none;
 }
 
-body {
-    background: url(../images/bgLogin.png) fixed center top #000 no-repeat;
-    margin: 0;
-}
-
 .wrapper {
     width: 100%;
 }
@@ -132,6 +127,14 @@ strong {
 }
 
 /* ----------- Centerpieces ----------- */
+#mainContent{
+    background-image:url(../images/bgLogin.png);
+    width: 100%;
+    height:100%;
+    background-size:100% 100%;
+    background-repeat:no-repeat;
+    background-attachment:fixed;
+}
 
 #content h2 {
     font-size: 1.6em;
@@ -241,14 +244,13 @@ ol.commentlist {
 
 .style1 {
     font-size: 14px;
-    padding: 20px 0 20px 0;
     color: white;
     text-align: center;
     background: #000000;
 }
 
 .style7 {
-    font-size: 0.7em
+    font-size: 2em
 }
 
 .style8 {

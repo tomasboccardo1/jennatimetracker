@@ -35,7 +35,7 @@
     <br>
     <g:if test="${requestedInvitations.size()> 0}">
         <div class="dialog">
-            <table>
+            <table style="min-height: 400px;">
                 <thead>
                     <tr>
                         <th><g:message code="invitation.requested.name" /></th>
