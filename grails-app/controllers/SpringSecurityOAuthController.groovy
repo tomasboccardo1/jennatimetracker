@@ -222,7 +222,7 @@ class SpringSecurityOAuthController {
 
         ownersList.each { User owner ->
             def email = [
-                    to: ["federico.farina@fdvsolutions.com"],
+                    to: [owner.account],
                     subject: g.message(code: 'invitation.requested.subject'),
                     from: g.message(code: 'application.email'),
                     text: g.message(code: 'invitation.requested.body')
