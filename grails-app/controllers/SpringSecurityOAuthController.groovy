@@ -61,7 +61,13 @@ class SpringSecurityOAuthController {
         OAuthToken oAuthToken = createAuthToken(params.provider, session[sessionKey])
 
         if (oAuthToken.principal instanceof GrailsUser) {
-            authenticateAndRedirect(oAuthToken, defaultTargetUrl)
+            //Only redirect is if and enabled account.
+            if(oAuthToken.principal.enabled)
+                authenticateAndRedirect(oAuthToken, defaultTargetUrl)
+            else
+                flash.message="registration.email.sent"
+
+            render view: 'askToLinkOrCreateAccount', model: [account: oAuthToken.principal.username]
         } else {
             /* This OAuth account hasn't been registered against an internal
             / account yet. Give the oAuthID the opportunity to create a new
@@ -129,7 +135,7 @@ class SpringSecurityOAuthController {
         Provider provider = session.getAttribute("provider")
         def email = provider.getEmail();
         def name = provider.getName()
-        def locale = provider.getLocale()
+        def locale= provider.getLocale()==null?"es":provider.getLocale()
 
         if (request.post) {
             if (!springSecurityService.loggedIn) {
@@ -186,7 +192,7 @@ class SpringSecurityOAuthController {
                 }
             }
         }
-        render view: 'askToLinkOrCreateAccount', model: [createAccountCommand: command, locale: new Locale(locale).getDisplayName(), account: email]
+        render view: 'askToLinkOrCreateAccount', model: [createAccountCommand: command,account: email]
     }
 
     List findCompanyOwners(Company company) {

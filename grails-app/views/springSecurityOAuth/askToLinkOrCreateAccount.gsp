@@ -59,7 +59,7 @@
 
     <br/>
 
-    <g:if test='${User.findByAccount(account)}'>
+    <g:if test='${User.findByAccount(account) || User.findByAccount(account)}'>
         <g:if test="${flash.message}">
             <h4 style="color: #ffffff"><g:message
                     code="${flash.message}"
@@ -87,7 +87,6 @@
 
         <g:form action="createAccount" method="post" autocomplete="off">
             <fieldset>
-
 
                 <legend><g:message code="springSecurity.oauth.registration.create.legend"
                                    default="Create a new account"/></legend>
@@ -124,15 +123,6 @@
                               from="${TimeZoneUtil.getAvailableTimeZones()}"
                               value="${request.locale.language}"/>
                 </div>
-
-                <div class="fieldcontain">
-                    <label for="locale">Locale:</label>
-                    <g:select name="locale"
-                              from="${LocaleUtil.getAvailableLocales()}"
-                              value="${locale}"
-                              optionValue="displayName"/>
-                </div>
-
 
                 <tr>
                     <td valign="top" class="name" style="color:white">
@@ -192,9 +182,11 @@
 
     <br/>
 
-    <g:link controller="login" action="auth" style="font-size: 14px"><g:message
-            code="springSecurity.oauth.registration.back"
-            default="Back to login page"/></g:link>
+    <g:link controller="login"
+            action="auth"
+            style="font-size: 14px">
+        <g:message code="springSecurity.oauth.registration.back" default="Back to login page"/>
+    </g:link>
 </div>
 
 </body>
