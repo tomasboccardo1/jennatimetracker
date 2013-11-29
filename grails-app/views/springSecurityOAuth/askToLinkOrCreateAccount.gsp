@@ -182,11 +182,13 @@
 
     <br/>
 
-    <g:link controller="login"
-            action="auth"
-            style="font-size: 14px">
-        <g:message code="springSecurity.oauth.registration.back" default="Back to login page"/>
-    </g:link>
+    <a style="font-size: 14px" href="javascript: login();"><g:message code="springSecurity.oauth.registration.back" default="Back to login page"/></a>
 </div>
+
+<script type='text/javascript'>
+    function login() {
+        window.location = "../login";
+    }
+</script>
 
 </body>
