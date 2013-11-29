@@ -60,14 +60,24 @@ class SpringSecurityOAuthController {
         // Create the relevant authentication token and attempt to log in.
         OAuthToken oAuthToken = createAuthToken(params.provider, session[sessionKey])
 
+        def user
         if (oAuthToken.principal instanceof GrailsUser) {
-            //Only redirect is if and enabled account.
-            if(oAuthToken.principal.enabled)
+            //User create by Oauth login
+            user = User.findByAccount(oAuthToken.principal.username)
+        } else {
+            //Existing domain user or not existing user coming from oauth connect
+            user = User.findByAccount(oAuthToken.principal);
+            //If is and existing user of domain we update the oauthToken and redirect to login then.
+            if (user)
+                oAuthToken = updateOAuthToken(oAuthToken, user)
+        }
+
+        if (user) {
+            if (user.enabled)
                 authenticateAndRedirect(oAuthToken, defaultTargetUrl)
             else
-                flash.message="registration.email.sent"
-
-            render view: 'askToLinkOrCreateAccount', model: [account: oAuthToken.principal.username]
+                flash.message = "registration.email.sent"
+            render view: 'askToLinkOrCreateAccount', model: [account: user.account]
         } else {
             /* This OAuth account hasn't been registered against an internal
             / account yet. Give the oAuthID the opportunity to create a new
@@ -135,7 +145,7 @@ class SpringSecurityOAuthController {
         Provider provider = session.getAttribute("provider")
         def email = provider.getEmail();
         def name = provider.getName()
-        def locale= provider.getLocale()==null?"es":provider.getLocale()
+        def locale = provider.getLocale() == null ? "es" : provider.getLocale()
 
         if (request.post) {
             if (!springSecurityService.loggedIn) {
@@ -192,7 +202,7 @@ class SpringSecurityOAuthController {
                 }
             }
         }
-        render view: 'askToLinkOrCreateAccount', model: [createAccountCommand: command,account: email]
+        render view: 'askToLinkOrCreateAccount', model: [createAccountCommand: command, account: email]
     }
 
     List findCompanyOwners(Company company) {
@@ -273,8 +283,7 @@ class SpringSecurityOAuthController {
     protected Map getDefaultTargetUrl() {
         def config = SpringSecurityUtils.securityConfig
         def savedRequest = session[DefaultSavedRequest.SPRING_SECURITY_SAVED_REQUEST_KEY]
-        def defaultUrlOnNull = '/'
-
+        def defaultUrlOnNull = grailsApplication.config.grails.serverURL
         if (savedRequest && !config.successHandler.alwaysUseDefault) {
             return [url: (savedRequest.redirectUrl ?: defaultUrlOnNull)]
         } else {
