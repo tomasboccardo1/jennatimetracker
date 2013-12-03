@@ -25,10 +25,10 @@
                          <g:if test='${hasCookie}'>checked='checked'</g:if>/>        Remember me</span>
 
             <input type="submit" value="Enter">
-            <h6>Iniciar Sesión usando:</h6>
+            <h6>Login using:</h6>
 
             <div class="social">
-                <div >
+                <div>
                     <oauth:connect provider="facebook"
                                    class="registerbtn fbutton">
                         Facebook Login
@@ -40,7 +40,7 @@
                     </oauth:connect>
                 </div>
             </div>
-            <a href="javascript: register();" id=registrarse>Soy nuevo, quiero registrarme!</a>
+            <a href="javascript: register();" id=registrarse>I'm new, I want to register!</a>
         </form>
     </div>
 </div>
