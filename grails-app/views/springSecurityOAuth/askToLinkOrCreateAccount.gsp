@@ -158,13 +158,14 @@
                 <div class="fieldcontain ${hasErrors(bean: linkAccountCommand, field: 'account', 'error')} ">
                     <label for='account'><g:message code="OAuthLinkAccountCommand.account.label"
                                                     default="Account"/>:</label>
-                    <g:textField name='account'/>
+                    <g:textField name='account' value="${linkAccountCommand?.account}"/>
                 </div>
 
                 <div class="fieldcontain ${hasErrors(bean: linkAccountCommand, field: 'password', 'error')} ">
-                    <label for='password'><g:message code="OAuthLinkAccountCommand.password.label"
-                                                     default="Password"/>:</label>
-                    <g:passwordField name='password' value='${linkAccountCommand?.password}'/>
+                    <label for='password'>
+                        <g:message code="OAuthLinkAccountCommand.password.label"
+                                   default="Password"/>:</label>
+                    <g:passwordField name='password'/>
                 </div>
 
 
@@ -182,7 +183,8 @@
 
     <br/>
 
-    <a style="font-size: 14px" href="javascript: login();"><g:message code="springSecurity.oauth.registration.back" default="Back to login page"/></a>
+    <a style="font-size: 14px" href="javascript: login();"><g:message code="springSecurity.oauth.registration.back"
+                                                                      default="Back to login page"/></a>
 </div>
 
 <script type='text/javascript'>

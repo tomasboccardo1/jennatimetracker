@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+
+import OAuthID
+import Permission
+import User
 import grails.plugin.springsecurity.oauth.OAuthToken
 import oauth.Provider
 import oauth.ProviderFactory
@@ -23,10 +27,6 @@ import org.codehaus.groovy.grails.plugins.springsecurity.SpringSecurityUtils
 import org.springframework.security.core.authority.GrantedAuthorityImpl
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.savedrequest.DefaultSavedRequest
-
-import User
-import Permission
-import OAuthID
 
 /**
  * Simple helper controller for handling OAuth authentication and integrating it
@@ -325,7 +325,7 @@ class OAuthLinkAccountCommand {
     String password
 
     static constraints = {
-        password(nullable: false, blank: false, size: 8..32)
+        password(nullable: false, blank: false)
         account blank: false
     }
 
