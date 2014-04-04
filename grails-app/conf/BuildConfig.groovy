@@ -34,7 +34,7 @@ grails.project.dependency.resolution = {
         compile 'org.markdownj:markdownj:0.3.0-1.0.2b4'
         compile 'jivesoftware:smack:3.0.4'
         compile 'jivesoftware:smackx:3.0.4'
-        runtime 'mysql:mysql-connector-java:5.1.10'
+        runtime 'mysql:mysql-connector-java:5.1.25'
         compile 'com.googlecode.json-simple:json-simple:1.1.1'
     }
 

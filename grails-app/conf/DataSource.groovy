@@ -14,7 +14,7 @@ hibernate {
 }
 
 environments {
-    test {
+/*    test {
         dataSource {
             driverClassName = 'org.h2.Driver'
             dbCreate = 'create'
@@ -28,4 +28,5 @@ environments {
             dialect = "org.hibernate.dialect.H2Dialect"
         }
     }
+*/
 }

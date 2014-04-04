@@ -18,8 +18,8 @@ environments {
     development {
         grails.serverURL = "http://localhost:8080/projectguide"
     }
-    testing {
-        grails.serverURL= "http://192.168.1.31:8080/projectguide"
+    test {
+        grails.serverURL= "http://192.168.1.70:8080/projectguide"
     }
 }
 

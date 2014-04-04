@@ -1,3 +1,4 @@
+import grails.util.Environment
 import org.codehaus.groovy.grails.commons.ApplicationAttributes
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.hibernate.event.EventListeners
@@ -7,6 +8,11 @@ class BootStrap {
     GrailsApplication grailsApplication
 
     def init = { servletContext ->
+
+        log.info("\n\n***********************************************************" +
+                   "\n*** CURRENT Environment: " + Environment.current.name +
+                   "\n***********************************************************\n\n")
+
 
         // Adding SoftDeleteListener to override default onDelete behaviour.
         def ctx = servletContext.getAttribute(ApplicationAttributes.APPLICATION_CONTEXT)
@@ -127,30 +133,54 @@ class BootStrap {
         def admin = User.find("from User u where u.enabled = true and exists (from u.permissions p where p.name = :admin)", ['admin': Permission.ROLE_SYSTEM_ADMIN])
         if (!admin) {
 
-            def systemAdminRole = new Permission(name: Permission.ROLE_SYSTEM_ADMIN,
-                    description: 'The administrator permission')
-
-            def permissions=[]
-            permissions << systemAdminRole
-            log.info("*** Creating admin user")
-
-            def defaultCompany = "Default Company"
             def person = new User()
-            def company = new Company(name: defaultCompany)
-            person.company=company;
-            company.addToEmployees(person)
-            company.save()
-            person.name="System Administrator"
-            person.account="admin@fdvsolutions.com"
-            person.enabled=true
-            person.password="j33naAdm1n"
-            person.permissions=permissions
-            person.locale=Locale.getDefault()
-            person.timeZone=TimeZone.getDefault()
-            person.save();
-            log.info("\n***********************************************************" +
-                    "\n*** ADMIN LOGIN: user = admin@fdvsolutions.com, password = j33naAdm1n\n" +
-                    "\n***********************************************************\n\n")
+            User.withTransaction { status ->
+
+                try {
+
+                    def systemAdminRole = Permission.findByName (Permission.ROLE_SYSTEM_ADMIN)
+
+                    def permissions=[]
+                    permissions << systemAdminRole
+                    log.info("*** Creating admin user")
+
+                    def suffix = "" +  ((int)(Math.random()*10000));
+
+                    def defaultCompany = "Default Company ${suffix}"
+
+                    def company = Company.findByName(defaultCompany)
+
+                    if (!company){
+                        company = new Company(name: defaultCompany)
+                        company.save(failOnError:true)
+                    }
+
+                    person.company=company;
+
+                    person.name="System Administrator"
+                    person.account="admin${suffix}@fdvsolutions.com"
+                    person.enabled=true
+                    person.password="j33naAdm1n"
+                    person.locale=Locale.getDefault()
+                    person.timeZone=TimeZone.getDefault()
+                    person.save(failOnError:true);
+
+                    company.addToEmployees(person)
+                    company.save(flush:true, failOnError:true)
+
+                    person.permissions=permissions
+                    systemAdminRole.users.add(person)
+
+                    person.save()
+                    log.info("\n***********************************************************" +
+                            "\n*** ADMIN LOGIN: user = ${person.account}, password = j33naAdm1n\n" +
+                            "\n***********************************************************\n\n")
+                } catch (Exception e) {
+                    log.error(e.getMessage(),e)
+                    status.setRollbackOnly()
+                }
+            }
+
         }
 
     }
