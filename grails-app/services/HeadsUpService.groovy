@@ -24,15 +24,14 @@ class HeadsUpService {
 
         def newKnowledge = companyService.listNewLearnings(company, from, to)
 
-        if(newKnowledge.empty) {
+        if (newKnowledge.empty) {
             log.debug("Sin conocimiento para: " + company.name)
             return
         }
 
         def knowledgePerUser = new HashMap().withDefault { 0 }
 
-        List<User> usersWithMorePoints
-        usersWithMorePoints = []
+        List<User> usersWithMorePoints = []
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd")
 
         Integer userPoints, maxPoints = 0;
@@ -46,14 +45,10 @@ class HeadsUpService {
                 if (userPoints!= null && userPoints > 0) {
                     knowledgePerUser.put(learning.user, userPoints)
 
-
-                    //Creo que esto esta mal.
                     if (userPoints > maxPoints) {
                         maxPoints = userPoints
-                        usersWithMorePoints = []
-                    }
-
-                    if (!(userPoints < maxPoints)){
+                        usersWithMorePoints = [((Learning) learning).user]
+                    } else if (userPoints == maxPoints) {
                         usersWithMorePoints.add(((Learning) learning).user)
                     }
                 }
