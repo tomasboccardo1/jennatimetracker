@@ -142,7 +142,7 @@ class SpringSecurityOAuthController {
         OAuthToken oAuthToken = session[SPRING_SECURITY_OAUTH_TOKEN]
         assert oAuthToken, "There is no auth token in the session!"
 
-        Provider provider = session.getAttribute("provider")
+        def provider = session.getAttribute("provider")
         def email = provider.getEmail();
         def name = provider.getName()
         def locale = provider.getLocale() == null ? "es" : provider.getLocale()
@@ -161,7 +161,7 @@ class SpringSecurityOAuthController {
                             company: company,
                             chatTime: command.chatTime,
                             timeZone: command.timeZone,
-                            locale: locale,
+                            locale: new Locale(locale),
                             enabled: false)
 
                     user.addToOAuthIDs(provider: oAuthToken.providerName, accessToken: oAuthToken.socialId, user: user)

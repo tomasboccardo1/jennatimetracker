@@ -205,7 +205,7 @@
                 </a>
 
                 <div id="header">
-                    <img src="${resource(dir: 'images', file: 'logIn.png')}"/>
+                    <img src="${resource(dir: 'images', file: 'login.png')}"/>
                     <a href="${createLink(controller: 'logout')}">Cerrar Sesión</a>
                 </div>
 
