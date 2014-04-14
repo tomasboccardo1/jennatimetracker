@@ -24,15 +24,14 @@ class HeadsUpService {
 
         def newKnowledge = companyService.listNewLearnings(company, from, to)
 
-        if(newKnowledge.empty) {
-            log.debug("Sin conocimiento para: " + company.name)
+        if (newKnowledge.empty) {
+            log.debug("No new knowledge for " + company.name)
             return
         }
 
         def knowledgePerUser = new HashMap().withDefault { 0 }
 
-        List<User> usersWithMorePoints
-        usersWithMorePoints = []
+        List<User> usersWithMorePoints = []
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd")
 
         Integer userPoints, maxPoints = 0;
@@ -46,14 +45,10 @@ class HeadsUpService {
                 if (userPoints!= null && userPoints > 0) {
                     knowledgePerUser.put(learning.user, userPoints)
 
-
-                    //Creo que esto esta mal.
                     if (userPoints > maxPoints) {
                         maxPoints = userPoints
-                        usersWithMorePoints = []
-                    }
-
-                    if (!(userPoints < maxPoints)){
+                        usersWithMorePoints = [((Learning) learning).user]
+                    } else if (userPoints == maxPoints) {
                         usersWithMorePoints.add(((Learning) learning).user)
                     }
                 }
@@ -61,7 +56,7 @@ class HeadsUpService {
         }
 
         company.employees.each { employee ->
-            log.info("Preparing report for ${employee} (locale: ${employee.locale})")
+            log.debug("Preparing report for ${employee} (locale: ${employee.locale})")
             def model = [
                     recipient: employee, company: company, newKnowledge: newKnowledge,
                     usersWithMorePoints: usersWithMorePoints, maxPoints: maxPoints, weekNumber: weekNumber, year: year,
@@ -69,7 +64,7 @@ class HeadsUpService {
                     to: messageSource.getMessage("default.date.formatted.short", [to] as Object[], employee.locale)
             ]
             emailNotificationService.sendNotification(employee, messageSource.getMessage('knowledge.heads.up.subject', null, employee.locale), 'knowledgeHeadsUp', model)
-            log.info("Report for ${employee} sent")
+            log.debug("Report for ${employee} sent")
         }
     }
 
@@ -103,7 +98,7 @@ order by um.date desc''',
                         to: messageSource.getMessage("default.date.formatted.short", [to] as Object[], project.teamLeader.locale)
                 ]
                 emailNotificationService.sendNotification(project.teamLeader, messageSource.getMessage('mood.heads.up.subject', [project] as Object[], project.teamLeader.locale), 'moodHeadsUp', model)
-                log.info("Report for ${project.teamLeader} sent")
+                log.debug("Report for ${project.teamLeader} sent")
             }
         }
     }
