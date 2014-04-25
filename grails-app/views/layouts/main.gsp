@@ -333,7 +333,7 @@
 
 <div id="footer">
     <p class="style1">
-        AIA Project Guide v5.2.5 is proudly powered by
+        AIA Project Guide v6 is proudly powered by
         <a href="http://www.fdvsolutions.com">FDV Solutions</a>
     </p>
 </div>

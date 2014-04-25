@@ -123,18 +123,6 @@ log4j = { root ->
     info file: 'log4j.logger.org.springframework.security'
 }
 
-environments {
-    production {
-        conversationExpiracy = 1000 * 60 * 2
-        chat.cronExpression = '0 0 0-23 ? * *'
-        reminder.cronExpression = '0 0 * ? * *'
-        userFollowUp.cronExpression = '0 0 9 ? * MON'
-        projectFollowUp.cronExpression = '0 0 9 ? * FRI'
-        knowledgeHeadsUp.cronExpression = '0 0 9 ? * MON'
-        moodWarningHeadsUp.cronExpression = '0 0 9 ? * MON-FRI'
-    }
-}
-
 grails {
     plugins {
         springsecurity {
@@ -246,8 +234,8 @@ oauth {
     providers {
         google {
             api = GoogleApi
-            key = "829584903408.apps.googleusercontent.com"
-            secret = "xZwkbo5uCZf2kgzB7avhjF-9"
+            key = "483033185506-6nni254q5i8681h2bvkegrah1g6jt4ti.apps.googleusercontent.com"
+            secret = "xR5M3_pxeTqKwzoYKy8M7Xn_"
             scope = "https://www.googleapis.com/auth/userinfo.email " +
                     "https://www.googleapis.com/auth/userinfo.profile"
             callback = "${grails.serverURL}/oauth/google/callback"
@@ -255,9 +243,9 @@ oauth {
         }
         facebook {
             api = FacebookApi
-            key = "1378928025682476"
+            key = "466904413415317"
             scope="email"
-            secret = "881c6999711c47c9f5060e0e1a11ea8e"
+            secret = "0e3581af7f110930b2ffa95e41b48602"
             callback = "${grails.serverURL}/oauth/facebook/callback"
             successUri = "${grails.serverURL}/springSecurityOAuth/onSuccess?provider=facebook"
         }
