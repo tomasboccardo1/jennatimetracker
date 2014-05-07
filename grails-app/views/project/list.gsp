@@ -14,6 +14,8 @@
     $(document).ready(function () {
         $("#startDateEdit_datePicker").attr("readonly", "true");
         $("#endDateEdit_datePicker").attr("readonly", "true");
+        $("#endDate_datePicker").attr("readonly", "true");
+        $("#startDate_datePicker").attr("readonly", "true");
         $("#filterButton").click(function () {
             $("#offset").val('0');
             $("#projectFormList").submit();
@@ -289,18 +291,19 @@
             <g:textArea name="descriptionEdit" rows="3" cols="40"/>
 
             <label for="startDateEdit"><g:message code="project.startDate" default="Start Date"/>:</label>
-            <jquery:datePicker id="startDateEdit" name="startDateEdit" onclick="disableCalendarInput()"
+            <jquery:datePicker id="startDateEdit" name="startDateEdit"
                                format="MM/dd/yyyy"
                                jsformat="mm/dd/yy"/>
 
             <label for="endDateEdit"><g:message code="project.endDate" default="End Date"/>:</label>
-            <jquery:datePicker id="endDateEdit" name="endDateEdit" onclick="disableCalendarInput()" format="MM/dd/yyyy"
+            <jquery:datePicker id="endDateEdit" name="endDateEdit"
+                               format="MM/dd/yyyy"
                                jsformat="mm/dd/yy"/>
 
-            <label for="activeEdit"><g:message code="projectActive" default="Project is active"/>:</label>
+            <label for="activeEdit"><g:message code="project.active" default="Project is active"/>:</label>
             <g:checkBox name="activeEdit"/>
 
-            <label for="billable"><g:message code="projectBillable" default="Project is billable"/>:</label>
+            <label for="billable"><g:message code="project.billable" default="Project is billable"/>:</label>
             <g:checkBox name="billableEdit"/>
 
         </fieldset>
@@ -316,33 +319,46 @@
         <g:hiddenField name="version"/>
         <fieldset>
             <label for="name"><g:message code="project.name" default="Name"/>:</label>
-            <g:textField name="name" maxlength="50" value="${fieldValue(bean: projectInstance, field: 'name')}"/>
+            <g:textField name="name" maxlength="50"/>
 
-            <label for="description"><g:message code="project.description" default="Description"/>:</label>
-            <g:textArea name="description" rows="3" cols="40"
-                        value="${fieldValue(bean: projectInstance, field: 'description')}"/>
+            <label for="description">
+            <g:message code="project.description" default="Description"/>:</label>
+            <g:textArea name="description"
+                        rows="3" cols="40"/>
 
-            <label for="startDate"><g:message code="project.startDate" default="Start Date"/>:</label>
-            <jquery:datePicker name="startDate" value="${projectInstance?.startDate}"/>
 
-            <label for="endDate"><g:message code="project.endDate" default="End Date"/>:</label>
-            <jquery:datePicker name="endDate" value="${projectInstance?.endDate}"/>
+            <label for="startDateCreate"><g:message code="project.startDate" default="Start Date"/>:</label>
+            <jquery:datePicker id="startDateCreate" name="startDate"
+                               format="MM/dd/yyyy"
+                               jsformat="mm/dd/yy"/>
 
-            <label for="teamLeader.id"><g:message code="project.teamLeader" default="Team Leader"/>:</label>
-            <g:select name="teamLeader.id" from="${userList}" optionKey="id"
-                      value="${projectInstance?.teamLeader?.id}"/>
+            <label for="endDateCreate"><g:message code="project.endDate" default="End Date"/>:</label>
+            <jquery:datePicker id="endDateCreate" name="endDate"
+                               format="MM/dd/yyyy"
+                               jsformat="mm/dd/yy"/>
 
-            <label for="mode.id"><g:message code="project.mode" default="Mode"/>:</label>
-            <g:select name="mode.id" from="${Mode.list()}" optionKey="id" value="${projectInstance?.mode?.id}"/>
+            <label for="teamLeader.id">
+            <g:message code="project.teamLeader" default="Team Leader"/>:</label>
+            <g:select name="teamLeader.id" from="${userList}"
+                      optionKey="id"
+                      optionValue="name"/>
 
-            <label for="technologies"><g:message code="project.technology" default="Technologies"/>:</label>
-            <g:select name="technologies" multiple="yes" size="2" from="${Technology.list()}" optionKey="id"
-                      value="${projectInstance?.technologies}"/>
+            <label for="mode.id">
+            <g:message code="project.mode" default="Mode"/>:</label>
+            <g:select name="mode.id" from="${Mode.list()}"
+                      optionKey="id"/>
 
-            <label for="active"><g:message code="projectActive" default="Project is active"/>:</label>
+            <label for="technologies">
+            <g:message code="project.technology" default="Technologies"/>:</label>
+            <g:select name="technologies" multiple="yes"
+                      size="2" from="${Technology.list()}"
+                      optionKey="id"/>
+
+            <label for="active"><g:message code="project.active"
+                                           default="Project is active"/>:</label>
             <g:checkBox name="active" value="true"/>
 
-            <label for="billable"><g:message code="projectBillable" default="Project is billable"/>:</label>
+            <label for="billable"><g:message code="project.billable" default="Project is billable"/>:</label>
             <g:checkBox name="billable" value="true"/>
 
         </fieldset>

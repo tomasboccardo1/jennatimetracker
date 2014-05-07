@@ -35,7 +35,8 @@ class ProjectController extends BaseController {
         setUpDefaultPagingParams(params)
         def projectInstanceList = listByCriteria(params, cmd, user)
         def projectInstanceTotal = countByCriteria(cmd, user)
-        [projectInstanceList: projectInstanceList, projectInstanceTotal: projectInstanceTotal, project: cmd.project, startDate: cmd.startDate, endDate: cmd.endDate, ongoing: cmd.ongoing,active: cmd.active, userList: userInstanceList]
+        [projectInstanceList: projectInstanceList, projectInstanceTotal: projectInstanceTotal, project: cmd.project, startDate: cmd.startDate,
+         endDate: cmd.endDate, ongoing: cmd.ongoing,active: cmd.active, userList: userInstanceList]
     }
 
     private List<Project> listByCriteria(params, cmd, user) {

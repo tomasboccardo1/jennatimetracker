@@ -35,7 +35,7 @@
                 <tr class="prop even">
                     <td valign="top" class="name"><g:message code="assignment.user" default="User"/>:</td>
                     <td valign="top" class="value"><g:link controller="user" action="show"
-                                                           id="${assignmentInstance?.user?.id}">${assignmentInstance?.user?.encodeAsHTML()}</g:link></td>
+                                                           id="${assignmentInstance?.user?.id}">${assignmentInstance?.user?.name?.encodeAsHTML()}</g:link></td>
                 </tr>
 
                 <tr class="prop odd">
