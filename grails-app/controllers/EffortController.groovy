@@ -12,17 +12,17 @@ class EffortController extends BaseController {
 
     static FULLCALENDAR_DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'00:00:00")
 
-    def beforeInterceptor = [action:this.&auth]
+    def beforeInterceptor = [action: this.&auth]
 
 
     def auth() {
-         try {
-          findLoggedUser()
-          return true
-         } catch (Exception e){
-          redirect(controller:'login', action:'auth')
-          return false
-         }
+        try {
+            findLoggedUser()
+            return true
+        } catch (Exception e) {
+            redirect(controller: 'login', action: 'auth')
+            return false
+        }
     }
 
 
@@ -39,7 +39,7 @@ class EffortController extends BaseController {
         if (!reqUser || reqUser.company != user.company) {
             reqUser = user
         }
-        [users: User.findAllByCompany(findLoggedUser().company, [sort:"name", order:"asc"]), userId: reqUser.id]
+        [users: User.findAllByCompany(findLoggedUser().company, [sort: "name", order: "asc"]), userId: reqUser.id]
     }
 
     def calendar = {
@@ -62,7 +62,15 @@ class EffortController extends BaseController {
         }
         JSONArray jsonResponse = new JSONArray()
         effortInstanceList.each { Effort effort ->
-            jsonResponse.put([id: effort.id, title: getTitleForEffort(effort), comment: effort.comment  ?: '', currentDate: g.formatDate(date:effort.date, type: 'date', style:'short'), start: FULLCALENDAR_DATE_FORMATTER.format(effort.date), assignmentList: getAssignmentCalendarFormat(effort.assignment), timeSpent: effort.timeSpent])
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("id", effort.id);
+            jsonObj.put("title", getTitleForEffort(effort));
+            jsonObj.put("comment", effort.comment ?: '');
+            jsonObj.put("currentDate", g.formatDate(date: effort.date, type: 'date', style: 'short'));
+            jsonObj.put("start", FULLCALENDAR_DATE_FORMATTER.format(effort.date));
+            jsonObj.put("assignmentList", getAssignmentCalendarFormat(effort.assignment));
+            jsonObj.put("timeSpent", effort.timeSpent);
+            jsonResponse.push(jsonObj)
         }
         render jsonResponse.toString()
     }
@@ -70,17 +78,17 @@ class EffortController extends BaseController {
     def myList = {
     }
 
-    private String getTitleForEffort(Effort effort){
-      String title = "$effort.timeSpent hs: "
-      if (effort.assignment != null)
-        title += "(${effort.assignment?.project?.name} - ${effort.assignment?.role?.name})"
-      else if (effort.tags?.size() > 0){
-        title +="${effort.tags.join(', ')}"
-      } else {
-        title +=""+g.message(code:"effort.assignment.not.specified")
-      }
+    private String getTitleForEffort(Effort effort) {
+        String title = "$effort.timeSpent hs: "
+        if (effort.assignment != null)
+            title += "(${effort.assignment?.project?.name} - ${effort.assignment?.role?.name})"
+        else if (effort.tags?.size() > 0) {
+            title += "${effort.tags.join(', ')}"
+        } else {
+            title += "" + g.message(code: "effort.assignment.not.specified")
+        }
 
-      return title
+        return title
     }
 
     def myCalendar = {
@@ -96,33 +104,33 @@ class EffortController extends BaseController {
         }
         JSONArray jsonResponse = new JSONArray()
         effortInstanceList.each { Effort effort ->
-          jsonResponse.add(
-                  [id: effort.id, title: getTitleForEffort(effort),
-                  comment: effort.comment ?: '',
-                  currentDate: g.formatDate(date:effort.date, type: 'date', style:'short'),
-                  start: FULLCALENDAR_DATE_FORMATTER.format(effort.date),
-                  assignmentList: getAssignmentCalendarFormat(effort.assignment),
-                  timeSpent: effort.timeSpent]
-          )
+            jsonResponse.add(
+                    [id            : effort.id, title: getTitleForEffort(effort),
+                     comment       : effort.comment ?: '',
+                     currentDate   : g.formatDate(date: effort.date, type: 'date', style: 'short'),
+                     start         : FULLCALENDAR_DATE_FORMATTER.format(effort.date),
+                     assignmentList: getAssignmentCalendarFormat(effort.assignment),
+                     timeSpent     : effort.timeSpent]
+            )
         }
         render jsonResponse.toString()
     }
 
-    private String getAssignmentCalendarFormat(Assignment ass){
-      String assignmentCalendarFormat = ""
-      String project = g.message(code:"assignment.project")
-      String role = g.message(code:"assignment.permission")
+    private String getAssignmentCalendarFormat(Assignment ass) {
+        String assignmentCalendarFormat = ""
+        String project = g.message(code: "assignment.project")
+        String role = g.message(code: "assignment.permission")
 
-      if (ass == null){
-        assignmentCalendarFormat = g.message(code:"assignment.not.specified")
-      } else {
-        assignmentCalendarFormat += project+": "
-        assignmentCalendarFormat += ass.project
-        assignmentCalendarFormat += " - "
-        assignmentCalendarFormat += role+": "
-        assignmentCalendarFormat += ass.role?.name+"."
-      }
-      return assignmentCalendarFormat
+        if (ass == null) {
+            assignmentCalendarFormat = g.message(code: "assignment.not.specified")
+        } else {
+            assignmentCalendarFormat += project + ": "
+            assignmentCalendarFormat += ass.project
+            assignmentCalendarFormat += " - "
+            assignmentCalendarFormat += role + ": "
+            assignmentCalendarFormat += ass.role?.name + "."
+        }
+        return assignmentCalendarFormat
 
     }
 
@@ -141,8 +149,7 @@ class EffortController extends BaseController {
             flash.args = [effortInstance.id]
             flash.defaultMessage = "Effort ${effortInstance.id} created"
             redirect(action: "show", id: effortInstance.id)
-        }
-        else {
+        } else {
             render(view: "create", model: [effortInstance: effortInstance])
         }
     }
@@ -204,8 +211,7 @@ class EffortController extends BaseController {
             flash.args = [params.id]
             flash.defaultMessage = "Effort not found with id ${params.id}"
             redirect(action: "list")
-        }
-        else {
+        } else {
             return [effortInstance: effortInstance]
         }
     }
@@ -218,8 +224,7 @@ class EffortController extends BaseController {
             flash.args = [params.id]
             flash.defaultMessage = "Effort not found with id ${params.id}"
             redirect(action: "list")
-        }
-        else {
+        } else {
             return [effortInstance: effortInstance]
         }
     }
@@ -242,11 +247,11 @@ class EffortController extends BaseController {
             // FIXME: As the number is going to be translated using the browser's locale when the user sends the form, we must transform it.
             // However, this is not consistent with how we show numbers in the rest of the app.
             // Handling i18n for number separators is hard, but should be consistent :(
-            jsonResponse.put('timeSpent', formatNumber(number:effortInstance.timeSpent, format:'##0.#'))
+            jsonResponse.put('timeSpent', formatNumber(number: effortInstance.timeSpent, format: '##0.#'))
             jsonResponse.put('assignmentId', effortInstance.assignment?.id)
             jsonResponse.put('comment', effortInstance.comment)
 
-            List assignmentsList =  findAssignmentsForUserAndDate(effortInstance.user, effortInstance.date)
+            List assignmentsList = findAssignmentsForUserAndDate(effortInstance.user, effortInstance.date)
             String assignments = convertAssignmentsToSelectComboContent(assignmentsList, effortInstance.assignment?.id)
             jsonResponse.put('assignmentList', assignments)
 
@@ -272,12 +277,10 @@ class EffortController extends BaseController {
                 flash.args = [params.id]
                 flash.defaultMessage = "Effort ${params.id} updated"
                 redirect(action: "show", id: effortInstance.id)
-            }
-            else {
+            } else {
                 render(view: "edit", model: [effortInstance: effortInstance])
             }
-        }
-        else {
+        } else {
             flash.message = "effort.not.found"
             flash.args = [params.id]
             flash.defaultMessage = "Effort not found with id ${params.id}"
@@ -303,25 +306,25 @@ class EffortController extends BaseController {
 
 
     private static dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    def ajaxGetAssignments =  {
-          JSONObject jsonResponse  = new JSONObject()
-          Date date  = dateFormat.parse("$params.year-$params.month-$params.day")
+    def ajaxGetAssignments = {
+        JSONObject jsonResponse = new JSONObject()
+        Date date = dateFormat.parse("$params.year-$params.month-$params.day")
 
-          User user = findLoggedUser()
+        User user = findLoggedUser()
 
-          List assignmentsList =  findAssignmentsForUserAndDate(user, date)
+        List assignmentsList = findAssignmentsForUserAndDate(user, date)
 
-          if (!assignmentsList.isEmpty()){
+        if (!assignmentsList.isEmpty()) {
             String assignments = convertAssignmentsToSelectComboContent(assignmentsList, null)
 
             jsonResponse.put('assignmentList', assignments)
             jsonResponse.put('ok', true)
-          }
+        }
 
-          render jsonResponse.toString()
-      }
+        render jsonResponse.toString()
+    }
 
-      private String convertAssignmentsToSelectComboContent(ArrayList assignmentList, Long selected){
+    private String convertAssignmentsToSelectComboContent(ArrayList assignmentList, Long selected) {
 
         String assignments = ""
         String openOption = "<option value=\""
@@ -329,36 +332,36 @@ class EffortController extends BaseController {
         String openOptionClosureSelected = "\" selected=\"selected\">"
         String optionClosure = "</option>"
 
-        assignmentList.each{ Assignment ass ->
-          assignments+=openOption+ass.id
-          if (selected != null && ass.id == selected)
-              assignments+=openOptionClosureSelected
-          else
-              assignments+=openOptionClosure
+        assignmentList.each { Assignment ass ->
+            assignments += openOption + ass.id
+            if (selected != null && ass.id == selected)
+                assignments += openOptionClosureSelected
+            else
+                assignments += openOptionClosure
 
-          assignments+=ass.toString()+optionClosure
+            assignments += ass.toString() + optionClosure
         }
 
         return assignments
 
-      }
+    }
 
-      /**
-       * Returns a list of assignment for the user, that is active for the given date
-       */
-      private List findAssignmentsForUserAndDate(final User user, final Date date) {
-          use(TimeCategory) {
-              final Date beginning = date.clone().clearTime() + 1.day
-              final Date end = date.clone().clearTime() - 1.millisecond
+    /**
+     * Returns a list of assignment for the user, that is active for the given date
+     */
+    private List findAssignmentsForUserAndDate(final User user, final Date date) {
+        use(TimeCategory) {
+            final Date beginning = date.clone().clearTime() + 1.day
+            final Date end = date.clone().clearTime() - 1.millisecond
 
-              return Assignment.withCriteria{
-                  eq("user", user)
-                  lt("startDate", beginning)
-                  gt("endDate", end)
-                  ne("deleted", true)
-                  eq("active", true)
-              }
-          }
-  
-      }
+            return Assignment.withCriteria {
+                eq("user", user)
+                lt("startDate", beginning)
+                gt("endDate", end)
+                ne("deleted", true)
+                eq("active", true)
+            }
+        }
+
+    }
 }

@@ -112,7 +112,9 @@
 	
 	            eventRender:function (calEvent, element) {
 	
-	                var tipContent = "<strong>" + calEvent.assignmentList + "</strong><br/>" + calEvent.currentDate + " - " + calEvent.timeSpent + "<br/>" + "<blockquote>" + calEvent.comment + "</blockquote>";
+	                var tipContent = "<strong>" + calEvent.assignmentList + "</strong><br/>" +
+                            calEvent.currentDate + " - " + calEvent.timeSpent + "<br/>" +
+                            "<blockquote>" + calEvent.comment + "</blockquote>";
 	
 	                $(element).qtip({
 	                    content:tipContent,
