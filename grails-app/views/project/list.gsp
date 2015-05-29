@@ -29,7 +29,7 @@
                 $(anOption).css("background-color",value);
             })
         });
-        $("#colorEdit").change(function(){
+        $("select[name=colorEdit]").change(function(){
             var $dropdown = $(this);
             if ($dropdown.val()==null){
                 $dropdown.css("background-color",null);
@@ -328,7 +328,7 @@
             <label for="billable"><g:message code="project.billable" default="Project is billable"/>:</label>
             <g:checkBox name="billableEdit"/>
 
-            <label for="color"><g:message code="project.color" default="Color"/>:</label>
+            <label for="colorEdit"><g:message code="project.color" default="Color"/>:</label>
             <g:select name="colorEdit" id="colorEdit" from="${colors}" noSelection="['':'Automatic']"/>
 
         </fieldset>
@@ -352,15 +352,25 @@
                         rows="3" cols="40"/>
 
 
-            <label for="startDateCreate"><g:message code="project.startDate" default="Start Date"/>:</label>
-            <jquery:datePicker id="startDateCreate" name="startDate"
-                               format="MM/dd/yyyy"
-                               jsformat="mm/dd/yy"/>
+            <div style="box-sizing: border-box">
+                <div style="width: 48%; display: inline-block; margin-right: 2%">
+                    <label for="startDateCreate"><g:message code="project.startDate" default="Start Date"/>:</label>
+                    <jquery:datePicker id="startDateCreate" name="startDate"
+                                       format="MM/dd/yyyy"
+                                       jsformat="mm/dd/yy" style="with: 100px"/>
+                </div>
+                <div style="width: 48%; display: inline-block">
+                    <label for="endDateCreate"><g:message code="project.endDate" default="End Date"/>:</label>
+                    <jquery:datePicker id="endDateCreate" name="endDate"
+                                       format="MM/dd/yyyy"
+                                       jsformat="mm/dd/yy" style="with: 100px"/>
+                </div>
+            </div>
 
-            <label for="endDateCreate"><g:message code="project.endDate" default="End Date"/>:</label>
-            <jquery:datePicker id="endDateCreate" name="endDate"
-                               format="MM/dd/yyyy"
-                               jsformat="mm/dd/yy"/>
+
+            <label for="colorEdit"><g:message code="project.color" default="Color"/>:</label>
+            <g:select name="colorEdit" id="colorEdit" from="${colors}" noSelection="['':'Automatic']"/>
+
 
             <label for="teamLeader.id">
             <g:message code="project.teamLeader" default="Team Leader"/>:</label>

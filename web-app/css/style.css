@@ -12,7 +12,7 @@ So without further ado, In the order of appearance I present to you
 
 /* ----------- Basic ----------- */
 
-* { font: 12px "Gill Sans", sans-serif; }
+* { font: 12px "Gill Sans", sans-serif; box-sizing: border-box; }
 
 img {
     border: none;
@@ -726,4 +726,7 @@ fieldset {
     padding-top: 10px;
     height: 220px;
 }
-        
+
+input.hasDatepicker {
+    width: 100%;
+}
