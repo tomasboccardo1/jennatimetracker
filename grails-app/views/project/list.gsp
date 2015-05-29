@@ -299,7 +299,7 @@
 <g:form action="ajaxProjectDeleted" method="POST" name="ajaxProjectDeleted">
 </g:form>
 
-<div id="dialogEdit" title="Edit Project">
+<div id="dialogEdit" title="Edit Project" class="popup">
     <p id="validateTipsEdit"/>
     <g:form action="ajaxUpdate" method="post" name="projectFormEdit">
 
@@ -312,15 +312,24 @@
             <label for="descriptionEdit"><g:message code="project.description" default="Description"/>:</label>
             <g:textArea name="descriptionEdit" rows="3" cols="40"/>
 
-            <label for="startDateEdit"><g:message code="project.startDate" default="Start Date"/>:</label>
-            <jquery:datePicker id="startDateEdit" name="startDateEdit"
-                               format="MM/dd/yyyy"
-                               jsformat="mm/dd/yy"/>
+            <div style="box-sizing: border-box">
+                <div style="width: 48%; display: inline-block; margin-right: 2%">
+                    <label for="startDateEdit"><g:message code="project.startDate" default="Start Date"/>:</label>
+                    <jquery:datePicker id="startDateEdit" name="startDateEdit"
+                                       format="MM/dd/yyyy"
+                                       jsformat="mm/dd/yy"/>
 
-            <label for="endDateEdit"><g:message code="project.endDate" default="End Date"/>:</label>
-            <jquery:datePicker id="endDateEdit" name="endDateEdit"
-                               format="MM/dd/yyyy"
-                               jsformat="mm/dd/yy"/>
+                </div>
+                <div style="width: 48%; display: inline-block">
+                    <label for="endDateEdit"><g:message code="project.endDate" default="End Date"/>:</label>
+                    <jquery:datePicker id="endDateEdit" name="endDateEdit"
+                                       format="MM/dd/yyyy"
+                                       jsformat="mm/dd/yy"/>
+                </div>
+            </div>
+
+
+
 
             <label for="activeEdit"><g:message code="project.active" default="Project is active"/>:</label>
             <g:checkBox name="activeEdit"/>
@@ -336,7 +345,7 @@
 </div>
 
 
-<div id="dialogCreate" title="Create Project">
+<div id="dialogCreate" title="Create Project" class="popup">
     <p id="validateTipsCreate"/>
     <g:form action="ajaxSave" method="post" name="projectFormCreate">
 
@@ -426,25 +435,37 @@
                 <g:hiddenField name="offset" value="${params.offset ?: '0'}"/>
                 <g:hiddenField name="max" value="${params.max ?: '10'}"/>
                 <fieldset>
-                    <label for="project"><g:message code="project.name" default="Name"/>:</label>
-                    <g:textField name="project" value="${project}"/>
-
-                    <label for="startDate"><g:message code="project.startDate" default="Start Date"/>:</label>
-                    <jquery:datePicker name="startDate" value="${startDate}" default="none"/>
-
-                    <label for="endDate"><g:message code="project.endDate" default="End Date"/>:</label>
-                    <jquery:datePicker name="endDate" value="${endDate}" default="none"/>
-
-                    <label for="ongoing"><g:message code="project.ongoing" default="Ongoing"/>:</label>
-                    <g:checkBox name="ongoing" value="${ongoing}"/>
-
-                    <label for="active"><g:message code="project.active" default="Active"/>:</label>
-                    <g:checkBox name="active" value="${(active == null) ? true : active}"/>
+                    <table>
+                        <tr>
+                            <td>
+                                <label for="project"><g:message code="project.name" default="Name"/>:</label>
+                                <g:textField name="project" value="${project}"/>
+                            </td>
+                            <td>
+                                <label for="startDate"><g:message code="project.startDate" default="Start Date"/>:</label>
+                                <jquery:datePicker name="startDate" value="${startDate}" default="none"/>
+                            </td>
+                            <td>
+                                <label for="endDate"><g:message code="project.endDate" default="End Date"/>:</label>
+                                <jquery:datePicker name="endDate" value="${endDate}" default="none"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="ongoing"><g:message code="project.ongoing" default="Ongoing"/>:</label>
+                                <g:checkBox name="ongoing" value="${ongoing}"/>
+                            </td>
+                            <td>
+                                <label for="active"><g:message code="project.active" default="Active"/>:</label>
+                                <g:checkBox name="active" value="${(active == null) ? true : active}"/>
+                            </td>
+                        </tr>
+                    </table>
                 </fieldset>
             </g:form>
         </div>
 
-        <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+        <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix" style="text-align: right">
             <button type="button" id="filterButton" class="ui-state-default ui-corner-all">
                 <g:message code="filter" default="Filter"/>
             </button>
@@ -455,9 +476,11 @@
     <div id="list">
         <g:render template="list"/>
     </div>
-    <button id="btnCreate" class="ui-button ui-state-default ui-corner-all">
-        <g:message code="project.new" default="New Project"/>
-    </button>
+    <div style="padding: 10px; text-align: center">
+        <button id="btnCreate" class="ui-button ui-state-default ui-corner-all">
+            <g:message code="project.new" default="New Project"/>
+        </button>
+    </div>
 </div>
 </body>
 </html>

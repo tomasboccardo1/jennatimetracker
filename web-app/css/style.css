@@ -403,7 +403,7 @@ th.desc a {
 /* PAGINATION */
 
 .paginateButtons {
-    background: #ffffff url(../images/shadow.jpg) bottom repeat-x;
+    background: #ffffff url(../images/shadow.jpg) bottom repeat;
     border: 1px solid #ccc;
     border-top: 0;
     color: #666;
@@ -486,7 +486,7 @@ th.desc a {
 }
 
 .buttons {
-    background: #fff url(../images/shadow.jpg) bottom repeat-x;
+    background: #fff url(../images/shadow.jpg) bottom repeat;
     border: 1px solid #ccc;
     border-top: 0;
     color: #666;
@@ -727,6 +727,6 @@ fieldset {
     height: 220px;
 }
 
-input.hasDatepicker {
+.popup input[type=text], .popup textarea, .popup select {
     width: 100%;
 }
