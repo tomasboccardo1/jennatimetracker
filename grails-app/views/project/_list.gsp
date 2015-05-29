@@ -15,7 +15,11 @@
           <a href="javascript:edit(${projectInstance.id});"><img src="${resource(dir: 'images', file: 'edit_16x16.png')}" border="0"/></a>
           <a href="${createLink(action: 'show', id: projectInstance.id)}"><img src="${resource(dir: 'images', file: 'lens_16x16.png')}" border="0"/></a>
         </td>
-        <td>${fieldValue(bean: projectInstance, field: "name")}</td>
+        <td>${fieldValue(bean: projectInstance, field: "name")}<span style="background-color: ${fieldValue(bean: projectInstance, field: "color")};   display: inline-block;
+        width: 15px;
+        height: 15px;
+        border-radius: 4px;
+        margin-left: 10px;"/> </td>
         <td><g:formatDate date="${projectInstance.startDate}" type="date" style="short"/></td>
         <td><g:formatDate date="${projectInstance.endDate}" type="date" style="short"/></td>
       </tr>

@@ -10,7 +10,6 @@
 
 <script>
 
-    // TODO: Modify from library
     $(document).ready(function () {
         $("#startDateEdit_datePicker").attr("readonly", "true");
         $("#endDateEdit_datePicker").attr("readonly", "true");
@@ -20,7 +19,25 @@
             $("#offset").val('0');
             $("#projectFormList").submit();
         });
+        setupColordropdown();
     });
+
+    function setupColordropdown() {
+        $("select[name=colorEdit]").each(function(idx,aDropDown){
+            $("option",aDropDown).each(function(idx2, anOption){
+                var value = $(anOption).val();
+                $(anOption).css("background-color",value);
+            })
+        });
+        $("#colorEdit").change(function(){
+            var $dropdown = $(this);
+            if ($dropdown.val()==null){
+                $dropdown.css("background-color",null);
+            } else {
+                $dropdown.css("background-color",$dropdown.val());
+            }
+        })
+    }
 
     function reloadAfterDelete() {
         $("#ajaxProjectDeleted").submit();
@@ -148,7 +165,7 @@
         $("#dialogEdit").dialog({
             bgiframe: true,
             autoOpen: false,
-            height: 300,
+            height: "auto",
             modal: true,
             buttons: {
                 '<g:message code="ok"/>': function () {
@@ -170,7 +187,7 @@
         $("#dialogCreate").dialog({
             bgiframe: true,
             autoOpen: false,
-            height: 550,
+            height: "auto",
             modal: true,
             buttons: {
                 '<g:message code="ok"/>': function () {
@@ -199,6 +216,11 @@
                 $("#descriptionEdit").val(response.descriptionEdit);
                 $("#startDateEdit_datePicker").datepicker('setDate', response.startDateEdit);
                 $("#endDateEdit_datePicker").datepicker('setDate', response.endDateEdit);
+
+                $("#colorEdit").val(response.colorEdit);
+                if (response.colorEdit != null){
+                    $("#colorEdit").css('background-color',response.colorEdit);
+                }
 
                 var activeEdit = response.activeEdit;
 
@@ -305,6 +327,9 @@
 
             <label for="billable"><g:message code="project.billable" default="Project is billable"/>:</label>
             <g:checkBox name="billableEdit"/>
+
+            <label for="color"><g:message code="project.color" default="Color"/>:</label>
+            <g:select name="colorEdit" id="colorEdit" from="${colors}" noSelection="['':'Automatic']"/>
 
         </fieldset>
     </g:form>

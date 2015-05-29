@@ -1,3 +1,4 @@
+import org.apache.commons.lang.StringUtils
 import org.json.simple.JSONObject
 import org.springframework.dao.DataIntegrityViolationException
 
@@ -7,6 +8,8 @@ class ProjectController extends BaseController {
 
     static allowedMethods = [ajaxSave: "POST"]
     static DATEPICKER_DATEFORMAT = new SimpleDateFormat("MM/dd/yyyy")
+
+    String[] colors = ["#EC584C", "#386D99", "#3AB550", "#B83C8A", "#EC6E4C", "#36A968", "#B1DE48", "#2E8E8E", "#454AA4", "#ECC34C","#EC954C"]
 
     DatabaseService databaseService
 
@@ -36,7 +39,7 @@ class ProjectController extends BaseController {
         def projectInstanceList = listByCriteria(params, cmd, user)
         def projectInstanceTotal = countByCriteria(cmd, user)
         [projectInstanceList: projectInstanceList, projectInstanceTotal: projectInstanceTotal, project: cmd.project, startDate: cmd.startDate,
-         endDate: cmd.endDate, ongoing: cmd.ongoing,active: cmd.active, userList: userInstanceList]
+         endDate: cmd.endDate, ongoing: cmd.ongoing,active: cmd.active, userList: userInstanceList, colors: colors]
     }
 
     private List<Project> listByCriteria(params, cmd, user) {
@@ -186,6 +189,10 @@ class ProjectController extends BaseController {
 
                 projectInstance.startDate = startDate
                 projectInstance.endDate = endDate
+                projectInstance.color = params.colorEdit
+                if (StringUtils.isEmpty(projectInstance.color)){
+                    projectInstance.color = getRandomColor()
+                }
 
                 if (!projectInstance.hasErrors() && projectInstance.save()) {
                     jsonResponse = buildJsonOkResponse(request, buildMessageSourceResolvable('confirm'), buildMessageSourceResolvable('project.updated', [projectInstance.name] as Object[]))
@@ -199,6 +206,11 @@ class ProjectController extends BaseController {
         return jsonResponse
     }
 
+    Random rand = new Random();
+    String getRandomColor() {
+        int randomNum = rand.nextInt(colors.length);
+        return colors[randomNum]
+    }
 
     def show = {
         def projectInstance = Project.get(params.id)
@@ -230,6 +242,7 @@ class ProjectController extends BaseController {
             jsonResponse.put('descriptionEdit', projectInstance.description)
             jsonResponse.put('activeEdit', projectInstance.active)
             jsonResponse.put('billableEdit', projectInstance.billable)
+            jsonResponse.put('colorEdit', projectInstance.color)
 
             jsonResponse.put('startDateEdit', DATEPICKER_DATEFORMAT.format(projectInstance.startDate))
             jsonResponse.put('endDateEdit', DATEPICKER_DATEFORMAT.format(projectInstance.endDate))

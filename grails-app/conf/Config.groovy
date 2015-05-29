@@ -86,6 +86,7 @@ jenna {
             'CreateAssignmentRequestHandler': [Permission.ROLE_SYSTEM_ADMIN, Permission.ROLE_PROJECT_LEADER],
             'ActiveAssignmentsRequestHandler': [Permission.ROLE_USER]
     ]
+    defaultProjectcolor = "#ECA94C"
 }
 
 avatarPlugin {

@@ -9,6 +9,7 @@ class Project {
     Boolean billable
     User teamLeader
     Mode mode
+    String color //html color
 
     boolean deleted = false
 

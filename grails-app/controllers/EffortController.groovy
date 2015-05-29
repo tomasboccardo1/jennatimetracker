@@ -1,4 +1,5 @@
 import groovy.time.TimeCategory
+import org.apache.commons.lang.StringUtils
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
 import org.springframework.dao.DataIntegrityViolationException
@@ -13,7 +14,7 @@ class EffortController extends BaseController {
     static FULLCALENDAR_DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'00:00:00")
 
     def beforeInterceptor = [action: this.&auth]
-
+    def grailsApplication
 
     def auth() {
         try {
@@ -64,6 +65,7 @@ class EffortController extends BaseController {
         effortInstanceList.each { Effort effort ->
             JSONObject jsonObj = new JSONObject();
             jsonObj.put("id", effort.id);
+            jsonObj.put("color", getColorForProject(effort));
             jsonObj.put("title", getTitleForEffort(effort));
             jsonObj.put("comment", effort.comment ?: '');
             jsonObj.put("currentDate", g.formatDate(date: effort.date, type: 'date', style: 'short'));
@@ -75,6 +77,22 @@ class EffortController extends BaseController {
         render jsonResponse.toString()
     }
 
+    /**
+     * Get the project color defined in model Project.color
+     * if not present, a default one is given
+     * @param effort
+     * @return
+     */
+    Object getColorForProject(Effort effort) {
+        String color = null;
+        if (effort.assignment != null && effort.assignment.project != null)
+            color =  effort.assignment.project.color
+
+        if (StringUtils.isEmpty(color)){
+            color = grailsApplication.config['jenna']['defaultProjectcolor']
+        }
+        return color;
+    }
     def myList = {
     }
 
@@ -105,7 +123,9 @@ class EffortController extends BaseController {
         JSONArray jsonResponse = new JSONArray()
         effortInstanceList.each { Effort effort ->
             jsonResponse.add(
-                    [id            : effort.id, title: getTitleForEffort(effort),
+                    [id            : effort.id,
+                     color: getColorForProject(effort),
+                     title: getTitleForEffort(effort),
                      comment       : effort.comment ?: '',
                      currentDate   : g.formatDate(date: effort.date, type: 'date', style: 'short'),
                      start         : FULLCALENDAR_DATE_FORMATTER.format(effort.date),
