@@ -45,7 +45,7 @@ class UserController extends BaseController {
         userInstance.setEnabled(Boolean.TRUE)
         userInstance.setLocale(currentUser.getLocale())
         userInstance.setTimeZone(currentUser.getTimeZone())
-        userInstance.setPassword(springSecurityService.encodePassword(String.valueOf("pguide")))
+        userInstance.setPassword("pguide-fdv")
         userInstance.chatTime = currentUser.chatTime
         userInstance.humour = "sweet"
         userInstance.localChatTime = TimeZoneUtil.toSystemTime(userInstance.chatTime, userInstance.timeZone)

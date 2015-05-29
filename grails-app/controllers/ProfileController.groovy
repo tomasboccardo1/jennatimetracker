@@ -48,7 +48,7 @@ class ProfileController extends BaseController {
 
         if (!("".equals(password)) || !("".equals(repassword))) {
             if (mustChangePassword(password, repassword)) {
-                userInstance.setPassword(springSecurityService.encodePassword(password))
+                userInstance.setPassword(password)
             } else {
                 flash.message = "user.password.change.error"
                 redirect(action: "show", id: userInstance.id)
