@@ -23,7 +23,7 @@ class EmailerService {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "ISO-8859-1")
 
             /**
-             * Arreglo berreta porque en las llamadas se estan enviando strings pero tambien listas de strings
+             * //FIXME  Arreglo berreta porque en las llamadas se estan enviando strings pero tambien listas de strings
              **/
             if(mail.to instanceof InternetAddress)
                 helper.to = mail.to
@@ -34,7 +34,7 @@ class EmailerService {
             helper.setText(mail.text, true)
 
             /**
-             * Arreglo berreta porque en las llamadas se estan enviando strings pero tambien listas de strings
+             * //FIXME Arreglo berreta porque en las llamadas se estan enviando strings pero tambien listas de strings
              **/
             if(mail.from instanceof InternetAddress)
                 helper.from = mail.from

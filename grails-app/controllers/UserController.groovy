@@ -1,3 +1,6 @@
+import antlr.StringUtils
+import org.apache.commons.lang.RandomStringUtils
+
 class UserController extends BaseController {
 
     def springSecurityService
@@ -45,7 +48,8 @@ class UserController extends BaseController {
         userInstance.setEnabled(Boolean.TRUE)
         userInstance.setLocale(currentUser.getLocale())
         userInstance.setTimeZone(currentUser.getTimeZone())
-        userInstance.setPassword("pguide-fdv")
+        def pass = RandomStringUtils.randomAlphanumeric(8);
+        userInstance.setPassword(pass)
         userInstance.chatTime = currentUser.chatTime
         userInstance.humour = "sweet"
         userInstance.localChatTime = TimeZoneUtil.toSystemTime(userInstance.chatTime, userInstance.timeZone)
@@ -63,11 +67,15 @@ class UserController extends BaseController {
                 permission.addToUsers(userInstance)
             }
 
-            jabberService.addAccount(userInstance.account, userInstance.name)
+            try {
+                jabberService.addAccount(userInstance.account, userInstance.name)
+            } catch (Exception e) {
+                log.error(e.getMessage(),e)
+            }
             flash.message = "user.created"
             flash.args = [userInstance.id]
             flash.defaultMessage = "User ${userInstance.id} created"
-            sendNotificationEmailToNewUser(userInstance)
+            sendNotificationEmailToNewUser(userInstance, pass)
             redirect(action: "show", id: userInstance.id)
         } else {
             render(view: "create", model: [userInstance: userInstance])
@@ -195,13 +203,13 @@ class UserController extends BaseController {
         }
     }
 
-    void sendNotificationEmailToNewUser(User user) {
+    void sendNotificationEmailToNewUser(User user, String password) {
         User currentUser = findLoggedUser()
         def email = [
                 to: [user.account],
                 subject: g.message(code: 'email.account.created'),
                 from: g.message(code: 'application.email'),
-                text: g.message(code: 'email.account.created.body', args: [user.account, currentUser.name, currentUser.company])
+                text: g.message(code: 'email.account.created.body', args: [user.account, currentUser.name, currentUser.company, password])
         ]
         emailerService.sendEmails([email])
 
