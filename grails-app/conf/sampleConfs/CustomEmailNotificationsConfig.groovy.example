@@ -2,15 +2,15 @@ package customconf
 
 environments {
     development {
-        mailSender {
-            useMail = true
-            mailHost = 'smtp.gmail.com'
-            mailPort = 587
-            mailUsername = 'youremail@gmail.com'
-            mailPassword = 'yourpassword'
-            mailProtocol = 'smtp'
-            mailFrom = 'youremail@gmail.com'
-            javaMailProperties = ['mail.smtp.auth': 'true', 'mail.smtp.starttls.enable': 'true', 'mail.smtp.starttls.required': 'true']
+        mail {
+            host = "smtp.gmail.com"
+            port = 465
+            username = "youremail@gmail.com"
+            password = "yourpassword"
+            props = ["mail.smtp.auth":"true",
+                     "mail.smtp.socketFactory.port":"465",
+                     "mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory",
+                     "mail.smtp.socketFactory.fallback":"false"]
         }
     }
 }
