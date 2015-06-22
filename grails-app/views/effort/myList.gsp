@@ -29,11 +29,22 @@
 	        var month = $("#date_month");
 	        var year = $("#date_year");
 	        var timeSpent = $("#timeSpent");
+	        var assignment = $("#assignmentId");
 	        var tags = $("#tags");
 	        var comment = $("#comment");
 	        var allFields = $([]).add(id).add(version).add(day).add(month).add(year).add(timeSpent).add(tags).add(comment);
 	        var tips = $("#validateTips");
-	
+
+            function ctrlEnterHandler(event) {
+                if (event.ctrlKey && (event.keyCode == 13 || event.keyCode == 10)){
+                    $("#effortForm").submit();
+                }
+            }
+
+            timeSpent.keydown(ctrlEnterHandler);
+            assignment.keydown(ctrlEnterHandler);
+            comment.keydown(ctrlEnterHandler);
+
 	        function updateTips(t) {
 	            tips.text(t).effect("highlight", {}, 1500);
 	        }
