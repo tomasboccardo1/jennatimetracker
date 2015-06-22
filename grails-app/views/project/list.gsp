@@ -23,13 +23,13 @@
     });
 
     function setupColordropdown() {
-        $("select[name=colorEdit]").each(function(idx,aDropDown){
+        $("select[name=color]").each(function(idx,aDropDown){
             $("option",aDropDown).each(function(idx2, anOption){
                 var value = $(anOption).val();
                 $(anOption).css("background-color",value);
             })
         });
-        $("select[name=colorEdit]").change(function(){
+        $("select[name=color]").change(function(){
             var $dropdown = $(this);
             if ($dropdown.val()==null){
                 $dropdown.css("background-color",null);
@@ -217,9 +217,9 @@
                 $("#startDateEdit_datePicker").datepicker('setDate', response.startDateEdit);
                 $("#endDateEdit_datePicker").datepicker('setDate', response.endDateEdit);
 
-                $("#colorEdit").val(response.colorEdit);
-                if (response.colorEdit != null){
-                    $("#colorEdit").css('background-color',response.colorEdit);
+                $("#colorEdit").val(response.color);
+                if (response.color != null){
+                    $("#colorEdit").css('background-color',response.color);
                 }
 
                 var activeEdit = response.activeEdit;
@@ -337,8 +337,8 @@
             <label for="billable"><g:message code="project.billable" default="Project is billable"/>:</label>
             <g:checkBox name="billableEdit"/>
 
-            <label for="colorEdit"><g:message code="project.color" default="Color"/>:</label>
-            <g:select name="colorEdit" id="colorEdit" from="${colors}" noSelection="['':'Automatic']"/>
+            <label for="color"><g:message code="project.color" default="Color"/>:</label>
+            <g:select name="color" id="colorEdit" from="${colors}" noSelection="['':'Automatic']"/>
 
         </fieldset>
     </g:form>
@@ -377,8 +377,8 @@
             </div>
 
 
-            <label for="colorEdit"><g:message code="project.color" default="Color"/>:</label>
-            <g:select name="colorEdit" id="colorEdit" from="${colors}" noSelection="['':'Automatic']"/>
+            <label for="color"><g:message code="project.color" default="Color"/>:</label>
+            <g:select name="color" id="colorEdit" from="${colors}" noSelection="['':'Automatic']"/>
 
 
             <label for="teamLeader.id">
