@@ -169,6 +169,9 @@ class BootStrap {
                     company.save(flush:true, failOnError:true)
 
                     person.permissions=permissions
+                    if (systemAdminRole.users == null) {
+                        systemAdminRole.users = []
+                    }
                     systemAdminRole.users.add(person)
 
                     person.save()
